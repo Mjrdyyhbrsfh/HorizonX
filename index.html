@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Horizon X - สมาชิก</title>
+    <style>
+        /* 🖤 ธีมมินิมอล ขาว-ดำ และการตั้งค่าพื้นฐาน */
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body { background-color: #000000; color: #ffffff; display: flex; justify-content: center; align-items: center; min-height: 100vh; overflow: hidden; }
+        
+        /* ✨ แอนิเมชันความเด้งนุ่มนวลสไตล์มินิมอล */
+        @keyframes modernBounce {
+            0% { transform: scale(0.3); opacity: 0; }
+            50% { transform: scale(1.05); opacity: 0.8; }
+            70% { transform: scale(0.97); opacity: 0.9; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
+        }
+
+        .page { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 90%; max-width: 400px; padding: 20px; }
+        .active { display: flex; }
+
+        /* ส่วนหน้าร้าน */
+        h1 { font-size: 2rem; letter-spacing: 2px; margin-bottom: 10px; animation: modernBounce 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
+        p { font-size: 0.9rem; color: #aaaaaa; margin-bottom: 30px; }
+        
+        /* ปุ่มและอินพุต */
+        .btn { background-color: #ffffff; color: #000000; border: none; padding: 14px 30px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 15px; animation: modernBounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; transition: transform 0.1s ease; }
+        .btn:active { transform: scale(0.93); }
+        .btn-secondary { background-color: transparent; color: #ffffff; border: 1px solid #ffffff; }
+        
+        .input-group { width: 100%; margin-bottom: 15px; text-align: left; }
+        input { width: 100%; padding: 12px; background: #000000; border: 1px solid #ffffff; color: #ffffff; border-radius: 4px; font-size: 1rem; }
+        input:focus { outline: none; border-color: #aaaaaa; }
+        .shake { animation: shake 0.4s ease-in-out; }
+        .link-text { color: #ffffff; text-decoration: underline; cursor: pointer; margin-top: 15px; font-size: 0.85rem; }
+    </style>
+</head>
+<body>
+
+    <!-- 1. หน้ายินดีต้อนรับ (Welcome Page) -->
+    <div id="welcomePage" class="page active">
+        <h1>ยินดีต้อนรับสู่ Horizon X</h1>
+        <p>ศูนย์กลางการซื้อขายสินค้าในเกมที่ปลอดภัย</p>
+        <button class="btn" onclick="switchPage('authPage')">เริ่มต้น</button>
+    </div>
+
+    <!-- 2. หน้าล็อกอินและสมัครสมาชิก -->
+    <div id="authPage" class="page">
+        <h1 id="authTitle">เข้าสู่ระบบ</h1>
+        <p id="authSub">กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบสมาชิก</p>
+        
+        <div class="input-group">
+            <input type="email" id="email" placeholder="อีเมล (Email)">
+        </div>
+        <div class="input-group">
+            <input type="password" id="password" placeholder="รหัสผ่าน (Password)">
+        </div>
+
+        <button class="btn" id="mainAuthBtn" onclick="handleAuth()">ตกลง</button>
+        <button class="btn btn-secondary" id="switchBtn" onclick="toggleAuthMode()">สมัครสมาชิกใหม่</button>
+        <p class="link-text" onclick="switchPage('welcomePage')">← ย้อนกลับ</p>
+    </div>
+
+    <!-- 3. หน้าแดชบอร์ดหลักเมื่อล็อกอินสำเร็จแล้ว -->
+    <div id="dashboardPage" class="page">
+        <h1>หน้าหลัก Horizon X</h1>
+        <p>ยินดีต้อนรับเข้าสู่ระบบหลังบ้านสำเร็จรูป</p>
+        <div style="border: 1px solid #ffffff; padding: 20px; width: 100%; border-radius: 4px; margin-bottom: 20px;">
+            <span style="color:#aaa; font-size:0.8rem;">WALLET</span>
+            <h2 id="userWallet" style="margin-top:5px;">0.00 THB</h2>
+        </div>
+        <button class="btn btn-secondary" onclick="logout()">ออกจากระบบ</button>
+    </div>
+
+    <!-- เชื่อมต่อระบบ Firebase ของ Google โดยตรงผ่าน SDK -->
+    <script type="module">
+        import { initializeApp } from "https://gstatic.com";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://gstatic.com";
+
+        // คีย์จริงของร้าน Horizon X
+        const firebaseConfig = {
+            apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
+            authDomain: "horizon-x-f920b.firebaseapp.com",
+            projectId: "horizon-x-f920b",
+            storageBucket: "horizon-x-f920b.firebasestorage.app",
+            messagingSenderId: "621329414639",
+            appId: "1:621329414639:web:16024b58edcb6348491e1a",
+            measurementId: "G-Y8NRP7NSCC"
+        };
+
+        // เริ่มการทำงานระบบ Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        window.auth = auth;
+        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
+        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
+        window.signOut = signOut;
+    </script>
+
+    <script>
+        let isSignUpMode = false;
+
+        function switchPage(pageId) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function toggleAuthMode() {
+            isSignUpMode = !isSignUpMode;
+            const title = document.getElementById('authTitle');
+            const sub = document.getElementById('authSub');
+            const mainBtn = document.getElementById('mainAuthBtn');
+            const switchBtn = document.getElementById('switchBtn');
+
+            if (isSignUpMode) {
+                title.innerText = "สมัครสมาชิก";
+                sub.innerText = "สร้างบัญชีใหม่เพื่อเข้าใช้งานระบบ";
+                mainBtn.innerText = "สมัครสมาชิก (REGISTER)";
+                switchBtn.innerText = "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ";
+            } else {
+                title.innerText = "เข้าสู่ระบบ";
+                sub.innerText = "กรุณากรอกข้อมูลเพื่อเข้าสู่ระบบสมาชิก";
+                mainBtn.innerText = "ตกลง";
+                switchBtn.innerText = "สมัครสมาชิกใหม่";
+            }
+        }
+
+        async function handleAuth() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const authCard = document.getElementById('authPage');
+
+            if(!email || !password) {
+                authCard.classList.add('shake');
+                setTimeout(() => authCard.classList.remove('shake'), 400);
+                alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+                return;
+            }
+
+            try {
+                if (isSignUpMode) {
+                    await createUserWithEmailAndPassword(window.auth, email, password);
+                    alert('สมัครสมาชิกสำเร็จ!');
+                } else {
+                    await signInWithEmailAndPassword(window.auth, email, password);
+                    alert('เข้าสู่ระบบสำเร็จ!');
+                }
+            } catch (error) {
+                authCard.classList.add('shake');
+                setTimeout(() => authCard.classList.remove('shake'), 400);
+                alert('เกิดข้อผิดพลาด: ' + error.message);
+            }
+        }
+
+        function logout() {
+            signOut(window.auth).then(() => {
+                switchPage('welcomePage');
+                document.getElementById('email').value = "";
+                document.getElementById('password').value = "";
+            });
+        }
+
+        // ตรวจสอบสถานะล็อกอินอัตโนมัติ
+        setTimeout(() => {
+            if(window.auth) {
+                onAuthStateChanged(window.auth, (user) => {
+                    if (user) {
+                        switchPage('dashboardPage');
+                    }
+                });
+            }
+        }, 1000);
+    </script>
+</body>
+</html>

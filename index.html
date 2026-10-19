@@ -1,2005 +1,1741 @@
 <!DOCTYPE html>
 <html lang="th">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#050505">
-  <meta name="description" content="Horizon X — Beyond the ordinary.">
-  <title>Horizon X — Beyond the Ordinary</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-
-  <style>
-    :root {
-      --bg: #050505;
-      --panel: #101010;
-      --border: #292929;
-      --text: #f5f5f5;
-      --muted: #929292;
-      --green: #8affaa;
-      --red: #ff8585;
-      --blue: #9cb5ff;
-      --amber: #ffd479;
-      --accent: #8affaa;
-      --ease: cubic-bezier(.2,.8,.2,1);
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; scrollbar-color: #444 #050505; }
-
-    body {
-      position: relative;
-      isolation: isolate;
-      margin: 0;
-      min-height: 100vh;
-      overflow-x: hidden;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    }
-
-    body, button, input, select, textarea { font-family: inherit; }
-    button, input, select, textarea { font-size: inherit; }
-    button { cursor: pointer; }
-
-    button:focus-visible, input:focus-visible,
-    select:focus-visible, textarea:focus-visible {
-      outline: 2px solid var(--green);
-      outline-offset: 4px;
-    }
-
-    ::selection { color: #050505; background: var(--green); }
-
-    .hidden { display: none !important; }
-
-    /* ============ BACKGROUND ============ */
-    .fx-background {
-      position: fixed; inset: 0; z-index: -2; overflow: hidden;
-      pointer-events: none;
-      background: radial-gradient(ellipse at 50% 0%, #141a16 0%, #080808 45%, #050505 80%);
-    }
-
-    .fx-grid {
-      position: absolute; inset: -50%; opacity: .18;
-      background-image:
-        linear-gradient(#8affaa18 1px, transparent 1px),
-        linear-gradient(90deg, #8affaa18 1px, transparent 1px);
-      background-size: 48px 48px;
-      transform: perspective(500px) rotateX(55deg);
-      animation: gridMove 22s linear infinite;
-      mask-image: linear-gradient(transparent, black 40%, transparent);
-      -webkit-mask-image: linear-gradient(transparent, black 40%, transparent);
-    }
-
-    .fx-glow {
-      position: absolute; width: 320px; height: 320px; border-radius: 50%;
-      background: var(--green); filter: blur(110px); opacity: .12;
-      animation: glowFloat 12s ease-in-out infinite alternate;
-    }
-    .fx-glow-one { top: 5%; left: -180px; }
-    .fx-glow-two { right: -200px; bottom: 5%; background: #718cff; animation-delay: -5s; }
-
-    .fx-scanline {
-      position: absolute; inset: 0; opacity: .13;
-      background: repeating-linear-gradient(to bottom, transparent 0, transparent 3px, #ffffff0a 4px);
-    }
-
-    #particles { position: absolute; inset: 0; overflow: hidden; }
-
-    .ambient-particle {
-      position: absolute; bottom: -12px; width: 3px; height: 3px; border-radius: 50%;
-      background: var(--green); box-shadow: 0 0 12px var(--green); opacity: 0;
-      animation: ambientRise var(--duration, 12s) linear var(--delay, 0s) infinite;
-    }
-
-    /* ============ NAV ============ */
-    .navbar {
-      position: sticky; top: 0; z-index: 100;
-      min-height: 72px; padding: 12px 5%;
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 12px; flex-wrap: wrap;
-      border-bottom: 1px solid #ffffff16;
-      background: #050505b8;
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      animation: navEnter .8s both;
-    }
-
-    .logo {
-      font-size: 20px; font-weight: 950; letter-spacing: 3px;
-      transition: letter-spacing .3s, text-shadow .3s;
-    }
-    .logo:hover { letter-spacing: 5px; text-shadow: 0 0 25px #ffffff70; }
-    .logo span { color: var(--green); }
-
-    .nav-links { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-
-    .nav-link {
-      padding: 8px 13px; border: 1px solid #ffffff14; border-radius: 9px;
-      background: transparent; color: #9a9a9a; font-size: 12px;
-      transition: .25s;
-    }
-    .nav-link:hover { color: #fff; border-color: #8affaa60; }
-    .nav-link.active {
-      color: #050505; background: var(--green); border-color: var(--green);
-      box-shadow: 0 0 20px #8affaa22;
-    }
-
-    /* ============ LAYOUT ============ */
-    .container { position: relative; width: min(100% - 32px, 460px); margin: 45px auto; }
-    .container.wide { width: min(100% - 32px, 620px); }
-
-    .hero { text-align: center; margin-bottom: 30px; }
-    .hero-enhanced { animation: heroEnter .9s var(--ease) both; }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
-      padding: 9px 13px; margin-bottom: 20px;
-      border: 1px solid #ffffff20; border-radius: 100px; background: #ffffff06;
-      color: #c9c9c9; font-size: 9px; letter-spacing: 2px;
-      animation: badgeFloat 4s ease-in-out infinite;
-    }
-
-    .live-dot {
-      width: 7px; height: 7px; flex-shrink: 0; border-radius: 50%;
-      background: var(--green); box-shadow: 0 0 12px var(--green);
-      animation: dotPulse 1.5s infinite;
-    }
-
-    .hero-art {
-      position: relative; height: 190px; margin: 0 auto 25px; overflow: hidden;
-      border: 1px solid #ffffff25; border-radius: 18px; background: #0b0b0b;
-      box-shadow: 0 15px 55px #0008, 0 0 30px #8affaa08;
-    }
-
-    .hero-image {
-      display: block; width: 100%; height: 100%; object-fit: cover; opacity: .76;
-      filter: grayscale(100%) contrast(1.15);
-      animation: imageReveal 1.4s both, imageDrift 18s ease-in-out infinite alternate;
-      transition: filter .6s, opacity .6s;
-    }
-    .hero-art:hover .hero-image { filter: grayscale(20%) contrast(1.15); opacity: .98; }
-
-    .hero-image-overlay {
-      position: absolute; inset: 0; pointer-events: none;
-      background: linear-gradient(0deg, #050505 0%, transparent 60%),
-                  linear-gradient(90deg, #05050555, transparent, #05050555);
-    }
-    .hero-image-text {
-      position: absolute; bottom: 13px; left: 15px;
-      color: #ffffffa0; font-size: 9px; letter-spacing: 4px;
-    }
-
-    .eyebrow { color: var(--muted); font-size: 10px; letter-spacing: 4px; }
-
-    h1 { font-size: clamp(32px, 8vw, 46px); margin: 13px 0; letter-spacing: -1px; }
-
-    .hero-title {
-      font-size: clamp(35px, 9vw, 52px); font-weight: 950; letter-spacing: -2px;
-      animation: titleEnter 1s .15s both; overflow-wrap: anywhere;
-    }
-
-    .glitch {
-      position: relative; display: inline-block; color: var(--green);
-      text-shadow: 0 0 22px #8affaa40; animation: glitchPulse 5s infinite;
-    }
-
-    .hero-subtitle { animation: fadeUp .8s .35s both; }
-
-    .hero-line {
-      display: flex; align-items: center; justify-content: center; gap: 10px;
-      margin-top: 22px; color: #6e776f; font-size: 8px; letter-spacing: 3px;
-    }
-    .hero-line span:first-child, .hero-line span:last-child {
-      width: 25px; height: 1px; background: #8affaa80;
-    }
-
-    .muted { color: var(--muted); font-size: 13px; line-height: 1.8; }
-    .tiny { font-size: 11px; }
-    .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-
-    /* ============ PANEL ============ */
-    .panel {
-      position: relative; overflow: hidden; padding: 25px;
-      border: 1px solid #ffffff1c; border-radius: 20px;
-      background: linear-gradient(145deg, #171717dc, #080808ef);
-      box-shadow: 0 25px 80px #0007, inset 0 1px #ffffff08;
-      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
-      animation: panelEnter .8s .2s both;
-      transition: border-color .35s, box-shadow .35s;
-    }
-    .panel + .panel { margin-top: 20px; }
-
-    .panel::before {
-      content: ""; position: absolute; top: 0; left: -120%; width: 70%; height: 1px;
-      background: linear-gradient(90deg, transparent, var(--green), transparent);
-      animation: panelShine 7s ease-in-out infinite; pointer-events: none;
-    }
-
-    .panel:focus-within { border-color: #8affaa60; box-shadow: 0 25px 80px #0008, 0 0 30px #8affaa0b; }
-
-    /* ============ TABS / FORM ============ */
-    .tabs { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 25px; }
-    .tabs.three { grid-template-columns: repeat(3, 1fr); }
-
-    .tab {
-      min-height: 43px; border: 1px solid #333; border-radius: 10px;
-      background: #ffffff03; color: #999; transition: .3s; font-size: 12px;
-    }
-    .tab:hover { border-color: #8affaa70; color: #fff; }
-    .tab.active {
-      color: #050505; background: #fff; border-color: #fff;
-      box-shadow: 0 0 22px #ffffff12;
-    }
-
-    .field { margin-bottom: 17px; animation: fadeUp .4s both; }
-    label { display: block; margin-bottom: 8px; font-size: 12px; color: #bbb; }
-
-    .input-wrap { position: relative; }
-
-    input, select, textarea {
-      width: 100%; min-height: 47px; padding: 12px;
-      border: 1px solid #333; border-radius: 10px;
-      background: #080808; color: #fff; outline: none;
-      transition: border-color .25s, box-shadow .25s, background .25s;
-    }
-    textarea { min-height: 92px; resize: vertical; line-height: 1.6; }
-    select { appearance: none; cursor: pointer; }
-
-    input:hover, select:hover, textarea:hover { border-color: #666; }
-    input:focus, select:focus, textarea:focus {
-      border-color: var(--green); background: #0d110e;
-      box-shadow: 0 0 0 3px #8affaa12, 0 0 22px #8affaa0a;
-    }
-    input::placeholder, textarea::placeholder { color: #505050; }
-
-    .password-input { padding-right: 62px; }
-
-    .password-toggle {
-      position: absolute; top: 50%; right: 9px; transform: translateY(-50%);
-      padding: 7px; border: 1px solid #333; border-radius: 7px;
-      background: #151515; color: #aaa; font-size: 10px;
-    }
-    .password-toggle:hover { color: var(--green); border-color: var(--green); }
-
-    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    /* ============ BUTTONS ============ */
-    .primary, .secondary, .notification-ok, .danger {
-      position: relative; overflow: hidden;
-      transition: transform .2s, box-shadow .25s, background .25s;
-    }
-
-    .primary {
-      width: 100%; min-height: 49px; padding: 12px;
-      border: 1px solid #fff; border-radius: 10px;
-      background: #fff; color: #050505; font-weight: 800;
-    }
-
-    .primary::after, .notification-ok::after {
-      content: ""; position: absolute; top: 0; bottom: 0; left: -120%; width: 70%;
-      background: linear-gradient(100deg, transparent, #ffffffa0, transparent);
-      transform: skewX(-20deg); transition: left .6s; pointer-events: none;
-    }
-    .primary:hover::after, .notification-ok:hover::after { left: 150%; }
-
-    .primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px #ffffff18; background: #e7ffed; }
-
-    .primary:active, .secondary:active, .notification-ok:active, .danger:active { transform: scale(.97); }
-
-    .secondary {
-      min-height: 40px; padding: 9px 13px;
-      border: 1px solid #444; border-radius: 9px;
-      background: #111; color: #fff;
-    }
-    .secondary:hover { border-color: #8affaa80; box-shadow: 0 0 20px #8affaa0b; }
-
-    .danger { border-color: #ff858555; color: var(--red); background: #1a0d0d; }
-    .danger:hover { border-color: var(--red); }
-
-    .small-btn { min-height: 32px; padding: 6px 11px; font-size: 11px; border-radius: 8px; }
-
-    button:disabled { opacity: .55; cursor: wait; transform: none !important; }
-
-    .forgot-button { width: 100%; margin-top: 12px; }
-    .form-note { font-size: 11px; }
-
-    /* ============ CARDS / LISTS ============ */
-    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-    .stat {
-      position: relative; margin: 16px 0; padding: 18px; overflow: hidden;
-      border: 1px solid #282828; border-radius: 14px; background: #080808;
-      transition: border-color .3s, transform .3s;
-    }
-    .stat:hover { transform: translateY(-3px); border-color: #8affaa50; }
-    .stat::after {
-      content: ""; position: absolute; top: 0; left: 0; width: 2px; height: 100%;
-      background: var(--green); box-shadow: 0 0 15px var(--green);
-    }
-    .stat.amber::after { background: var(--amber); box-shadow: 0 0 15px var(--amber); }
-    .stat .value { font-size: 25px; font-weight: 900; letter-spacing: -1px; margin: 6px 0 2px; }
-    .stat.amber .value { color: var(--amber); }
-    .stat .value.neg { color: var(--red); }
-
-    .status-line {
-      display: inline-flex; align-items: center; gap: 8px;
-      color: var(--green); font-size: 11px;
-    }
-    .status-line::before {
-      content: ""; width: 7px; height: 7px; border-radius: 50%;
-      background: var(--green); box-shadow: 0 0 10px var(--green);
-    }
-
-    .list { display: grid; gap: 10px; margin-top: 14px; }
-
-    .list-item {
-      padding: 14px; border: 1px solid #262626; border-radius: 12px;
-      background: #0a0a0a; animation: fadeUp .35s both;
-      transition: border-color .25s;
-    }
-    .list-item:hover { border-color: #8affaa45; }
-
-    .list-item-head {
-      display: flex; align-items: flex-start; justify-content: space-between;
-      gap: 10px; margin-bottom: 8px;
-    }
-
-    .list-item-title { font-size: 14px; font-weight: 700; overflow-wrap: anywhere; }
-    .list-item-body { color: #a5a5a5; font-size: 12px; line-height: 1.7; overflow-wrap: anywhere; white-space: pre-wrap; }
-    .list-item-meta { margin-top: 10px; color: #5f5f5f; font-size: 10px; letter-spacing: 1px; }
-
-    .list-actions { display: flex; gap: 6px; flex-shrink: 0; }
-
-    .chip {
-      display: inline-flex; align-items: center; gap: 5px;
-      padding: 4px 9px; border-radius: 100px;
-      font-size: 9px; font-weight: 800; letter-spacing: 1.5px;
-      border: 1px solid; white-space: nowrap;
-    }
-    .chip.pending { color: var(--amber); border-color: #ffd47955; background: #ffd47910; }
-    .chip.ok { color: var(--green); border-color: #8affaa55; background: #8affaa10; }
-    .chip.bad { color: var(--red); border-color: #ff858555; background: #ff858510; }
-    .chip.neutral { color: #aaa; border-color: #444; background: #ffffff06; }
-
-    .amount-in { color: var(--green); font-weight: 900; }
-    .amount-out { color: var(--red); font-weight: 900; }
-
-    .empty {
-      padding: 30px 16px; text-align: center; color: #5c5c5c;
-      border: 1px dashed #2b2b2b; border-radius: 14px; font-size: 12px;
-      line-height: 1.9;
-    }
-    .empty .big { display: block; font-size: 26px; margin-bottom: 8px; opacity: .7; }
-
-    .skeleton {
-      height: 74px; border-radius: 12px; border: 1px solid #1f1f1f;
-      background: linear-gradient(90deg, #0c0c0c, #141414, #0c0c0c);
-      background-size: 200% 100%; animation: shimmer 1.4s linear infinite;
-    }
-
-    .banner {
-      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
-      padding: 13px 15px; margin-bottom: 18px;
-      border: 1px solid #ffd47955; border-radius: 12px;
-      background: #ffd4790d; color: var(--amber); font-size: 12px; line-height: 1.6;
-    }
-    .banner .grow { flex: 1; min-width: 150px; }
-
-    .badge-role {
-      display: inline-block; padding: 3px 9px; border-radius: 100px;
-      font-size: 9px; font-weight: 800; letter-spacing: 2px;
-      border: 1px solid var(--green); color: var(--green);
-    }
-
-    footer { padding: 25px 12px; text-align: center; color: #555; font-size: 9px; letter-spacing: 2px; }
-
-    /* ============ TOAST ============ */
-    .toast-wrap {
-      position: fixed; left: 50%; bottom: 22px; transform: translateX(-50%);
-      z-index: 100001; display: grid; gap: 8px; width: min(92vw, 380px);
-      pointer-events: none;
-    }
-    .toast {
-      padding: 12px 15px; border-radius: 11px; font-size: 12px; line-height: 1.5;
-      background: #111c; border: 1px solid #333; color: #eee;
-      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
-      box-shadow: 0 12px 40px #000a;
-      animation: toastIn .3s var(--ease) both;
-    }
-    .toast.ok { border-color: #8affaa66; color: #d9ffe5; }
-    .toast.bad { border-color: #ff858566; color: #ffdcdc; }
-    .toast.out { animation: toastOut .3s var(--ease) both; }
-
-    /* ============ OFFLINE BAR ============ */
-    .offline-bar {
-      position: sticky; top: 0; z-index: 200;
-      padding: 9px 14px; text-align: center; font-size: 11px; letter-spacing: 1px;
-      background: #3a2c00; color: var(--amber); border-bottom: 1px solid #ffd47933;
-    }
-
-    /* ============ LOADER ============ */
-    .loader-overlay {
-      position: fixed; inset: 0; z-index: 100002;
-      display: grid; place-items: center; gap: 18px;
-      background: #050505; transition: opacity .4s, visibility .4s;
-    }
-    .loader-overlay.done { opacity: 0; visibility: hidden; }
-
-    .spinner {
-      width: 42px; height: 42px; border-radius: 50%;
-      border: 2px solid #222; border-top-color: var(--green);
-      animation: spin .8s linear infinite;
-    }
-    .loader-text { color: #666; font-size: 10px; letter-spacing: 5px; text-align: center; }
-
-    .inline-loading {
-      display: inline-block; width: 13px; height: 13px; border-radius: 50%;
-      border: 2px solid #333; border-top-color: var(--green);
-      animation: spin .7s linear infinite; vertical-align: -2px;
-    }
-
-    /* ============ NOTIFICATION MODAL ============ */
-    .notification-overlay {
-      --notice-accent: #8affaa;
-      --notice-glow: rgba(90,255,140,.14);
-      position: fixed; inset: 0; z-index: 99999;
-      display: flex; align-items: center; justify-content: center; padding: 20px;
-      background: #000b;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-      opacity: 0; visibility: hidden; pointer-events: none;
-      transition: opacity .3s, visibility .3s;
-    }
-    .notification-overlay.error { --notice-accent: #ff8585; --notice-glow: rgba(255,65,65,.14); }
-    .notification-overlay.info { --notice-accent: #d0d0d0; --notice-glow: rgba(255,255,255,.10); }
-    .notification-overlay.active { opacity: 1; visibility: visible; pointer-events: auto; }
-
-    .notification-card {
-      position: relative; width: 100%; max-width: 370px;
-      padding: 32px 25px 24px; overflow: hidden; text-align: center;
-      background: linear-gradient(145deg, #191919, #080808);
-      border: 1px solid #383838; border-radius: 23px;
-      box-shadow: 0 25px 100px #000, 0 0 50px var(--notice-glow);
-      transform: translateY(25px) scale(.92); transition: transform .35s;
-    }
-    .notification-overlay.active .notification-card {
-      animation: modalEpic .55s cubic-bezier(.16,1,.3,1) both;
-      transform: translateY(0) scale(1);
-    }
-    .notification-card::before {
-      content: ""; position: absolute; top: 0; left: 15%; width: 70%; height: 1px;
-      background: var(--notice-accent); box-shadow: 0 0 18px var(--notice-accent);
-    }
-    .notification-card::after {
-      content: ""; position: absolute; inset: 0; border-radius: inherit;
-      background: linear-gradient(120deg, transparent 25%, #ffffff08 50%, transparent 75%);
-      background-size: 200% 100%; animation: modalShimmer 4s linear infinite; pointer-events: none;
-    }
-
-    .notification-icon {
-      position: relative; z-index: 1; display: grid; place-items: center;
-      width: 78px; height: 78px; margin: 0 auto 18px;
-      border: 1px solid var(--notice-accent); border-radius: 50%;
-      background: var(--notice-accent); color: #080808;
-      box-shadow: 0 0 25px var(--notice-glow), 0 0 70px var(--notice-glow);
-      animation: noticePop .45s both;
-    }
-    .notification-icon svg {
-      width: 36px; height: 36px; fill: none; stroke: currentColor;
-      stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round;
-    }
-
-    .notification-emoji { position: relative; z-index: 1; font-size: 24px; margin-bottom: 9px; }
-    .notification-label {
-      position: relative; z-index: 1; color: var(--notice-accent);
-      font-size: 10px; font-weight: 800; letter-spacing: 4px; margin-bottom: 10px;
-    }
-    .notification-title {
-      position: relative; z-index: 1; font-size: 24px; margin: 0 0 12px;
-      overflow-wrap: anywhere; animation: fadeUp .45s .1s both;
-    }
-    .notification-description {
-      position: relative; z-index: 1; max-width: 270px; margin: 0 auto 24px;
-      color: #aaa; font-size: 13px; line-height: 1.8; overflow-wrap: anywhere;
-      animation: fadeUp .45s .2s both;
-    }
-    .notification-ok {
-      position: relative; z-index: 1; width: 100%; min-height: 48px;
-      border: 1px solid var(--notice-accent); border-radius: 11px;
-      background: var(--notice-accent); color: #080808;
-      font-size: 12px; font-weight: 800; letter-spacing: 2px;
-      animation: fadeUp .45s .3s both;
-    }
-    .notification-footnote {
-      position: relative; z-index: 1; margin-top: 17px;
-      color: #555; font-size: 9px; letter-spacing: 2px;
-    }
-
-    .fx-particle {
-      position: fixed; z-index: 100000; width: 4px; height: 4px; border-radius: 50%;
-      background: var(--green); box-shadow: 0 0 12px var(--green);
-      pointer-events: none; animation: particleBurst 1s ease-out forwards;
-    }
-
-    /* ============ KEYFRAMES ============ */
-    @keyframes gridMove { to { background-position: 0 48px; } }
-    @keyframes glowFloat { from { transform: translate3d(0,0,0); } to { transform: translate3d(70px,50px,0); } }
-    @keyframes ambientRise {
-      0% { opacity: 0; transform: translateY(0); }
-      10% { opacity: .65; }
-      85% { opacity: .35; }
-      100% { opacity: 0; transform: translateY(-105vh); }
-    }
-    @keyframes navEnter { from { opacity: 0; transform: translateY(-15px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes heroEnter { from { opacity: 0; transform: translateY(25px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes panelEnter { from { opacity: 0; transform: translateY(22px) scale(.98); } to { opacity: 1; transform: translateY(0) scale(1); } }
-    @keyframes titleEnter { from { opacity: 0; letter-spacing: 8px; filter: blur(8px); } to { opacity: 1; letter-spacing: -2px; filter: blur(0); } }
-    @keyframes imageReveal { from { opacity: 0; } to { opacity: .76; } }
-    @keyframes imageDrift { from { transform: scale(1); } to { transform: scale(1.09); } }
-    @keyframes badgeFloat { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-    @keyframes dotPulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
-    @keyframes glitchPulse {
-      0%,90%,100% { transform: translateX(0); }
-      92% { transform: translateX(-2px); }
-      94% { transform: translateX(2px); }
-      96% { transform: translateX(-1px); }
-    }
-    @keyframes fadeUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes panelShine { 0%,70%,100% { left: -120%; } 85% { left: 150%; } }
-    @keyframes modalEpic {
-      0% { opacity: 0; transform: translateY(35px) scale(.82) rotateX(8deg); }
-      70% { opacity: 1; transform: translateY(-4px) scale(1.015); }
-      100% { opacity: 1; transform: translateY(0) scale(1); }
-    }
-    @keyframes modalShimmer { to { background-position: -200% 0; } }
-    @keyframes noticePop { from { opacity: 0; transform: scale(.5) rotate(-12deg); } to { opacity: 1; transform: scale(1) rotate(0); } }
-    @keyframes particleBurst {
-      from { opacity: 1; transform: translate(0,0) scale(1); }
-      to { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(0); }
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes shimmer { to { background-position: -200% 0; } }
-    @keyframes toastIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
-    @keyframes toastOut { to { opacity: 0; transform: translateY(10px); } }
-
-    @media (max-width: 420px) {
-      .container { margin: 30px auto; }
-      .panel { padding: 20px; }
-      .hero-art { height: 155px; }
-      .hero-title { letter-spacing: -1px; }
-      .hero-badge { font-size: 8px; letter-spacing: 1.5px; }
-      .notification-card { padding: 28px 20px 22px; }
-      .navbar { padding: 10px 4%; }
-      .nav-link { padding: 7px 10px; font-size: 11px; }
-      .grid-2, .row { grid-template-columns: 1fr; }
-      .stat .value { font-size: 21px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-        transition-duration: .01ms !important;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Horizon X — Beyond the ordinary.">
+<title>Horizon X — Beyond the Ordinary</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<style>
+/* =========================================================
+   HORIZON X — THEME
+   ========================================================= */
+:root{
+  --bg:#050505;--panel:#101010;--border:#292929;--text:#f5f5f5;--muted:#929292;
+  --green:#8affaa;--red:#ff8585;--blue:#9cb5ff;--amber:#ffd479;--accent:#8affaa;
+  --ease:cubic-bezier(.2,.8,.2,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scrollbar-color:#444 #050505}
+body{
+  position:relative;isolation:isolate;margin:0;min-height:100vh;overflow-x:hidden;
+  background:var(--bg);color:var(--text);
+  font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans Thai",sans-serif;
+}
+body,button,input{font-family:inherit}
+button,input{font-size:inherit}
+button{cursor:pointer}
+button:focus-visible,input:focus-visible,a:focus-visible{outline:2px solid var(--green);outline-offset:3px}
+::selection{color:#050505;background:var(--green)}
+.hidden{display:none!important}
+.center{text-align:center}
+.left{text-align:left}
+.muted{color:var(--muted);font-size:13px;line-height:1.8}
+.small{font-size:11px}
+.block-btn{display:block;text-align:center;text-decoration:none;margin-top:12px}
+
+/* ---------- BACKGROUND FX ---------- */
+.fx-background{
+  position:fixed;inset:0;z-index:-2;overflow:hidden;pointer-events:none;
+  background:radial-gradient(ellipse at 50% 0%,#141a16 0%,#080808 45%,#050505 80%);
+}
+.fx-grid{
+  position:absolute;inset:-50%;opacity:.18;
+  background-image:linear-gradient(#8affaa18 1px,transparent 1px),
+                   linear-gradient(90deg,#8affaa18 1px,transparent 1px);
+  background-size:48px 48px;
+  transform:perspective(500px) rotateX(55deg);
+  animation:gridMove 22s linear infinite;
+  mask-image:linear-gradient(transparent,black 40%,transparent);
+  -webkit-mask-image:linear-gradient(transparent,black 40%,transparent);
+}
+.fx-glow{
+  position:absolute;width:320px;height:320px;border-radius:50%;
+  background:var(--green);filter:blur(110px);opacity:.12;
+  animation:glowFloat 12s ease-in-out infinite alternate;
+}
+.fx-glow-one{top:5%;left:-180px}
+.fx-glow-two{right:-200px;bottom:5%;background:#718cff;animation-delay:-5s}
+.fx-scanline{position:absolute;inset:0;opacity:.13;
+  background:repeating-linear-gradient(to bottom,transparent 0,transparent 3px,#ffffff0a 4px)}
+#particles{position:absolute;inset:0;overflow:hidden}
+.ambient-particle{
+  position:absolute;bottom:-12px;width:3px;height:3px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 12px var(--green);opacity:0;
+  animation:ambientRise var(--duration,12s) linear var(--delay,0s) infinite;
+}
+
+/* ---------- LOADING / OFFLINE ---------- */
+.loading-screen{
+  position:fixed;inset:0;z-index:9000;display:grid;place-content:center;gap:18px;
+  justify-items:center;background:#050505;transition:opacity .5s,visibility .5s;
+}
+.loading-screen.done{opacity:0;visibility:hidden;pointer-events:none}
+.loader-ring{
+  width:54px;height:54px;border-radius:50%;border:2px solid #ffffff1a;
+  border-top-color:var(--green);box-shadow:0 0 30px #8affaa30;animation:spin 1s linear infinite;
+}
+.loader-text{color:#6f7a70;font-size:10px;letter-spacing:4px;margin:0}
+.offline-bar{
+  position:sticky;top:0;z-index:400;padding:9px 14px;text-align:center;
+  background:#2a1f08;color:var(--amber);font-size:11px;letter-spacing:1px;
+  border-bottom:1px solid #4a3a12;
+}
+.live-dot.warn{background:var(--amber);box-shadow:0 0 12px var(--amber)}
+.banner{border-bottom:1px solid #3a3018;background:#191405}
+.banner-inner{width:min(100% - 32px,900px);margin:0 auto;padding:12px 0;
+  display:flex;align-items:center;gap:14px}
+.banner-icon{font-size:20px;color:var(--amber)}
+.banner-inner strong{font-size:13px}
+.banner-inner p{margin:2px 0 0}
+.banner-inner button{margin-left:auto}
+
+/* ---------- NAV ---------- */
+.navbar{
+  position:sticky;top:0;z-index:500;min-height:68px;padding:14px 6%;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  border-bottom:1px solid #ffffff16;background:#050505b8;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);animation:navEnter .8s both;
+}
+.logo{font-size:20px;font-weight:950;letter-spacing:3px;color:var(--text);
+  text-decoration:none;transition:letter-spacing .3s,text-shadow .3s}
+.logo:hover{letter-spacing:5px;text-shadow:0 0 25px #ffffff70}
+.logo span{color:var(--green)}
+.nav-links{display:flex;gap:4px;align-items:center}
+.nav-links a{padding:8px 12px;border-radius:9px;color:#9a9a9a;text-decoration:none;
+  font-size:12px;border:1px solid transparent;transition:.25s}
+.nav-links a:hover{color:#fff;border-color:#333}
+.nav-links a.active{color:#050505;background:#fff;border-color:#fff}
+
+/* ---------- LAYOUT ---------- */
+.container{position:relative;width:min(100% - 32px,520px);margin:48px auto}
+#adminPage.container{width:min(100% - 32px,900px)}
+.hero{text-align:center;margin-bottom:30px}
+.hero-enhanced{animation:heroEnter .9s var(--ease) both}
+.hero-badge{display:inline-flex;align-items:center;justify-content:center;gap:9px;
+  padding:9px 13px;margin-bottom:20px;border:1px solid #ffffff20;border-radius:100px;
+  background:#ffffff06;color:#c9c9c9;font-size:9px;letter-spacing:2px;
+  animation:badgeFloat 4s ease-in-out infinite}
+.live-dot{width:7px;height:7px;flex-shrink:0;border-radius:50%;background:var(--green);
+  box-shadow:0 0 12px var(--green);animation:dotPulse 1.5s infinite}
+.hero-art{position:relative;height:190px;margin:0 auto 25px;overflow:hidden;
+  border:1px solid #ffffff25;border-radius:18px;background:#0b0b0b;
+  box-shadow:0 15px 55px #0008,0 0 30px #8affaa08}
+.hero-image{display:block;width:100%;height:100%;object-fit:cover;opacity:.76;
+  filter:grayscale(100%) contrast(1.15);
+  animation:imageReveal 1.4s both,imageDrift 18s ease-in-out infinite alternate;
+  transition:filter .6s,opacity .6s}
+.hero-art:hover .hero-image{filter:grayscale(20%) contrast(1.15);opacity:.98}
+.hero-image-overlay{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(0deg,#050505 0%,transparent 60%),
+             linear-gradient(90deg,#05050555,transparent,#05050555)}
+.hero-image-text{position:absolute;bottom:13px;left:15px;color:#ffffffa0;font-size:9px;letter-spacing:4px}
+.eyebrow{color:var(--muted);font-size:10px;letter-spacing:4px}
+h1{font-size:clamp(28px,7vw,42px);margin:13px 0;letter-spacing:-1px}
+.hero-title{font-size:clamp(35px,9vw,52px);font-weight:950;letter-spacing:-2px;
+  animation:titleEnter 1s .15s both;overflow-wrap:anywhere}
+.glitch{position:relative;display:inline-block;color:var(--green);
+  text-shadow:0 0 22px #8affaa40;animation:glitchPulse 5s infinite}
+.hero-subtitle{animation:fadeUp .8s .35s both}
+.hero-line{display:flex;align-items:center;justify-content:center;gap:10px;
+  margin-top:22px;color:#6e776f;font-size:8px;letter-spacing:3px}
+.hero-line span:first-child,.hero-line span:last-child{width:25px;height:1px;background:#8affaa80}
+
+/* ---------- PANEL ---------- */
+.panel{position:relative;overflow:hidden;padding:25px;border:1px solid #ffffff1c;
+  border-radius:20px;background:linear-gradient(145deg,#171717dc,#080808ef);
+  box-shadow:0 25px 80px #0007,inset 0 1px #ffffff08;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+  animation:panelEnter .8s .2s both;transition:border-color .35s,box-shadow .35s}
+.panel::before{content:"";position:absolute;top:0;left:-120%;width:70%;height:1px;
+  background:linear-gradient(90deg,transparent,var(--green),transparent);
+  animation:panelShine 7s ease-in-out infinite;pointer-events:none}
+.panel:focus-within{border-color:#8affaa60;box-shadow:0 25px 80px #0008,0 0 30px #8affaa0b}
+.section-title{font-size:13px;letter-spacing:3px;color:#8a8a8a;margin:30px 0 12px;text-transform:uppercase}
+
+/* ---------- TABS / FORM ---------- */
+.tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:25px}
+.tab{min-height:43px;border:1px solid #333;border-radius:10px;background:#ffffff03;
+  color:#999;transition:.3s}
+.tab:hover{border-color:#8affaa70;color:#fff}
+.tab.active{color:#050505;background:#fff;border-color:#fff;box-shadow:0 0 22px #ffffff12}
+.field{margin-bottom:17px;animation:fadeUp .4s both}
+label{display:block;margin-bottom:8px;font-size:12px;color:#bbb}
+.input-wrap{position:relative}
+input[type=text],input[type=email],input[type=password],input[type=number],input[type=file]{
+  width:100%;min-height:47px;padding:12px;border:1px solid #333;border-radius:10px;
+  background:#080808;color:#fff;outline:none;
+  transition:border-color .25s,box-shadow .25s,background .25s}
+input:hover{border-color:#666}
+input:focus{border-color:var(--green);background:#0d110e;box-shadow:0 0 0 3px #8affaa12,0 0 22px #8affaa0a}
+input::placeholder{color:#505050}
+input[type=file]{padding:10px;font-size:12px;color:#aaa}
+input[type=file]::file-selector-button{margin-right:12px;padding:7px 12px;border-radius:7px;
+  border:1px solid #444;background:#151515;color:#ddd;cursor:pointer}
+.password-input{padding-right:62px}
+.password-toggle{position:absolute;top:50%;right:9px;transform:translateY(-50%);
+  padding:7px;border:1px solid #333;border-radius:7px;background:#151515;color:#aaa;font-size:10px}
+.password-toggle:hover{color:var(--green);border-color:var(--green)}
+.strength{height:3px;margin-top:8px;border-radius:3px;background:#1c1c1c;overflow:hidden}
+.strength span{display:block;height:100%;width:0;background:var(--red);transition:width .3s,background .3s}
+.strength.s1 span{width:33%;background:var(--red)}
+.strength.s2 span{width:66%;background:var(--amber)}
+.strength.s3 span{width:100%;background:var(--green)}
+
+/* ---------- BUTTONS ---------- */
+.primary,.secondary,.notification-ok{position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .25s,background .25s,border-color .25s}
+.primary{width:100%;min-height:49px;padding:12px;border:1px solid #fff;border-radius:10px;
+  background:#fff;color:#050505;font-weight:800}
+.primary::after,.notification-ok::after{content:"";position:absolute;top:0;bottom:0;left:-120%;
+  width:70%;background:linear-gradient(100deg,transparent,#ffffffa0,transparent);
+  transform:skewX(-20deg);transition:left .6s;pointer-events:none}
+.primary:hover::after,.notification-ok:hover::after{left:150%}
+.primary:hover{transform:translateY(-2px);box-shadow:0 8px 30px #ffffff18;background:#e7ffed}
+.primary:active,.secondary:active,.notification-ok:active{transform:scale(.97)}
+.secondary{min-height:40px;padding:9px 13px;border:1px solid #444;border-radius:9px;
+  background:#111;color:#fff;font-size:12px}
+.secondary:hover{border-color:#8affaa80;box-shadow:0 0 20px #8affaa0b}
+.secondary.danger:hover{border-color:#ff858580;color:#ffb3b3}
+.secondary.ok:hover{border-color:#8affaa80;color:var(--green)}
+button:disabled{opacity:.55;cursor:wait;transform:none!important}
+.forgot-button{width:100%;margin-top:12px}
+.form-note{font-size:11px}
+
+/* ---------- DASHBOARD / WALLET ---------- */
+.dashboard-title{font-size:27px;overflow-wrap:anywhere;animation:fadeUp .7s both}
+.stat{position:relative;margin:22px 0;padding:18px;overflow:hidden;border:1px solid #282828;
+  border-radius:14px;background:#080808;transition:border-color .3s,transform .3s}
+.stat:hover{transform:translateY(-3px);border-color:#8affaa50}
+.stat::after{content:"";position:absolute;top:0;left:0;width:2px;height:100%;
+  background:var(--green);box-shadow:0 0 15px var(--green)}
+.stat h2{font-size:17px;margin:6px 0}
+.status-line{display:inline-flex;align-items:center;gap:8px;color:var(--green);font-size:11px}
+.status-line::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--green);
+  box-shadow:0 0 10px var(--green)}
+.status-line.offline{color:var(--amber)}
+.status-line.offline::before{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.quick-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:8px}
+.quick-card{display:flex;flex-direction:column;gap:6px;padding:16px;border:1px solid #262626;
+  border-radius:13px;background:#0a0a0a;text-decoration:none;color:var(--text);transition:.3s}
+.quick-card:hover{border-color:#8affaa50;transform:translateY(-3px)}
+.quick-label{font-size:10px;letter-spacing:2px;color:#8b8b8b}
+.quick-card strong{font-size:20px;color:var(--green)}
+.wallet-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0 26px}
+.wallet-card{padding:16px;border:1px solid #262626;border-radius:13px;background:#0a0a0a;
+  display:flex;flex-direction:column;gap:7px}
+.wallet-card.available{border-color:#2c4a35;background:#08120c}
+.wallet-card.pending{border-color:#4a3d18;background:#120f06}
+.wallet-label{font-size:10px;letter-spacing:2px;color:#8b8b8b}
+.wallet-card strong{font-size:19px}
+.wallet-card.available strong{color:var(--green)}
+.wallet-card.pending strong{color:var(--amber)}
+
+/* ---------- LISTS ---------- */
+.tx-list{display:flex;flex-direction:column;gap:9px}
+.tx-list.compact{margin-top:20px}
+.tx-item{display:flex;align-items:flex-start;gap:12px;padding:13px;border:1px solid #242424;
+  border-radius:12px;background:#0a0a0a;animation:fadeUp .35s both}
+.tx-item .tx-main{flex:1;min-width:0}
+.tx-item .tx-top{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.tx-item .tx-amount{font-weight:800;font-size:15px}
+.tx-item .tx-amount.in{color:var(--green)}
+.tx-item .tx-amount.out{color:var(--red)}
+.tx-item .tx-meta{font-size:11px;color:#777;margin-top:4px;overflow-wrap:anywhere}
+.tx-item .tx-note{font-size:11px;color:#8d8d8d;margin-top:4px;overflow-wrap:anywhere}
+.chip{font-size:9px;letter-spacing:1.5px;padding:4px 9px;border-radius:100px;
+  border:1px solid #3a3a3a;color:#aaa;text-transform:uppercase;white-space:nowrap}
+.chip.pending{border-color:#5a4715;color:var(--amber);background:#171205}
+.chip.approved{border-color:#2c5a3a;color:var(--green);background:#08150d}
+.chip.rejected{border-color:#5a2c2c;color:var(--red);background:#150808}
+.chip.cancelled{border-color:#3a3a3a;color:#888}
+.tx-actions{display:flex;gap:7px;margin-top:10px;flex-wrap:wrap}
+.tx-actions button{font-size:11px;padding:7px 11px}
+.admin-item{border-color:#2b2b2b}
+.admin-item .tx-amount{font-size:17px}
+.slip-link{font-size:11px;color:var(--blue);text-decoration:none}
+.slip-link:hover{text-decoration:underline}
+
+/* ---------- STATES ---------- */
+.skeleton{padding:13px;border:1px solid #1f1f1f;border-radius:12px;background:#0a0a0a}
+.skeleton-line{height:11px;border-radius:6px;margin-bottom:9px;
+  background:linear-gradient(90deg,#171717 25%,#232323 50%,#171717 75%);
+  background-size:200% 100%;animation:shimmer 1.4s linear infinite}
+.skeleton-line:last-child{margin-bottom:0;width:60%}
+.empty{padding:30px 18px;text-align:center;border:1px dashed #2c2c2c;border-radius:13px;background:#080808}
+.empty-glyph{font-size:28px;opacity:.5}
+.empty p{margin:9px 0 0;color:#7c7c7c;font-size:12px}
+.error-glyph{width:62px;height:62px;margin:0 auto 16px;display:grid;place-items:center;
+  border-radius:50%;border:1px solid var(--red);color:var(--red);font-size:28px;
+  box-shadow:0 0 35px #ff858520}
+
+/* ---------- MODAL / TOAST ---------- */
+.notification-overlay{
+  --notice-accent:#8affaa;--notice-glow:rgba(90,255,140,.14);
+  position:fixed;inset:0;z-index:99999;display:flex;align-items:center;justify-content:center;
+  padding:20px;background:#000b;backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  opacity:0;visibility:hidden;pointer-events:none;transition:opacity .3s,visibility .3s}
+.notification-overlay.error{--notice-accent:#ff8585;--notice-glow:rgba(255,65,65,.14)}
+.notification-overlay.info{--notice-accent:#d0d0d0;--notice-glow:rgba(255,255,255,.10)}
+.notification-overlay.warn{--notice-accent:#ffd479;--notice-glow:rgba(255,212,121,.14)}
+.notification-overlay.active{opacity:1;visibility:visible;pointer-events:auto}
+.notification-card{position:relative;width:100%;max-width:380px;padding:32px 25px 24px;
+  overflow:hidden;text-align:center;background:linear-gradient(145deg,#191919,#080808);
+  border:1px solid #383838;border-radius:23px;
+  box-shadow:0 25px 100px #000,0 0 50px var(--notice-glow);
+  transform:translateY(25px) scale(.92);transition:transform .35s}
+.notification-overlay.active .notification-card{
+  animation:modalEpic .55s cubic-bezier(.16,1,.3,1) both;transform:translateY(0) scale(1)}
+.notification-card::before{content:"";position:absolute;top:0;left:15%;width:70%;height:1px;
+  background:var(--notice-accent);box-shadow:0 0 18px var(--notice-accent)}
+.notification-card::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;
+  background:linear-gradient(120deg,transparent 25%,#ffffff08 50%,transparent 75%);
+  background-size:200% 100%;animation:modalShimmer 4s linear infinite}
+.notification-icon{position:relative;z-index:1;display:grid;place-items:center;width:78px;height:78px;
+  margin:0 auto 18px;border:1px solid var(--notice-accent);border-radius:50%;
+  background:var(--notice-accent);color:#080808;
+  box-shadow:0 0 25px var(--notice-glow),0 0 70px var(--notice-glow);animation:noticePop .45s both}
+.notification-icon svg{width:36px;height:36px;fill:none;stroke:currentColor;stroke-width:2.5;
+  stroke-linecap:round;stroke-linejoin:round}
+.notification-emoji{position:relative;z-index:1;font-size:24px;margin-bottom:9px}
+.notification-label{position:relative;z-index:1;color:var(--notice-accent);font-size:10px;
+  font-weight:800;letter-spacing:4px;margin-bottom:10px}
+.notification-title{position:relative;z-index:1;font-size:23px;margin:0 0 12px;
+  overflow-wrap:anywhere;animation:fadeUp .45s .1s both}
+.notification-description{position:relative;z-index:1;max-width:280px;margin:0 auto 24px;
+  color:#aaa;font-size:13px;line-height:1.8;overflow-wrap:anywhere;animation:fadeUp .45s .2s both}
+.notification-ok{position:relative;z-index:1;width:100%;min-height:48px;
+  border:1px solid var(--notice-accent);border-radius:11px;background:var(--notice-accent);
+  color:#080808;font-size:12px;font-weight:800;letter-spacing:2px;animation:fadeUp .45s .3s both}
+.notification-footnote{position:relative;z-index:1;margin-top:17px;color:#555;font-size:9px;letter-spacing:2px}
+.dialog-actions{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1.4fr;gap:9px}
+.dialog-actions .notification-ok{animation:none}
+#reasonOverlay .notification-description{margin-bottom:18px}
+#reasonOverlay .field{position:relative;z-index:1;margin-bottom:18px}
+
+.toast-host{position:fixed;z-index:100001;left:50%;bottom:22px;transform:translateX(-50%);
+  display:flex;flex-direction:column;gap:9px;width:min(100% - 32px,420px);pointer-events:none}
+.toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;padding:13px 15px;
+  border-radius:13px;border:1px solid #333;background:#111111f0;backdrop-filter:blur(12px);
+  color:#eee;font-size:12.5px;line-height:1.6;box-shadow:0 16px 45px #000a;
+  animation:toastIn .3s var(--ease) both}
+.toast.leaving{animation:toastOut .25s var(--ease) both}
+.toast .dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0;
+  background:var(--green);box-shadow:0 0 10px var(--green)}
+.toast.error{border-color:#5a2c2c}
+.toast.error .dot{background:var(--red);box-shadow:0 0 10px var(--red)}
+.toast.info .dot{background:#cfcfcf;box-shadow:0 0 10px #cfcfcf}
+.toast.warn{border-color:#5a4715}
+.toast.warn .dot{background:var(--amber);box-shadow:0 0 10px var(--amber)}
+.fx-particle{position:fixed;z-index:100000;width:4px;height:4px;border-radius:50%;
+  background:var(--green);box-shadow:0 0 12px var(--green);pointer-events:none;
+  animation:particleBurst 1s ease-out forwards}
+footer{padding:25px 12px;text-align:center;color:#555;font-size:9px;letter-spacing:2px}
+
+/* ---------- KEYFRAMES ---------- */
+@keyframes gridMove{to{background-position:0 48px}}
+@keyframes glowFloat{from{transform:translate3d(0,0,0)}to{transform:translate3d(70px,50px,0)}}
+@keyframes ambientRise{0%{opacity:0;transform:translateY(0)}10%{opacity:.65}85%{opacity:.35}100%{opacity:0;transform:translateY(-105vh)}}
+@keyframes navEnter{from{opacity:0;transform:translateY(-15px)}to{opacity:1;transform:translateY(0)}}
+@keyframes heroEnter{from{opacity:0;transform:translateY(25px)}to{opacity:1;transform:translateY(0)}}
+@keyframes panelEnter{from{opacity:0;transform:translateY(22px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes titleEnter{from{opacity:0;letter-spacing:8px;filter:blur(8px)}to{opacity:1;letter-spacing:-2px;filter:blur(0)}}
+@keyframes imageReveal{from{opacity:0}to{opacity:.76}}
+@keyframes imageDrift{from{transform:scale(1)}to{transform:scale(1.09)}}
+@keyframes badgeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+@keyframes dotPulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes glitchPulse{0%,90%,100%{transform:translateX(0)}92%{transform:translateX(-2px)}94%{transform:translateX(2px)}96%{transform:translateX(-1px)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes panelShine{0%,70%,100%{left:-120%}85%{left:150%}}
+@keyframes modalEpic{0%{opacity:0;transform:translateY(35px) scale(.82) rotateX(8deg)}70%{opacity:1;transform:translateY(-4px) scale(1.015)}100%{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes modalShimmer{to{background-position:-200% 0}}
+@keyframes noticePop{from{opacity:0;transform:scale(.5) rotate(-12deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@keyframes particleBurst{from{opacity:1;transform:translate(0,0) scale(1)}to{opacity:0;transform:translate(var(--dx),var(--dy)) scale(0)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes shimmer{to{background-position:-200% 0}}
+@keyframes toastIn{from{opacity:0;transform:translateY(16px) scale(.96)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes toastOut{to{opacity:0;transform:translateY(10px) scale(.96)}}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width:720px){
+  .nav-links a{padding:7px 9px;font-size:11px}
+  #adminPage.container{width:min(100% - 24px,100%)}
+}
+@media (max-width:480px){
+  .container{margin:30px auto}
+  .panel{padding:19px;border-radius:17px}
+  .hero-art{height:150px}
+  .hero-title{letter-spacing:-1px}
+  .hero-badge{font-size:8px;letter-spacing:1.5px}
+  .notification-card{padding:28px 20px 22px}
+  .navbar{padding:12px 4%;min-height:60px}
+  .logo{font-size:16px;letter-spacing:2px}
+  .wallet-grid,.quick-grid{grid-template-columns:1fr}
+  .banner-inner{flex-wrap:wrap}
+  .banner-inner button{margin-left:0;width:100%}
+  #navLogout{padding:7px 10px;font-size:11px}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;
+    scroll-behavior:auto!important;transition-duration:.01ms!important}
+}
+</style>
 </head>
 
 <body>
-  <!-- BACKGROUND -->
-  <div class="fx-background" aria-hidden="true">
-    <div class="fx-grid"></div>
-    <div class="fx-glow fx-glow-one"></div>
-    <div class="fx-glow fx-glow-two"></div>
-    <div class="fx-scanline"></div>
-    <div id="particles"></div>
+
+<!-- ================= BACKGROUND ================= -->
+<div class="fx-background" aria-hidden="true">
+  <div class="fx-grid"></div>
+  <div class="fx-glow fx-glow-one"></div>
+  <div class="fx-glow fx-glow-two"></div>
+  <div class="fx-scanline"></div>
+  <div id="particles"></div>
+</div>
+
+<!-- ================= LOADING ================= -->
+<div id="loadingScreen" class="loading-screen">
+  <div class="loader-ring"></div>
+  <p class="loader-text">กำลังเชื่อมต่อ HORIZON X</p>
+</div>
+
+<!-- ================= OFFLINE ================= -->
+<div id="offlineBar" class="offline-bar hidden" role="status">
+  <span class="live-dot warn"></span> ออฟไลน์ — ข้อมูลจะซิงก์เมื่อกลับมาออนไลน์
+</div>
+
+<!-- ================= NAV ================= -->
+<header class="navbar">
+  <a class="logo" href="#/dashboard">HORIZON <span>X</span></a>
+  <nav id="mainNav" class="nav-links hidden" aria-label="เมนูหลัก">
+    <a href="#/dashboard" data-nav="dashboard">ภาพรวม</a>
+    <a href="#/wallet" data-nav="wallet">กระเป๋าเงิน</a>
+    <a href="#/admin" data-nav="admin" id="navAdmin" class="hidden">แอดมิน</a>
+  </nav>
+  <button id="navLogout" class="secondary hidden" type="button">ออกจากระบบ</button>
+</header>
+
+<!-- ================= VERIFY BANNER ================= -->
+<div id="verifyBanner" class="banner hidden">
+  <div class="banner-inner">
+    <span class="banner-icon">✉</span>
+    <div>
+      <strong>ยังไม่ได้ยืนยันอีเมล</strong>
+      <p class="muted small">ยืนยันอีเมลเพื่อความปลอดภัยของบัญชี</p>
+    </div>
+    <button id="resendVerifyBtn" class="secondary" type="button">ส่งอีเมลอีกครั้ง</button>
   </div>
+</div>
 
-  <div id="offlineBar" class="offline-bar hidden" role="status">
-    ออฟไลน์อยู่ — การเปลี่ยนแปลงจะถูกซิงก์เมื่อกลับมาออนไลน์
+<main>
+  <!-- ================= AUTH ================= -->
+  <section id="homePage" class="container">
+    <div class="hero hero-enhanced">
+      <div class="hero-badge"><span class="live-dot"></span>NEXT GENERATION EXPERIENCE</div>
+      <div class="hero-art">
+        <img class="hero-image" alt="Horizon X futuristic space"
+          src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1000&q=85">
+        <div class="hero-image-overlay"></div>
+        <div class="hero-image-text">HX / 001</div>
+      </div>
+      <div class="eyebrow">BEYOND THE ORDINARY</div>
+      <h1 class="hero-title">HORIZON <span class="glitch">X</span></h1>
+      <p class="muted hero-subtitle">อีกระดับของประสบการณ์ดิจิทัล</p>
+      <div class="hero-line"><span></span><span>EXPLORE THE UNKNOWN</span><span></span></div>
+    </div>
+
+    <div class="panel">
+      <div class="tabs" role="tablist">
+        <button id="loginTab" class="tab active" type="button" role="tab">เข้าสู่ระบบ</button>
+        <button id="signupTab" class="tab" type="button" role="tab">สมัครสมาชิก</button>
+      </div>
+
+      <form id="authForm" novalidate>
+        <div id="nameField" class="field hidden">
+          <label for="displayName">ชื่อที่ใช้แสดง</label>
+          <input id="displayName" type="text" maxlength="40" autocomplete="nickname" placeholder="ชื่อของคุณ">
+        </div>
+        <div class="field">
+          <label for="email">อีเมล</label>
+          <input id="email" type="email" required autocomplete="email" placeholder="you@example.com">
+        </div>
+        <div class="field">
+          <label for="password">รหัสผ่าน</label>
+          <div class="input-wrap">
+            <input id="password" class="password-input" type="password" required minlength="6"
+                   autocomplete="current-password" placeholder="อย่างน้อย 6 ตัวอักษร">
+            <button id="passwordToggle" class="password-toggle" type="button"
+                    aria-label="แสดงรหัสผ่าน" aria-pressed="false">แสดง</button>
+          </div>
+          <div id="strengthBar" class="strength hidden"><span></span></div>
+        </div>
+        <button id="submitBtn" class="primary" type="submit">เข้าสู่ระบบ</button>
+      </form>
+
+      <button id="forgotBtn" class="secondary forgot-button" type="button">ลืมรหัสผ่าน?</button>
+      <p class="muted form-note">ระบบบัญชีใช้ Firebase Authentication</p>
+    </div>
+  </section>
+
+  <!-- ================= DASHBOARD ================= -->
+  <section id="dashboardPage" class="container hidden">
+    <div class="panel">
+      <div class="eyebrow">HORIZON X / DASHBOARD</div>
+      <h1 class="dashboard-title">ยินดีต้อนรับ</h1>
+      <p id="welcomeText" class="muted"></p>
+
+      <div class="stat">
+        <div class="eyebrow">ACCOUNT STATUS</div>
+        <h2 id="accountState">บัญชีพร้อมใช้งาน</h2>
+        <p class="muted small" id="accountMeta">—</p>
+        <div class="status-line" id="connState">CONNECTED</div>
+      </div>
+
+      <div class="quick-grid">
+        <a class="quick-card" href="#/wallet">
+          <span class="quick-label">ยอดเงินคงเหลือ</span>
+          <strong id="quickBalance">฿0.00</strong>
+        </a>
+        <a class="quick-card" href="#/wallet">
+          <span class="quick-label">รอดำเนินการ</span>
+          <strong id="quickPending">฿0.00</strong>
+        </a>
+      </div>
+
+      <div id="recentTx" class="tx-list compact"></div>
+      <a class="secondary block-btn" href="#/wallet">ดูกระเป๋าเงินทั้งหมด →</a>
+    </div>
+  </section>
+
+  <!-- ================= WALLET ================= -->
+  <section id="walletPage" class="container hidden">
+    <div class="panel">
+      <div class="eyebrow">HORIZON X / WALLET</div>
+      <h1 class="dashboard-title">กระเป๋าเงิน</h1>
+
+      <div class="wallet-grid">
+        <div class="wallet-card available">
+          <span class="wallet-label">ยอดเงินคงเหลือ</span><strong id="walletBalance">฿0.00</strong>
+        </div>
+        <div class="wallet-card pending">
+          <span class="wallet-label">รอดำเนินการ</span><strong id="walletPending">฿0.00</strong>
+        </div>
+        <div class="wallet-card">
+          <span class="wallet-label">เติมสะสม</span><strong id="walletIn">฿0.00</strong>
+        </div>
+        <div class="wallet-card">
+          <span class="wallet-label">ถอนสะสม</span><strong id="walletOut">฿0.00</strong>
+        </div>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button id="depositTab" class="tab active" type="button">เติมเงิน</button>
+        <button id="withdrawTab" class="tab" type="button">ถอนเงิน</button>
+      </div>
+
+      <form id="depositForm" novalidate>
+        <div class="field">
+          <label for="depositAmount">จำนวนเงิน (บาท) — ขั้นต่ำ 50</label>
+          <input id="depositAmount" type="number" min="50" step="0.01" inputmode="decimal" placeholder="500" required>
+        </div>
+        <div class="field">
+          <label for="depositNote">หมายเหตุ</label>
+          <input id="depositNote" type="text" maxlength="200" placeholder="เช่น โอนผ่านธนาคาร ก">
+        </div>
+        <div class="field">
+          <label for="slipFile">สลิปโอนเงิน (ไม่บังคับ, ไม่เกิน 5 MB)</label>
+          <input id="slipFile" type="file" accept="image/png,image/jpeg,image/webp">
+          <p class="muted small">สลิปเป็นเพียงหลักฐานประกอบ — ยอดเงินจริงยืนยันโดยแอดมิน</p>
+        </div>
+        <button id="depositBtn" class="primary" type="submit">ส่งคำขอเติมเงิน</button>
+      </form>
+
+      <form id="withdrawForm" class="hidden" novalidate>
+        <div class="field">
+          <label for="withdrawAmount">จำนวนเงิน (บาท) — ขั้นต่ำ 100</label>
+          <input id="withdrawAmount" type="number" min="100" step="0.01" inputmode="decimal" placeholder="300" required>
+        </div>
+        <div class="field">
+          <label for="withdrawNote">หมายเหตุ / เลขบัญชีปลายทาง</label>
+          <input id="withdrawNote" type="text" maxlength="200" placeholder="ธ.กสิกร 123-4-56789-0">
+        </div>
+        <p class="muted small">เมื่อส่งคำขอ ระบบจะกันยอดเงินไว้ทันทีจนกว่าแอดมินจะตรวจ</p>
+        <button id="withdrawBtn" class="primary" type="submit">ส่งคำขอถอนเงิน</button>
+      </form>
+
+      <h2 class="section-title">คำขอของฉัน</h2>
+      <div id="requestList" class="tx-list"></div>
+
+      <h2 class="section-title">ประวัติธุรกรรม</h2>
+      <div id="txList" class="tx-list"></div>
+    </div>
+  </section>
+
+  <!-- ================= ADMIN ================= -->
+  <section id="adminPage" class="container hidden">
+    <div class="panel">
+      <div class="eyebrow">HORIZON X / ADMIN</div>
+      <h1 class="dashboard-title">ศูนย์ผู้ดูแลระบบ</h1>
+
+      <div class="tabs" role="tablist">
+        <button id="pendingTab" class="tab active" type="button">รอตรวจสอบ</button>
+        <button id="historyTab" class="tab" type="button">ประวัติทั้งหมด</button>
+      </div>
+
+      <div id="adminList" class="tx-list"></div>
+
+      <h2 class="section-title">บันทึกการทำงาน (Audit Log)</h2>
+      <div id="auditList" class="tx-list"></div>
+    </div>
+  </section>
+
+  <!-- ================= ERROR ================= -->
+  <section id="errorPage" class="container hidden">
+    <div class="panel center">
+      <div class="error-glyph">!</div>
+      <h1 class="dashboard-title">เกิดข้อผิดพลาด</h1>
+      <p id="errorText" class="muted">ไม่สามารถเชื่อมต่อระบบได้</p>
+      <button id="retryBtn" class="primary" type="button">ลองใหม่อีกครั้ง</button>
+    </div>
+  </section>
+</main>
+
+<footer>HORIZON X · BEYOND THE ORDINARY</footer>
+
+<!-- ================= NOTIFICATION ================= -->
+<div id="notificationOverlay" class="notification-overlay" role="dialog" aria-modal="true"
+     aria-labelledby="notificationTitle" aria-describedby="notificationDescription"
+     aria-hidden="true" inert>
+  <div class="notification-card">
+    <div id="notificationIcon" class="notification-icon" aria-hidden="true"></div>
+    <div id="notificationEmoji" class="notification-emoji">🎉</div>
+    <div id="notificationLabel" class="notification-label">SYSTEM SUCCESS</div>
+    <h2 id="notificationTitle" class="notification-title">สำเร็จ!</h2>
+    <p id="notificationDescription" class="notification-description"></p>
+    <button id="notificationOk" class="notification-ok" type="button">ตกลง →</button>
+    <div class="notification-footnote">HORIZON X · BEYOND THE ORDINARY</div>
   </div>
+</div>
 
-  <!-- NAVBAR -->
-  <header class="navbar">
-    <div class="logo">HORIZON <span>X</span></div>
-
-    <nav class="nav-links" id="navLinks" aria-label="เมนูหลัก">
-      <button class="nav-link hidden" data-page="dashboard" type="button">แดชบอร์ด</button>
-      <button class="nav-link hidden" data-page="wallet" type="button">กระเป๋าเงิน</button>
-      <button class="nav-link hidden" data-page="admin" id="navAdmin" type="button">แอดมิน</button>
-    </nav>
-
-    <button id="navLogout" class="secondary hidden" type="button">ออกจากระบบ</button>
-  </header>
-
-  <main>
-    <!-- ============ HOME / AUTH ============ -->
-    <section id="homePage" class="container">
-      <div class="hero hero-enhanced">
-        <div class="hero-badge">
-          <span class="live-dot"></span>
-          NEXT GENERATION EXPERIENCE
-        </div>
-
-        <div class="hero-art">
-          <img
-            class="hero-image"
-            src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&fit=crop&w=1000&q=85"
-            alt="Horizon X futuristic space"
-          >
-          <div class="hero-image-overlay"></div>
-          <div class="hero-image-text">HX / 001</div>
-        </div>
-
-        <div class="eyebrow">BEYOND THE ORDINARY</div>
-        <h1 class="hero-title">HORIZON <span class="glitch">X</span></h1>
-        <p class="muted hero-subtitle">อีกระดับของประสบการณ์ดิจิทัล</p>
-
-        <div class="hero-line">
-          <span></span><span>EXPLORE THE UNKNOWN</span><span></span>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="tabs">
-          <button id="loginTab" class="tab active" type="button">เข้าสู่ระบบ</button>
-          <button id="signupTab" class="tab" type="button">สมัครสมาชิก</button>
-        </div>
-
-        <form id="authForm" novalidate>
-          <div id="nameField" class="field hidden">
-            <label for="displayName">ชื่อที่ใช้แสดง</label>
-            <input id="displayName" type="text" maxlength="40" autocomplete="nickname" placeholder="ชื่อของคุณ">
-          </div>
-
-          <div class="field">
-            <label for="email">อีเมล</label>
-            <input id="email" type="email" required autocomplete="email" placeholder="you@example.com">
-          </div>
-
-          <div class="field">
-            <label for="password">รหัสผ่าน</label>
-            <div class="input-wrap">
-              <input
-                id="password" class="password-input" type="password" required minlength="6"
-                autocomplete="current-password" placeholder="อย่างน้อย 6 ตัวอักษร"
-              >
-              <button
-                id="passwordToggle" class="password-toggle" type="button"
-                aria-label="แสดงรหัสผ่าน" aria-pressed="false"
-              >แสดง</button>
-            </div>
-          </div>
-
-          <button id="submitBtn" class="primary" type="submit">เข้าสู่ระบบ</button>
-        </form>
-
-        <button id="forgotBtn" class="secondary forgot-button" type="button">ลืมรหัสผ่าน?</button>
-
-        <p class="muted form-note">
-          ระบบบัญชีใช้ Firebase Authentication · รหัสผ่านไม่ถูกเก็บไว้ที่ไหนเลย
-        </p>
-      </div>
-    </section>
-
-    <!-- ============ DASHBOARD ============ -->
-    <section id="dashboardPage" class="container hidden">
-      <div class="panel">
-        <div class="eyebrow">HORIZON X / DASHBOARD</div>
-        <h1 class="dashboard-title">ยินดีต้อนรับ</h1>
-        <p id="welcomeText" class="muted"></p>
-
-        <div id="verifyBanner" class="banner hidden">
-          <span aria-hidden="true">⚠️</span>
-          <span class="grow">
-            อีเมลของคุณยังไม่ได้รับการยืนยัน — ยืนยันก่อนจึงจะทำรายการในกระเป๋าเงินได้
-          </span>
-          <button id="verifyResend" class="secondary small-btn" type="button">ส่งอีเมลยืนยัน</button>
-          <button id="verifyRefresh" class="secondary small-btn" type="button">ตรวจสอบอีกครั้ง</button>
-        </div>
-
-        <div class="stat">
-          <div class="eyebrow">ACCOUNT STATUS</div>
-          <h2 style="margin:8px 0 4px;">บัญชีพร้อมใช้งาน</h2>
-          <p class="muted" id="accountEmail"></p>
-          <p class="muted mono tiny" id="accountUid"></p>
-          <div class="status-line">CONNECTED</div>
-        </div>
-
-        <div class="grid-2">
-          <div class="stat">
-            <div class="eyebrow">ยอดคงเหลือ</div>
-            <div class="value" id="dashBalance">0.00</div>
-            <div class="muted tiny">บาท (THB)</div>
-          </div>
-          <div class="stat amber">
-            <div class="eyebrow">รอดำเนินการ</div>
-            <div class="value" id="dashPending">0.00</div>
-            <div class="muted tiny">บาท (THB)</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="eyebrow">บันทึกของฉัน / CRUD</div>
-        <h2 style="margin:10px 0 16px; font-size:20px;">Notes</h2>
-
-        <form id="noteForm">
-          <div class="field">
-            <label for="noteTitle">หัวข้อ</label>
-            <input id="noteTitle" type="text" maxlength="80" placeholder="หัวข้อบันทึก" required>
-          </div>
-          <div class="field">
-            <label for="noteBody">รายละเอียด</label>
-            <textarea id="noteBody" maxlength="1000" placeholder="พิมพ์รายละเอียด..."></textarea>
-          </div>
-          <div class="row">
-            <button id="noteSubmit" class="primary" type="submit">เพิ่มบันทึก</button>
-            <button id="noteCancel" class="secondary hidden" type="button">ยกเลิกแก้ไข</button>
-          </div>
-        </form>
-
-        <div id="noteList" class="list">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ WALLET ============ -->
-    <section id="walletPage" class="container hidden">
-      <div class="panel">
-        <div class="eyebrow">HORIZON X / WALLET</div>
-        <h1 class="dashboard-title">กระเป๋าเงิน</h1>
-
-        <div id="walletVerifyBanner" class="banner hidden">
-          <span aria-hidden="true">⚠️</span>
-          <span class="grow">ต้องยืนยันอีเมลก่อนจึงจะส่งคำขอได้</span>
-        </div>
-
-        <div class="stat">
-          <div class="eyebrow">ยอดเงินคงเหลือ</div>
-          <div class="value" id="walletBalance">0.00</div>
-          <div class="muted tiny">บาท (THB) · ยืนยันโดยผู้ดูแลระบบ</div>
-        </div>
-
-        <div class="grid-2">
-          <div class="stat amber">
-            <div class="eyebrow">รอเติมเงิน</div>
-            <div class="value" id="walletPendingIn">0.00</div>
-          </div>
-          <div class="stat amber">
-            <div class="eyebrow">รอถอนเงิน</div>
-            <div class="value" id="walletPendingOut">0.00</div>
-          </div>
-        </div>
-
-        <div class="grid-2">
-          <div class="stat">
-            <div class="eyebrow">รายการสำเร็จ</div>
-            <div class="value" id="walletDoneCount">0</div>
-          </div>
-          <div class="stat">
-            <div class="eyebrow">ใช้ได้ถอนได้</div>
-            <div class="value" id="walletAvailable">0.00</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="eyebrow">ส่งคำขอใหม่</div>
-
-        <form id="walletForm">
-          <div class="field">
-            <label for="walletType">ประเภทรายการ</label>
-            <select id="walletType">
-              <option value="topup">เติมเงิน (เงินเข้า)</option>
-              <option value="withdraw">ถอนเงิน (เงินออก)</option>
-            </select>
-          </div>
-
-          <div class="field">
-            <label for="walletAmount">จำนวนเงิน (บาท)</label>
-            <input id="walletAmount" type="number" min="1" step="0.01" placeholder="100.00" required>
-          </div>
-
-          <div class="field">
-            <label for="walletNote">หมายเหตุ / เลขอ้างอิงสลิป (ไม่บังคับ)</label>
-            <input id="walletNote" type="text" maxlength="120" placeholder="เช่น โอนผ่าน KBank 14:32">
-          </div>
-
-          <button id="walletSubmit" class="primary" type="submit">ส่งคำขอ</button>
-
-          <p class="muted form-note">
-            คำขอจะเริ่มที่สถานะ <b>รอตรวจสอบ</b> เสมอ ·
-            การอัปโหลดสลิปไม่ถือเป็นหลักฐานยืนยันการรับเงินจนกว่าผู้ดูแลจะอนุมัติ
-          </p>
-        </form>
-      </div>
-
-      <div class="panel">
-        <div class="eyebrow">ประวัติธุรกรรม</div>
-        <div id="walletHistory" class="list">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ ADMIN ============ -->
-    <section id="adminPage" class="container wide hidden">
-      <div class="panel">
-        <div class="eyebrow">HORIZON X / ADMIN</div>
-        <h1 class="dashboard-title">ศูนย์ผู้ดูแลระบบ</h1>
-        <p class="muted tiny">สิทธิ์ตรวจสอบจาก <b>Firestore (users/&#123;uid&#125;.role)</b> ไม่ใช่ localStorage</p>
-
-        <div class="tabs three" style="margin-top:20px;">
-          <button class="tab active" data-filter="pending" type="button">รอตรวจสอบ</button>
-          <button class="tab" data-filter="approved" type="button">อนุมัติแล้ว</button>
-          <button class="tab" data-filter="all" type="button">ทั้งหมด</button>
-        </div>
-
-        <div id="adminList" class="list">
-          <div class="skeleton"></div>
-          <div class="skeleton"></div>
-        </div>
-      </div>
-
-      <div class="panel">
-        <div class="eyebrow">ปรับยอดเงินด้วยตนเอง</div>
-        <form id="adjustForm">
-          <div class="row">
-            <div class="field">
-              <label for="adjustEmail">อีเมลผู้ใช้</label>
-              <input id="adjustEmail" type="email" placeholder="user@example.com" required>
-            </div>
-            <div class="field">
-              <label for="adjustMode">รูปแบบ</label>
-              <select id="adjustMode">
-                <option value="delta">บวก/ลบจากยอดเดิม</option>
-                <option value="set">ตั้งยอดใหม่ทับ</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="adjustAmount">จำนวนเงิน (ใส่ค่าลบได้)</label>
-            <input id="adjustAmount" type="number" step="0.01" placeholder="100" required>
-          </div>
-          <button id="adjustSubmit" class="primary" type="submit">บันทึกการปรับยอด</button>
-        </form>
-      </div>
-    </section>
-  </main>
-
-  <footer>HORIZON X · BEYOND THE ORDINARY</footer>
-
-  <!-- NOTIFICATION MODAL -->
-  <div
-    id="notificationOverlay" class="notification-overlay"
-    role="dialog" aria-modal="true" aria-labelledby="notificationTitle"
-    aria-describedby="notificationDescription" aria-hidden="true" inert
-  >
-    <div class="notification-card">
-      <div id="notificationIcon" class="notification-icon" aria-hidden="true"></div>
-      <div id="notificationEmoji" class="notification-emoji">🎉</div>
-      <div id="notificationLabel" class="notification-label">SYSTEM SUCCESS</div>
-      <h2 id="notificationTitle" class="notification-title">สำเร็จ!</h2>
-      <p id="notificationDescription" class="notification-description"></p>
-      <button id="notificationOk" class="notification-ok" type="button">ตกลง →</button>
-      <div class="notification-footnote">HORIZON X · BEYOND THE ORDINARY</div>
+<!-- ================= REASON DIALOG ================= -->
+<div id="reasonOverlay" class="notification-overlay info" role="dialog" aria-modal="true"
+     aria-hidden="true" inert>
+  <div class="notification-card">
+    <div class="notification-label">ADMIN REVIEW</div>
+    <h2 id="reasonTitle" class="notification-title">ยืนยันการตรวจสอบ</h2>
+    <p id="reasonDesc" class="notification-description"></p>
+    <div class="field left">
+      <label for="reasonInput">เหตุผล / หมายเหตุ</label>
+      <input id="reasonInput" type="text" maxlength="200" placeholder="ระบุเหตุผล">
+    </div>
+    <div class="dialog-actions">
+      <button id="reasonCancel" class="secondary" type="button">ยกเลิก</button>
+      <button id="reasonConfirm" class="notification-ok" type="button">ยืนยัน</button>
     </div>
   </div>
+</div>
 
-  <div id="toastWrap" class="toast-wrap" aria-live="polite" aria-atomic="true"></div>
+<!-- ================= TOASTS ================= -->
+<div id="toastHost" class="toast-host" aria-live="polite"></div>
 
-  <div id="bootLoader" class="loader-overlay">
-    <div class="spinner"></div>
-    <div class="loader-text">HORIZON X<br>INITIALIZING</div>
-  </div>
+<script type="module">
+/* =========================================================
+   0. IMPORTS
+   ========================================================= */
+import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+import {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut,
+  onAuthStateChanged, updateProfile, sendPasswordResetEmail, sendEmailVerification
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import {
+  initializeFirestore, persistentLocalCache, persistentMultipleTabManager,
+  doc, collection, query, where, orderBy, limit, onSnapshot
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+import {
+  getStorage, ref as storageRef, uploadBytes, getDownloadURL
+} from "https://www.gstatic.com/firebasejs/12.4.0/firebase-storage.js";
+import { getFunctions, httpsCallable } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-functions.js";
+import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 
-  <script type="module">
-    /* =========================================================
-       1) FIREBASE IMPORTS
-    ========================================================= */
+/* =========================================================
+   1. CONFIG + FIREBASE INIT
+   ========================================================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyD96Cs3NteaSwrJMFXKfROGBuvTHvMYDE",
+  authDomain: "horizon-x-f920b.firebaseapp.com",
+  projectId: "horizon-x-f920b",
+  storageBucket: "horizon-x-f920b.firebasestorage.app",
+  messagingSenderId: "621329414639",
+  appId: "1:621329414639:web:16024b58edcb6348491e1a",
+  measurementId: "G-Y8NRP7NSCC"
+};
 
-    import { initializeApp, getApps } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
-    import { getAnalytics, isSupported } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
+const FUNCTIONS_REGION = "asia-southeast1";
+const USE_EMULATORS = false;
 
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      signOut,
-      onAuthStateChanged,
-      updateProfile,
-      sendPasswordResetEmail,
-      sendEmailVerification,
-      reload
-    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = initializeFirestore(app, {
+  localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
+});
+const storage = getStorage(app);
+const functions = getFunctions(app, FUNCTIONS_REGION);
 
-    import {
-      initializeFirestore,
-      persistentLocalCache,
-      persistentMultipleTabManager,
-      collection,
-      doc,
-      getDoc,
-      getDocs,
-      setDoc,
-      addDoc,
-      updateDoc,
-      deleteDoc,
-      query,
-      where,
-      limit,
-      serverTimestamp,
-      runTransaction,
-      onSnapshot
-    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js";
+(async () => {
+  try { if (await isSupported()) getAnalytics(app); } catch (e) { console.warn("Analytics:", e); }
+})();
 
-    import {
-      initializeAppCheck,
-      ReCaptchaV3Provider
-    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app-check.js";
+/* ---------- Callables ---------- */
+const bootstrapProfileFn = httpsCallable(functions, "bootstrapProfile");
+const submitDepositFn    = httpsCallable(functions, "submitDeposit");
+const submitWithdrawFn   = httpsCallable(functions, "submitWithdraw");
+const cancelRequestFn    = httpsCallable(functions, "cancelRequest");
+const reviewRequestFn    = httpsCallable(functions, "reviewRequest");
 
-    /* =========================================================
-       2) CONFIG  (แก้ apiKey ที่ตกตัว "g" เรียบร้อยแล้ว)
-    ========================================================= */
+/* =========================================================
+   2. UI PRIMITIVES
+   ========================================================= */
+const $  = (id) => document.getElementById(id);
+const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
-      authDomain: "horizon-x-f920b.firebaseapp.com",
-      projectId: "horizon-x-f920b",
-      storageBucket: "horizon-x-f920b.firebasestorage.app",
-      messagingSenderId: "621329414639",
-      appId: "1:621329414639:web:16024b58edcb6348491e1a",
-      measurementId: "G-Y8NRP7NSCC"
-    };
+const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 
-    /* ใส่ Site Key ของ reCAPTCHA v3 ถ้าเปิด App Check (เว้นว่างได้) */
-    const APP_CHECK_SITE_KEY = "";
+const overlay        = $("notificationOverlay");
+const noticeTitle    = $("notificationTitle");
+const noticeDesc     = $("notificationDescription");
+const noticeLabel    = $("notificationLabel");
+const noticeEmoji    = $("notificationEmoji");
+const noticeIcon     = $("notificationIcon");
+const noticeOk       = $("notificationOk");
+const toastHost      = $("toastHost");
 
-    const COLLECTIONS = {
-      users: "users",
-      notes: "notes",
-      requests: "walletRequests"
-    };
+let previousFocus = null;
+let onCloseCb = null;
 
-    /* =========================================================
-       3) DOM HELPERS
-    ========================================================= */
+const NOTICE_TYPES = {
+  success: { emoji:"🎉", label:"SYSTEM SUCCESS", icon:'<path d="m5 12 4 4L19 6"></path>' },
+  error:   { emoji:"❌", label:"SYSTEM ERROR",   icon:'<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>' },
+  info:    { emoji:"💡", label:"SYSTEM NOTICE",  icon:'<circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path>' },
+  warn:    { emoji:"⚠️", label:"SYSTEM WARNING", icon:'<path d="M12 9v4"></path><path d="M12 17h.01"></path><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0z"></path>' }
+};
 
-    const $ = id => document.getElementById(id);
+function showNotification(type, title, message, onClose = null) {
+  const cfg = NOTICE_TYPES[type] || NOTICE_TYPES.info;
+  const actual = NOTICE_TYPES[type] ? type : "info";
 
-    const overlay = $("notificationOverlay");
-    const noticeTitle = $("notificationTitle");
-    const noticeDescription = $("notificationDescription");
-    const noticeLabel = $("notificationLabel");
-    const noticeEmoji = $("notificationEmoji");
-    const noticeIcon = $("notificationIcon");
-    const noticeOk = $("notificationOk");
-    const toastWrap = $("toastWrap");
+  if (!overlay.classList.contains("active")) previousFocus = document.activeElement;
+  onCloseCb = onClose;
 
-    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+  overlay.classList.remove("success", "error", "info", "warn", "active");
+  overlay.classList.add(actual);
 
-    const esc = value => String(value ?? "")
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
+  noticeEmoji.textContent = cfg.emoji;
+  noticeLabel.textContent = cfg.label;
+  noticeTitle.textContent = title || "แจ้งเตือน";
+  noticeDesc.textContent = message || "";
+  noticeIcon.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + cfg.icon + "</svg>";
 
-    const money = value => Number(value || 0).toLocaleString("th-TH", {
-      minimumFractionDigits: 2,
-      maximumFractionDigits: 2
-    });
+  overlay.inert = false;
+  overlay.setAttribute("aria-hidden", "false");
+  void overlay.offsetWidth;
+  overlay.classList.add("active");
+  noticeOk.focus({ preventScroll: true });
 
-    const stamp = ms => ms
-      ? new Date(ms).toLocaleString("th-TH", {
-          day: "2-digit", month: "short", year: "numeric",
-          hour: "2-digit", minute: "2-digit"
-        })
-      : "—";
+  if (actual === "success") burstParticles();
+}
 
-    const statusChip = status => {
-      const map = {
-        pending: ["pending", "รอตรวจสอบ"],
-        approved: ["ok", "อนุมัติแล้ว"],
-        rejected: ["bad", "ปฏิเสธ"],
-        cancelled: ["neutral", "ยกเลิก"]
-      };
-      const [cls, text] = map[status] || ["neutral", status];
-      return `<span class="chip ${cls}">${esc(text)}</span>`;
-    };
+function closeNotification() {
+  if (!overlay.classList.contains("active")) return;
+  overlay.classList.remove("active");
+  overlay.setAttribute("aria-hidden", "true");
+  overlay.inert = true;
 
-    const setText = (id, value) => {
-      const el = $(id);
-      if (el) el.textContent = value;
-    };
+  const cb = onCloseCb; onCloseCb = null;
+  if (previousFocus && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
+  if (typeof cb === "function") cb();
+}
 
-    /* =========================================================
-       4) STATE
-    ========================================================= */
+noticeOk.addEventListener("click", closeNotification);
+overlay.addEventListener("click", (e) => { if (e.target === overlay) closeNotification(); });
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && overlay.classList.contains("active")) closeNotification();
+});
 
-    let auth = null;
-    let db = null;
+/* ---------- Toast ---------- */
+function toast(message, type = "success", ms = 4200) {
+  const el = document.createElement("div");
+  el.className = "toast " + type;
 
-    let currentUser = null;
-    let profile = null;
-    let currentPage = "home";
+  const dot = document.createElement("span");
+  dot.className = "dot";
 
-    let authMode = "login";
-    let busy = false;
-    let editingNoteId = null;
-    let adminFilter = "pending";
-    let lastRequestAt = 0;
+  const text = document.createElement("span");
+  text.textContent = message;
 
-    let unsubNotes = null;
-    let unsubWallet = null;
-    let unsubAdmin = null;
-    let walletCache = [];
-    let adminCache = [];
+  el.append(dot, text);
+  toastHost.appendChild(el);
 
-    const unsubs = {
-      notes: () => { if (unsubNotes) { unsubNotes(); unsubNotes = null; } },
-      wallet: () => { if (unsubWallet) { unsubWallet(); unsubWallet = null; } },
-      admin: () => { if (unsubAdmin) { unsubAdmin(); unsubAdmin = null; } }
-    };
+  const remove = () => {
+    el.classList.add("leaving");
+    el.addEventListener("animationend", () => el.remove(), { once: true });
+  };
+  const timer = setTimeout(remove, ms);
+  el.addEventListener("click", () => { clearTimeout(timer); remove(); });
+}
 
-    /* =========================================================
-       5) TOAST
-    ========================================================= */
+/* ---------- Particles ---------- */
+function createAmbientParticles() {
+  if (reducedMotion.matches) return;
+  const container = $("particles");
+  const frag = document.createDocumentFragment();
+  for (let i = 0; i < 18; i++) {
+    const p = document.createElement("span");
+    p.className = "ambient-particle";
+    p.style.left = Math.random() * 100 + "%";
+    p.style.setProperty("--duration", 10 + Math.random() * 15 + "s");
+    p.style.setProperty("--delay", -Math.random() * 20 + "s");
+    frag.appendChild(p);
+  }
+  container.appendChild(frag);
+}
 
-    function toast(message, kind = "ok") {
-      const el = document.createElement("div");
-      el.className = `toast ${kind}`;
-      el.textContent = message;
-      toastWrap.appendChild(el);
+function burstParticles() {
+  if (reducedMotion.matches) return;
+  const card = document.querySelector(".notification-card");
+  if (!card) return;
 
-      setTimeout(() => {
-        el.classList.add("out");
-        el.addEventListener("animationend", () => el.remove(), { once: true });
-      }, 3200);
-    }
+  const rect = card.getBoundingClientRect();
+  const ox = rect.left + rect.width / 2;
+  const oy = rect.top + rect.height / 2;
+  const frag = document.createDocumentFragment();
+  const nodes = [];
 
-    /* =========================================================
-       6) NOTIFICATION MODAL
-    ========================================================= */
+  for (let i = 0; i < 24; i++) {
+    const p = document.createElement("span");
+    p.className = "fx-particle";
+    p.style.left = ox + "px";
+    p.style.top = oy + "px";
+    const angle = (Math.PI * 2 * i) / 24;
+    const dist = 45 + Math.random() * 100;
+    p.style.setProperty("--dx", Math.cos(angle) * dist + "px");
+    p.style.setProperty("--dy", Math.sin(angle) * dist + "px");
+    frag.appendChild(p);
+    nodes.push(p);
+  }
+  document.body.appendChild(frag);
+  nodes.forEach((n) => n.addEventListener("animationend", () => n.remove(), { once: true }));
+}
 
-    let previousFocus = null;
+/* ---------- Formatters ---------- */
+const thb = new Intl.NumberFormat("th-TH", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const formatTHB = (v) => "฿" + thb.format(Number(v) || 0);
 
-    const noticeTypes = {
-      success: { emoji: "🎉", label: "SYSTEM SUCCESS", icon: '<path d="m5 12 4 4L19 6"></path>' },
-      error:   { emoji: "❌", label: "SYSTEM ERROR",   icon: '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>' },
-      info:    { emoji: "💡", label: "SYSTEM NOTICE",  icon: '<circle cx="12" cy="12" r="10"></circle><path d="M12 16v-4"></path><path d="M12 8h.01"></path>' }
-    };
+function formatDateTime(value) {
+  if (!value) return "—";
+  const date = value.toDate ? value.toDate() : new Date(value);
+  if (Number.isNaN(date.getTime())) return "—";
+  return new Intl.DateTimeFormat("th-TH", {
+    day: "2-digit", month: "short", year: "numeric", hour: "2-digit", minute: "2-digit"
+  }).format(date);
+}
 
-    function showNotification(type, title, message) {
-      const actualType = noticeTypes[type] ? type : "info";
-      const config = noticeTypes[actualType];
+/* ---------- Busy ---------- */
+function setBusy(button, busy, busyLabel = "กำลังดำเนินการ...") {
+  if (!button) return;
+  if (busy) {
+    if (!button.dataset.idleLabel) button.dataset.idleLabel = button.textContent;
+    button.disabled = true;
+    button.textContent = busyLabel;
+  } else {
+    button.disabled = false;
+    if (button.dataset.idleLabel) button.textContent = button.dataset.idleLabel;
+  }
+}
 
-      if (!overlay.classList.contains("active")) previousFocus = document.activeElement;
+/* ---------- State renderers ---------- */
+function renderSkeleton(host, rows = 3) {
+  if (!host) return;
+  host.innerHTML = "";
+  for (let i = 0; i < rows; i++) {
+    const box = document.createElement("div");
+    box.className = "skeleton";
+    box.innerHTML = '<div class="skeleton-line"></div><div class="skeleton-line"></div>';
+    host.appendChild(box);
+  }
+}
 
-      overlay.classList.remove("success", "error", "info", "active");
-      overlay.classList.add(actualType);
+function renderEmpty(host, glyph, message) {
+  if (!host) return;
+  host.innerHTML = "";
+  const box = document.createElement("div");
+  box.className = "empty";
+  const g = document.createElement("div");
+  g.className = "empty-glyph";
+  g.textContent = glyph;
+  const p = document.createElement("p");
+  p.textContent = message;
+  box.append(g, p);
+  host.appendChild(box);
+}
 
-      noticeEmoji.textContent = config.emoji;
-      noticeLabel.textContent = config.label;
-      noticeTitle.textContent = title || "แจ้งเตือน";
-      noticeDescription.textContent = message || "";
-      noticeIcon.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + config.icon + "</svg>";
+/* =========================================================
+   3. AUTH
+   ========================================================= */
+const ERROR_MESSAGES = {
+  "auth/email-already-in-use": "อีเมลนี้มีบัญชีอยู่แล้ว",
+  "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
+  "auth/weak-password": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+  "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+  "auth/user-not-found": "ไม่พบบัญชีนี้",
+  "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
+  "auth/too-many-requests": "ลองใหม่ภายหลัง (ส่งคำขอถี่เกินไป)",
+  "auth/network-request-failed": "เชื่อมต่ออินเทอร์เน็ตไม่สำเร็จ",
+  "auth/operation-not-allowed": "ยังไม่เปิด Email/Password ใน Firebase Console",
+  "auth/unauthorized-domain": "โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase",
+  "auth/invalid-api-key": "Firebase API key ไม่ถูกต้อง",
+  "auth/user-disabled": "บัญชีนี้ถูกระงับการใช้งาน",
+  "auth/requires-recent-login": "กรุณาเข้าสู่ระบบใหม่ก่อนทำรายการนี้",
+  "auth/missing-email": "กรุณากรอกอีเมล"
+};
+const friendlyError = (err) =>
+  (err && (ERROR_MESSAGES[err.code] || err.message)) || "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง";
 
-      overlay.inert = false;
-      overlay.setAttribute("aria-hidden", "false");
-      void overlay.offsetWidth;
-      overlay.classList.add("active");
+/* =========================================================
+   4. APP STATE
+   ========================================================= */
+const state = {
+  user: null,
+  isAdmin: false,
+  walletStarted: false,
+  adminStarted: false,
+  walletFormsBound: false,
+  booted: false
+};
 
-      noticeOk.focus({ preventScroll: true });
-      if (actualType === "success") burstParticles();
-    }
+/* =========================================================
+   5. ROUTER
+   ========================================================= */
+const ROUTES = { "/dashboard":"dashboardPage", "/wallet":"walletPage", "/admin":"adminPage" };
+const ALL_PAGES = ["homePage", "dashboardPage", "walletPage", "adminPage", "errorPage"];
 
-    function closeNotification() {
-      if (!overlay.classList.contains("active")) return;
-      overlay.classList.remove("active");
-      overlay.setAttribute("aria-hidden", "true");
-      overlay.inert = true;
-      if (previousFocus && previousFocus.isConnected) previousFocus.focus({ preventScroll: true });
-    }
+function showOnly(pageId) {
+  ALL_PAGES.forEach((id) => {
+    const el = $(id);
+    if (el) el.classList.toggle("hidden", id !== pageId);
+  });
+}
 
-    noticeOk.addEventListener("click", closeNotification);
-    overlay.addEventListener("click", e => { if (e.target === overlay) closeNotification(); });
-    document.addEventListener("keydown", e => {
-      if (e.key === "Escape" && overlay.classList.contains("active")) closeNotification();
-    });
+function currentRoute() {
+  const hash = location.hash.replace(/^#/, "");
+  return ROUTES[hash] ? hash : null;
+}
 
-    /* =========================================================
-       7) PARTICLES
-    ========================================================= */
+function render() {
+  if (!state.user) { showOnly("homePage"); return; }
 
-    function createAmbientParticles() {
-      if (reducedMotion.matches) return;
-      const container = $("particles");
-      const fragment = document.createDocumentFragment();
+  let route = currentRoute() || "/dashboard";
+  if (route === "/admin" && !state.isAdmin) route = "/dashboard";
 
-      for (let i = 0; i < 18; i++) {
-        const p = document.createElement("span");
-        p.className = "ambient-particle";
-        p.style.left = (Math.random() * 100) + "%";
-        p.style.setProperty("--duration", (10 + Math.random() * 15) + "s");
-        p.style.setProperty("--delay", (-Math.random() * 20) + "s");
-        fragment.appendChild(p);
+  showOnly(ROUTES[route]);
+  if (("#" + route) !== location.hash) {
+    history.replaceState(null, "", "#" + route);
+  }
+
+  $$("[data-nav]").forEach((link) => {
+    link.classList.toggle("active", link.getAttribute("href") === "#" + route);
+  });
+
+  if (route === "/wallet") {
+    if (!state.walletStarted) { state.walletStarted = true; startWallet(state.user.uid); }
+  } else if (state.walletStarted) {
+    state.walletStarted = false; stopWallet();
+  }
+
+  if (route === "/admin") {
+    if (!state.adminStarted) { state.adminStarted = true; startAdmin(); }
+  } else if (state.adminStarted) {
+    state.adminStarted = false; stopAdmin();
+  }
+}
+
+window.addEventListener("hashchange", render);
+
+/* =========================================================
+   6. AUTH FORM
+   ========================================================= */
+function initAuthForm() {
+  const form = $("authForm");
+  const submitBtn = $("submitBtn");
+  const forgotBtn = $("forgotBtn");
+  const loginTab = $("loginTab");
+  const signupTab = $("signupTab");
+  const nameField = $("nameField");
+  const displayNameInput = $("displayName");
+  const emailInput = $("email");
+  const passwordInput = $("password");
+  const toggle = $("passwordToggle");
+  const strength = $("strengthBar");
+
+  let mode = "login";
+  let busy = false;
+
+  function setMode(next) {
+    mode = next;
+    const isSignup = mode === "signup";
+    loginTab.classList.toggle("active", !isSignup);
+    signupTab.classList.toggle("active", isSignup);
+    nameField.classList.toggle("hidden", !isSignup);
+    displayNameInput.required = isSignup;
+    passwordInput.autocomplete = isSignup ? "new-password" : "current-password";
+    submitBtn.textContent = isSignup ? "สร้างบัญชี" : "เข้าสู่ระบบ";
+    strength.classList.toggle("hidden", !isSignup);
+  }
+
+  loginTab.addEventListener("click", () => setMode("login"));
+  signupTab.addEventListener("click", () => setMode("signup"));
+
+  toggle.addEventListener("click", () => {
+    const show = passwordInput.type === "password";
+    passwordInput.type = show ? "text" : "password";
+    toggle.textContent = show ? "ซ่อน" : "แสดง";
+    toggle.setAttribute("aria-pressed", String(show));
+    toggle.setAttribute("aria-label", show ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน");
+  });
+
+  passwordInput.addEventListener("input", () => {
+    const v = passwordInput.value;
+    let score = 0;
+    if (v.length >= 6) score++;
+    if (v.length >= 10 && /[A-Z]/.test(v)) score++;
+    if (/[0-9]/.test(v) && /[^A-Za-z0-9]/.test(v)) score++;
+    strength.classList.remove("s1", "s2", "s3");
+    if (score > 0) strength.classList.add("s" + score);
+  });
+
+  form.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    if (busy) return;
+
+    const email = emailInput.value.trim();
+    const password = passwordInput.value;
+    const displayName = displayNameInput.value.trim();
+
+    if (!email) { showNotification("info", "กรอกอีเมลก่อน", "กรุณากรอกอีเมลของคุณ"); emailInput.focus(); return; }
+    if (!/^\S+@\S+\.\S+$/.test(email)) { showNotification("info", "อีเมลไม่ถูกต้อง", "ตรวจสอบรูปแบบอีเมลอีกครั้ง"); emailInput.focus(); return; }
+    if (password.length < 6) { showNotification("info", "รหัสผ่านสั้นเกินไป", "ต้องมีอย่างน้อย 6 ตัวอักษร"); passwordInput.focus(); return; }
+    if (mode === "signup" && !displayName) { showNotification("info", "กรอกชื่อก่อน", "กรุณากรอกชื่อที่ต้องการใช้แสดง"); displayNameInput.focus(); return; }
+
+    busy = true;
+    setBusy(submitBtn, true, mode === "signup" ? "กำลังสร้างบัญชี..." : "กำลังเข้าสู่ระบบ...");
+
+    try {
+      if (mode === "signup") {
+        const cred = await createUserWithEmailAndPassword(auth, email, password);
+        try { await updateProfile(cred.user, { displayName }); } catch (e) { console.warn(e); }
+        try { await sendEmailVerification(cred.user); } catch (e) { console.warn(e); }
+        showNotification("success", "สมัครสมาชิกสำเร็จ!", "ยินดีต้อนรับสู่ Horizon X — กรุณายืนยันอีเมลเพื่อความปลอดภัย");
+      } else {
+        await signInWithEmailAndPassword(auth, email, password);
+        showNotification("success", "เข้าสู่ระบบสำเร็จ!", "ยินดีต้อนรับกลับมา ขอให้สนุกกับ Horizon X");
       }
-      container.appendChild(fragment);
+      form.reset();
+    } catch (error) {
+      console.error("Auth error:", error);
+      showNotification("error", mode === "signup" ? "สมัครสมาชิกไม่สำเร็จ" : "เข้าสู่ระบบไม่สำเร็จ", friendlyError(error));
+    } finally {
+      busy = false;
+      setBusy(submitBtn, false);
+      submitBtn.textContent = mode === "signup" ? "สร้างบัญชี" : "เข้าสู่ระบบ";
+    }
+  });
+
+  forgotBtn.addEventListener("click", async () => {
+    if (busy) return;
+    const email = emailInput.value.trim();
+    if (!email) { showNotification("info", "กรอกอีเมลก่อน", "กรอกอีเมลเพื่อขอลิงก์ตั้งรหัสผ่านใหม่"); emailInput.focus(); return; }
+
+    setBusy(forgotBtn, true, "กำลังส่ง...");
+    try {
+      await sendPasswordResetEmail(auth, email);
+      showNotification("success", "ส่งคำขอแล้ว", "หากอีเมลนี้มีบัญชี คุณจะได้รับอีเมลสำหรับตั้งรหัสผ่านใหม่");
+    } catch (error) {
+      console.error("Reset error:", error);
+      showNotification("error", "ส่งคำขอไม่สำเร็จ", friendlyError(error));
+    } finally {
+      setBusy(forgotBtn, false);
+    }
+  });
+
+  setMode("login");
+}
+
+/* =========================================================
+   7. WALLET
+   ========================================================= */
+let unsubUser = null, unsubRequests = null, unsubTx = null;
+let pendingKeys = { deposit: newKey(), withdraw: newKey() };
+const inFlight = { deposit: false, withdraw: false };
+
+function newKey() {
+  const raw = (crypto.randomUUID ? crypto.randomUUID() : Date.now() + Math.random().toString(36).slice(2));
+  return raw.replace(/[^A-Za-z0-9_-]/g, "").slice(0, 48);
+}
+
+const STATUS_TEXT = { pending:"รอตรวจสอบ", approved:"สำเร็จ", rejected:"ถูกปฏิเสธ", cancelled:"ยกเลิก" };
+
+function makeChip(status) {
+  const span = document.createElement("span");
+  span.className = "chip " + status;
+  span.textContent = STATUS_TEXT[status] || status;
+  return span;
+}
+
+function initWalletTabs() {
+  const dTab = $("depositTab"), wTab = $("withdrawTab");
+  const dForm = $("depositForm"), wForm = $("withdrawForm");
+
+  dTab.addEventListener("click", () => {
+    dTab.classList.add("active"); wTab.classList.remove("active");
+    dForm.classList.remove("hidden"); wForm.classList.add("hidden");
+  });
+  wTab.addEventListener("click", () => {
+    wTab.classList.add("active"); dTab.classList.remove("active");
+    wForm.classList.remove("hidden"); dForm.classList.add("hidden");
+  });
+}
+
+function startWallet(uid) {
+  stopWallet();
+
+  unsubUser = onSnapshot(doc(db, "users", uid),
+    (snap) => { if (snap.exists()) renderBalance(snap.data()); },
+    (err) => { console.error(err); toast("โหลดข้อมูลกระเป๋าเงินไม่สำเร็จ", "error"); }
+  );
+
+  const reqQ = query(collection(db, "walletRequests"),
+    where("uid", "==", uid), orderBy("createdAt", "desc"), limit(25));
+
+  renderSkeleton($("requestList"), 2);
+  unsubRequests = onSnapshot(reqQ,
+    (snap) => renderRequests(snap),
+    (err) => { console.error(err); toast("โหลดคำขอไม่สำเร็จ", "error"); }
+  );
+
+  const txQ = query(collection(db, "transactions"),
+    where("uid", "==", uid), orderBy("createdAt", "desc"), limit(30));
+
+  renderSkeleton($("txList"), 3);
+  unsubTx = onSnapshot(txQ,
+    (snap) => renderTransactions(snap),
+    (err) => { console.error(err); toast("โหลดประวัติธุรกรรมไม่สำเร็จ", "error"); }
+  );
+}
+
+function stopWallet() {
+  if (unsubUser) { unsubUser(); unsubUser = null; }
+  if (unsubRequests) { unsubRequests(); unsubRequests = null; }
+  if (unsubTx) { unsubTx(); unsubTx = null; }
+}
+
+function renderBalance(data) {
+  const map = {
+    walletBalance: formatTHB(data.balance),
+    walletPending: formatTHB(data.pendingBalance),
+    walletIn: formatTHB(data.totalDeposited),
+    walletOut: formatTHB(data.totalWithdrawn),
+    quickBalance: formatTHB(data.balance),
+    quickPending: formatTHB(data.pendingBalance)
+  };
+  Object.entries(map).forEach(([id, val]) => { const el = $(id); if (el) el.textContent = val; });
+
+  const w = $("withdrawAmount");
+  if (w) w.max = String(Number(data.balance) || 0);
+}
+
+function buildTxRow(data, { showActions = false } = {}) {
+  const item = document.createElement("div");
+  item.className = "tx-item";
+
+  const main = document.createElement("div");
+  main.className = "tx-main";
+
+  const top = document.createElement("div");
+  top.className = "tx-top";
+
+  const isOut = data.type === "withdraw";
+  const amount = document.createElement("span");
+  amount.className = "tx-amount " + (isOut ? "out" : "in");
+  amount.textContent = (isOut ? "−" : "+") + formatTHB(data.amount);
+
+  const typeChip = document.createElement("span");
+  typeChip.className = "chip";
+  typeChip.textContent = isOut ? "ถอนเงิน" : "เติมเงิน";
+
+  top.append(amount, typeChip);
+  if (data.status) top.appendChild(makeChip(data.status));
+  main.appendChild(top);
+
+  const meta = document.createElement("div");
+  meta.className = "tx-meta";
+  meta.textContent = formatDateTime(data.createdAt) +
+    (data.balanceAfter != null ? " · คงเหลือ " + formatTHB(data.balanceAfter) : "");
+  main.appendChild(meta);
+
+  if (data.note) {
+    const n = document.createElement("div"); n.className = "tx-note";
+    n.textContent = "หมายเหตุ: " + data.note; main.appendChild(n);
+  }
+  if (data.reason) {
+    const r = document.createElement("div"); r.className = "tx-note";
+    r.textContent = "เหตุผลจากแอดมิน: " + data.reason; main.appendChild(r);
+  }
+  if (data.slipUrl) {
+    const a = document.createElement("a");
+    a.className = "slip-link"; a.href = data.slipUrl;
+    a.target = "_blank"; a.rel = "noopener noreferrer";
+    a.textContent = "ดูสลิป ↗";
+    main.appendChild(a);
+  }
+
+  if (showActions && data.status === "pending") {
+    const actions = document.createElement("div");
+    actions.className = "tx-actions";
+    const btn = document.createElement("button");
+    btn.className = "secondary danger"; btn.type = "button"; btn.textContent = "ยกเลิกคำขอ";
+    btn.addEventListener("click", () => cancelRequest(data.requestId, btn));
+    actions.appendChild(btn);
+    main.appendChild(actions);
+  }
+
+  item.appendChild(main);
+  return item;
+}
+
+function renderRequests(snap) {
+  const host = $("requestList");
+  if (!host) return;
+  if (snap.empty) { renderEmpty(host, "📄", "ยังไม่มีคำขอเติม/ถอนเงิน"); return; }
+  host.innerHTML = "";
+  snap.forEach((d) => host.appendChild(buildTxRow(d.data(), { showActions: true })));
+}
+
+function renderTransactions(snap) {
+  const host = $("txList"), recent = $("recentTx");
+
+  if (snap.empty) {
+    if (host) renderEmpty(host, "📊", "ยังไม่มีประวัติธุรกรรม");
+    if (recent) renderEmpty(recent, "📊", "ยังไม่มีธุรกรรมล่าสุด");
+    return;
+  }
+  if (host) {
+    host.innerHTML = "";
+    snap.forEach((d) => host.appendChild(buildTxRow(d.data())));
+  }
+  if (recent) {
+    recent.innerHTML = "";
+    let i = 0;
+    snap.forEach((d) => { if (i++ < 3) recent.appendChild(buildTxRow(d.data())); });
+  }
+}
+
+/* ---------- Slip upload ---------- */
+const MAX_SLIP_BYTES = 5 * 1024 * 1024;
+const ALLOWED_TYPES = ["image/png", "image/jpeg", "image/webp"];
+
+async function uploadSlip(uid, file, key) {
+  if (!file || !file.size) return null;
+  if (!ALLOWED_TYPES.includes(file.type)) throw new Error("ไฟล์สลิปต้องเป็น PNG, JPG หรือ WEBP");
+  if (file.size > MAX_SLIP_BYTES) throw new Error("ไฟล์สลิปต้องมีขนาดไม่เกิน 5 MB");
+
+  const ext = (file.name.split(".").pop() || "jpg").toLowerCase();
+  const ref = storageRef(storage, `slips/${uid}/${key}.${ext}`);
+  await uploadBytes(ref, file, { contentType: file.type, cacheControl: "public,max-age=3600" });
+  const url = await getDownloadURL(ref);
+  return { path: ref.fullPath, url };
+}
+
+/* ---------- Forms ---------- */
+function bindWalletForms(uid) {
+  if (state.walletFormsBound) return;
+  state.walletFormsBound = true;
+
+  const dForm = $("depositForm"), dBtn = $("depositBtn");
+  const wForm = $("withdrawForm"), wBtn = $("withdrawBtn");
+
+  dForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (inFlight.deposit) return;
+
+    const amount = Number($("depositAmount").value);
+    const note = $("depositNote").value.trim();
+    const file = $("slipFile").files[0] || null;
+
+    if (!Number.isFinite(amount) || amount < 50) {
+      showNotification("info", "จำนวนไม่ถูกต้อง", "ยอดเติมเงินขั้นต่ำ 50 บาท"); return;
     }
 
-    function burstParticles() {
-      if (reducedMotion.matches) return;
-      const card = document.querySelector(".notification-card");
-      if (!card) return;
+    inFlight.deposit = true;
+    setBusy(dBtn, true, "กำลังส่งคำขอ...");
 
-      const rect = card.getBoundingClientRect();
-      const originX = rect.left + rect.width / 2;
-      const originY = rect.top + rect.height / 2;
-      const fragment = document.createDocumentFragment();
-      const nodes = [];
-
-      for (let i = 0; i < 24; i++) {
-        const p = document.createElement("span");
-        p.className = "fx-particle";
-        p.style.left = originX + "px";
-        p.style.top = originY + "px";
-
-        const angle = (Math.PI * 2 * i) / 24;
-        const distance = 45 + Math.random() * 100;
-        p.style.setProperty("--dx", Math.cos(angle) * distance + "px");
-        p.style.setProperty("--dy", Math.sin(angle) * distance + "px");
-
-        fragment.appendChild(p);
-        nodes.push(p);
+    try {
+      let slipPath = null, slipUrl = null;
+      if (file) {
+        setBusy(dBtn, true, "กำลังอัปโหลดสลิป...");
+        const up = await uploadSlip(uid, file, pendingKeys.deposit);
+        slipPath = up.path; slipUrl = up.url;
       }
+      setBusy(dBtn, true, "กำลังบันทึกคำขอ...");
+      const res = await submitDepositFn({ amount, note, slipPath, slipUrl, idempotencyKey: pendingKeys.deposit });
+      const dup = res.data && res.data.duplicated;
+      toast(dup ? "คำขอนี้ถูกส่งไปแล้ว" : "ส่งคำขอเติมเงินแล้ว — รอแอดมินตรวจสอบ", dup ? "info" : "success");
+      dForm.reset();
+      pendingKeys.deposit = newKey();
+    } catch (error) {
+      console.error(error);
+      showNotification("error", "ส่งคำขอไม่สำเร็จ", error.message || "กรุณาลองอีกครั้ง");
+    } finally {
+      inFlight.deposit = false;
+      setBusy(dBtn, false);
+    }
+  });
 
-      document.body.appendChild(fragment);
-      nodes.forEach(n => n.addEventListener("animationend", () => n.remove(), { once: true }));
+  wForm.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (inFlight.withdraw) return;
+
+    const amount = Number($("withdrawAmount").value);
+    const note = $("withdrawNote").value.trim();
+
+    if (!Number.isFinite(amount) || amount < 100) {
+      showNotification("info", "จำนวนไม่ถูกต้อง", "ยอดถอนขั้นต่ำ 100 บาท"); return;
     }
 
-    /* =========================================================
-       8) ONLINE / OFFLINE
-    ========================================================= */
+    inFlight.withdraw = true;
+    setBusy(wBtn, true, "กำลังส่งคำขอ...");
 
-    function syncOnlineState() {
-      const offline = !navigator.onLine;
-      $("offlineBar").classList.toggle("hidden", !offline);
+    try {
+      const res = await submitWithdrawFn({ amount, note, idempotencyKey: pendingKeys.withdraw });
+      const dup = res.data && res.data.duplicated;
+      toast(dup ? "คำขอนี้ถูกส่งไปแล้ว" : "ส่งคำขอถอนเงินแล้ว — ยอดถูกกันไว้ชั่วคราว", dup ? "info" : "success");
+      wForm.reset();
+      pendingKeys.withdraw = newKey();
+    } catch (error) {
+      console.error(error);
+      showNotification("error", "ส่งคำขอไม่สำเร็จ", error.message || "กรุณาลองอีกครั้ง");
+    } finally {
+      inFlight.withdraw = false;
+      setBusy(wBtn, false);
     }
-    window.addEventListener("online", () => { syncOnlineState(); toast("กลับมาออนไลน์แล้ว — กำลังซิงก์ข้อมูล", "ok"); });
-    window.addEventListener("offline", syncOnlineState);
+  });
+}
 
-    /* =========================================================
-       9) ERRORS
-    ========================================================= */
+async function cancelRequest(requestId, btn) {
+  setBusy(btn, true, "กำลังยกเลิก...");
+  try {
+    await cancelRequestFn({ requestId });
+    toast("ยกเลิกคำขอแล้ว", "info");
+  } catch (error) {
+    console.error(error);
+    showNotification("error", "ยกเลิกไม่สำเร็จ", error.message || "กรุณาลองอีกครั้ง");
+    setBusy(btn, false);
+  }
+}
 
-    function friendlyError(error) {
-      const messages = {
-        "auth/email-already-in-use": "อีเมลนี้มีบัญชีอยู่แล้ว",
-        "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
-        "auth/weak-password": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
-        "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
-        "auth/user-not-found": "ไม่พบบัญชีนี้",
-        "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
-        "auth/too-many-requests": "ทำรายการถี่เกินไป ลองใหม่ภายหลัง",
-        "auth/network-request-failed": "เชื่อมต่ออินเทอร์เน็ตไม่สำเร็จ",
-        "auth/operation-not-allowed": "ยังไม่เปิด Email/Password ใน Firebase Console",
-        "auth/unauthorized-domain": "โดเมนนี้ยังไม่ได้รับอนุญาตใน Firebase Console",
-        "auth/invalid-api-key": "Firebase API key ไม่ถูกต้อง",
-        "auth/app-not-authorized": "แอปไม่ได้รับอนุญาตให้ใช้โปรเจกต์นี้",
-        "auth/requests-to-this-api-have-been-blocked": "คำขอถูกบล็อก ตรวจสอบการตั้งค่าโปรเจกต์",
-        "permission-denied": "ไม่มีสิทธิ์เข้าถึงข้อมูลนี้ (ตรวจ Firestore Rules)",
-        "unavailable": "เซิร์ฟเวอร์ไม่ตอบสนอง ข้อมูลจะซิงก์เมื่อออนไลน์",
-        "failed-precondition": "ต้องสร้าง Index ใน Firestore (ดูข้อความใน Console)",
-        "not-found": "ไม่พบข้อมูลที่ต้องการ",
-        "already-exists": "ข้อมูลนี้มีอยู่แล้ว"
-      };
+/* =========================================================
+   8. ADMIN
+   ========================================================= */
+let unsubAdminReq = null, unsubAudit = null;
+let adminFilter = "pending";
+let requestCache = [];
 
-      return messages[error?.code] ||
-        error?.message ||
-        "เกิดข้อผิดพลาด กรุณาลองอีกครั้ง";
-    }
+const reasonOverlay = $("reasonOverlay");
+const reasonTitle = $("reasonTitle");
+const reasonDesc = $("reasonDesc");
+const reasonInput = $("reasonInput");
+const reasonConfirm = $("reasonConfirm");
+const reasonCancel = $("reasonCancel");
+let reasonResolver = null, reasonPrevFocus = null;
 
-    function reportError(error, title = "เกิดข้อผิดพลาด") {
-      console.error(title, error);
-      showNotification("error", title, friendlyError(error));
-    }
+function askReason(title, description, { required = false } = {}) {
+  return new Promise((resolve) => {
+    reasonPrevFocus = document.activeElement;
+    reasonTitle.textContent = title;
+    reasonDesc.textContent = description;
+    reasonInput.value = "";
+    reasonInput.placeholder = required ? "ต้องระบุเหตุผล" : "ไม่บังคับ";
+    reasonConfirm.dataset.required = String(required);
 
-    /* =========================================================
-       10) ROUTING
-    ========================================================= */
+    reasonOverlay.inert = false;
+    reasonOverlay.setAttribute("aria-hidden", "false");
+    void reasonOverlay.offsetWidth;
+    reasonOverlay.classList.add("active");
+    reasonInput.focus({ preventScroll: true });
 
-    const PAGES = ["home", "dashboard", "wallet", "admin"];
+    reasonResolver = resolve;
+  });
+}
 
-    function showPage(page) {
-      if (!PAGES.includes(page)) page = "home";
-      if ((page === "wallet" || page === "admin") && !currentUser) page = "home";
-      if (page === "admin" && profile?.role !== "admin") page = "dashboard";
+function closeReason(value) {
+  reasonOverlay.classList.remove("active");
+  reasonOverlay.setAttribute("aria-hidden", "true");
+  reasonOverlay.inert = true;
 
-      currentPage = page;
+  const resolve = reasonResolver; reasonResolver = null;
+  if (reasonPrevFocus && reasonPrevFocus.isConnected) reasonPrevFocus.focus({ preventScroll: true });
+  if (resolve) resolve(value);
+}
 
-      PAGES.forEach(name => {
-        const section = $(name + "Page");
-        if (section) section.classList.toggle("hidden", name !== page);
+reasonCancel.addEventListener("click", () => closeReason(null));
+reasonConfirm.addEventListener("click", () => {
+  const v = reasonInput.value.trim();
+  if (!v && reasonConfirm.dataset.required === "true") { toast("กรุณาระบุเหตุผล", "warn"); return; }
+  closeReason(v);
+});
+reasonInput.addEventListener("keydown", (e) => { if (e.key === "Enter") reasonConfirm.click(); });
+reasonOverlay.addEventListener("click", (e) => { if (e.target === reasonOverlay) closeReason(null); });
+
+function initAdminTabs() {
+  const pTab = $("pendingTab"), hTab = $("historyTab");
+  pTab.addEventListener("click", () => {
+    adminFilter = "pending"; pTab.classList.add("active"); hTab.classList.remove("active"); startAdminRequests();
+  });
+  hTab.addEventListener("click", () => {
+    adminFilter = "all"; hTab.classList.add("active"); pTab.classList.remove("active"); startAdminRequests();
+  });
+}
+
+function startAdmin() { startAdminRequests(); startAuditLog(); }
+
+function stopAdmin() {
+  if (unsubAdminReq) { unsubAdminReq(); unsubAdminReq = null; }
+  if (unsubAudit) { unsubAudit(); unsubAudit = null; }
+  requestCache = [];
+}
+
+function startAdminRequests() {
+  if (unsubAdminReq) { unsubAdminReq(); unsubAdminReq = null; }
+
+  const host = $("adminList");
+  renderSkeleton(host, 3);
+
+  const base = collection(db, "walletRequests");
+  const q = adminFilter === "pending"
+    ? query(base, where("status", "==", "pending"), orderBy("createdAt", "asc"), limit(50))
+    : query(base, orderBy("createdAt", "desc"), limit(60));
+
+  unsubAdminReq = onSnapshot(q,
+    (snap) => { requestCache = snap.docs.map((d) => ({ id: d.id, ...d.data() })); renderAdminList(); },
+    (err) => { console.error(err); showNotification("error", "โหลดคำขอไม่สำเร็จ", err.message); }
+  );
+}
+
+function startAuditLog() {
+  const host = $("auditList");
+  renderSkeleton(host, 3);
+
+  unsubAudit = onSnapshot(query(collection(db, "auditLogs"), orderBy("at", "desc"), limit(30)),
+    (snap) => {
+      if (snap.empty) { renderEmpty(host, "🗂", "ยังไม่มีบันทึกการทำงาน"); return; }
+      host.innerHTML = "";
+      snap.forEach((d) => {
+        const data = d.data();
+        const row = document.createElement("div");
+        row.className = "tx-item";
+        const main = document.createElement("div");
+        main.className = "tx-main";
+
+        const top = document.createElement("div");
+        top.className = "tx-top";
+        const chip = document.createElement("span");
+        chip.className = "chip";
+        chip.textContent = data.action || "action";
+        top.appendChild(chip);
+        main.appendChild(top);
+
+        const meta = document.createElement("div");
+        meta.className = "tx-meta";
+        meta.textContent = `${data.actorEmail || data.actorUid || "system"} · ${formatDateTime(data.at)}`;
+        main.appendChild(meta);
+
+        if (data.reason) {
+          const r = document.createElement("div"); r.className = "tx-note";
+          r.textContent = "เหตุผล: " + data.reason; main.appendChild(r);
+        }
+        row.appendChild(main);
+        host.appendChild(row);
       });
+    },
+    (err) => { console.error(err); renderEmpty($("auditList"), "!", "โหลดบันทึกไม่สำเร็จ"); }
+  );
+}
 
-      document.querySelectorAll(".nav-link").forEach(link => {
-        link.classList.toggle("active", link.dataset.page === page);
-      });
+function renderAdminList() {
+  const host = $("adminList");
+  if (!host) return;
 
-      $("navLogout").classList.toggle("hidden", !currentUser);
-      document.querySelectorAll('[data-page="dashboard"], [data-page="wallet"]')
-        .forEach(el => el.classList.toggle("hidden", !currentUser));
-      $("navAdmin").classList.toggle("hidden", !currentUser || profile?.role !== "admin");
+  const items = adminFilter === "pending"
+    ? requestCache.filter((r) => r.status === "pending")
+    : requestCache;
 
-      window.scrollTo({ top: 0, behavior: reducedMotion.matches ? "auto" : "smooth" });
+  if (!items.length) {
+    renderEmpty(host, "✅", adminFilter === "pending" ? "ไม่มีคำขอรอตรวจสอบ" : "ยังไม่มีคำขอ");
+    return;
+  }
+
+  host.innerHTML = "";
+
+  items.forEach((data) => {
+    const item = document.createElement("div");
+    item.className = "tx-item admin-item";
+
+    const main = document.createElement("div");
+    main.className = "tx-main";
+
+    const top = document.createElement("div");
+    top.className = "tx-top";
+
+    const isOut = data.type === "withdraw";
+    const amount = document.createElement("span");
+    amount.className = "tx-amount " + (isOut ? "out" : "in");
+    amount.textContent = (isOut ? "−" : "+") + formatTHB(data.amount);
+
+    const typeChip = document.createElement("span");
+    typeChip.className = "chip";
+    typeChip.textContent = isOut ? "ถอนเงิน" : "เติมเงิน";
+
+    const statusChip = document.createElement("span");
+    statusChip.className = "chip " + data.status;
+    statusChip.textContent = data.status;
+
+    top.append(amount, typeChip, statusChip);
+    main.appendChild(top);
+
+    const owner = document.createElement("div");
+    owner.className = "tx-meta";
+    owner.textContent = `${data.displayName || "—"} · ${data.email || "—"} · ${formatDateTime(data.createdAt)}`;
+    main.appendChild(owner);
+
+    const idLine = document.createElement("div");
+    idLine.className = "tx-note";
+    idLine.textContent = "รหัสคำขอ: " + data.requestId;
+    main.appendChild(idLine);
+
+    if (data.note) {
+      const n = document.createElement("div"); n.className = "tx-note";
+      n.textContent = "หมายเหตุ: " + data.note; main.appendChild(n);
+    }
+    if (data.slipUrl) {
+      const a = document.createElement("a");
+      a.className = "slip-link"; a.href = data.slipUrl;
+      a.target = "_blank"; a.rel = "noopener noreferrer";
+      a.textContent = "เปิดสลิป ↗";
+      main.appendChild(a);
     }
 
-    document.querySelectorAll(".nav-link").forEach(link => {
-      link.addEventListener("click", () => showPage(link.dataset.page));
-    });
-
-    /* =========================================================
-       11) AUTH UI
-    ========================================================= */
-
-    function setMode(nextMode) {
-      authMode = nextMode;
-      const signup = authMode === "signup";
-
-      $("loginTab").classList.toggle("active", !signup);
-      $("signupTab").classList.toggle("active", signup);
-      $("nameField").classList.toggle("hidden", !signup);
-      $("displayName").required = signup;
-      $("password").autocomplete = signup ? "new-password" : "current-password";
-      $("submitBtn").textContent = signup ? "สร้างบัญชี" : "เข้าสู่ระบบ";
-    }
-
-    $("loginTab").addEventListener("click", () => setMode("login"));
-    $("signupTab").addEventListener("click", () => setMode("signup"));
-
-    $("passwordToggle").addEventListener("click", () => {
-      const input = $("password");
-      const isPassword = input.type === "password";
-      input.type = isPassword ? "text" : "password";
-      $("passwordToggle").textContent = isPassword ? "ซ่อน" : "แสดง";
-      $("passwordToggle").setAttribute("aria-label", isPassword ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน");
-      $("passwordToggle").setAttribute("aria-pressed", String(isPassword));
-    });
-
-    function setBusy(value) {
-      busy = value;
-      ["submitBtn", "forgotBtn", "navLogout", "walletSubmit", "noteSubmit", "adjustSubmit"]
-        .forEach(id => { const el = $(id); if (el) el.disabled = value; });
-
-      $("submitBtn").textContent = value
-        ? "กำลังดำเนินการ..."
-        : authMode === "signup" ? "สร้างบัญชี" : "เข้าสู่ระบบ";
-    }
-
-    /* =========================================================
-       12) FIRESTORE USER PROFILE
-    ========================================================= */
-
-    async function ensureUserDoc(user) {
-      const ref = doc(db, COLLECTIONS.users, user.uid);
-      const snap = await getDoc(ref);
-
-      if (snap.exists()) return { uid: user.uid, ...snap.data() };
-
-      const base = {
-        displayName: user.displayName || "",
-        email: user.email || "",
-        role: "user",
-        balance: 0,
-        createdAt: serverTimestamp(),
-        createdAtMs: Date.now(),
-        updatedAt: serverTimestamp()
-      };
-
-      await setDoc(ref, base);
-      return { uid: user.uid, ...base };
-    }
-
-    async function refreshProfile() {
-      if (!currentUser) return;
-      const snap = await getDoc(doc(db, COLLECTIONS.users, currentUser.uid));
-      if (snap.exists()) profile = { uid: currentUser.uid, ...snap.data() };
-      renderProfile();
-    }
-
-    function renderProfile() {
-      const label = profile?.displayName || currentUser?.email || "ผู้ใช้ Horizon X";
-
-      setText("welcomeText", "บัญชี: " + label + (profile?.role === "admin" ? "  ·  ADMIN" : ""));
-      setText("accountEmail", profile?.email || currentUser?.email || "");
-      setText("accountUid", "UID: " + (currentUser?.uid || ""));
-      setText("dashBalance", money(profile?.balance));
-
-      const pending = sumPending(walletCache);
-      setText("dashPending", money(pending.in + pending.out));
-
-      const verified = !!currentUser?.emailVerified;
-      $("verifyBanner").classList.toggle("hidden", verified || !currentUser);
-      $("walletVerifyBanner").classList.toggle("hidden", verified || !currentUser);
-    }
-
-    function sumPending(list) {
-      return list.reduce((acc, item) => {
-        if (item.status !== "pending") return acc;
-        if (item.type === "topup") acc.in += Number(item.amount || 0);
-        else acc.out += Number(item.amount || 0);
-        return acc;
-      }, { in: 0, out: 0 });
-    }
-
-    /* =========================================================
-       13) EMAIL VERIFICATION
-    ========================================================= */
-
-    $("verifyResend").addEventListener("click", async () => {
-      if (!currentUser) return;
-      try {
-        await sendEmailVerification(currentUser);
-        toast("ส่งอีเมลยืนยันแล้ว ตรวจกล่องจดหมาย (และ Spam)", "ok");
-      } catch (error) {
-        reportError(error, "ส่งอีเมลยืนยันไม่สำเร็จ");
+    if (data.status !== "pending") {
+      const rv = document.createElement("div");
+      rv.className = "tx-note";
+      rv.textContent = `ตรวจโดย ${data.reviewedByName || data.reviewedBy || "—"} · ${formatDateTime(data.reviewedAt)}`;
+      main.appendChild(rv);
+      if (data.reason) {
+        const r = document.createElement("div"); r.className = "tx-note";
+        r.textContent = "เหตุผล: " + data.reason; main.appendChild(r);
       }
-    });
+    } else {
+      const actions = document.createElement("div");
+      actions.className = "tx-actions";
 
-    $("verifyRefresh").addEventListener("click", async () => {
-      if (!currentUser) return;
+      const ok = document.createElement("button");
+      ok.className = "secondary ok"; ok.type = "button"; ok.textContent = "อนุมัติ";
+      ok.addEventListener("click", () => review(data, "approve", ok));
+
+      const no = document.createElement("button");
+      no.className = "secondary danger"; no.type = "button"; no.textContent = "ปฏิเสธ";
+      no.addEventListener("click", () => review(data, "reject", no));
+
+      actions.append(ok, no);
+      main.appendChild(actions);
+    }
+
+    item.appendChild(main);
+    host.appendChild(item);
+  });
+}
+
+async function review(data, decision, btn) {
+  const isReject = decision === "reject";
+  const reason = await askReason(
+    isReject ? "ปฏิเสธคำขอ" : "อนุมัติคำขอ",
+    `${data.type === "deposit" ? "เติมเงิน" : "ถอนเงิน"} ${formatTHB(data.amount)} — ${data.email || ""}`,
+    { required: isReject }
+  );
+  if (reason === null) return;
+
+  setBusy(btn, true, "กำลังบันทึก...");
+  try {
+    await reviewRequestFn({ requestId: data.requestId, decision, reason });
+    toast(isReject ? "ปฏิเสธคำขอแล้ว" : "อนุมัติคำขอแล้ว", isReject ? "warn" : "success");
+  } catch (error) {
+    console.error(error);
+    showNotification("error", "บันทึกไม่สำเร็จ", error.message || "กรุณาลองอีกครั้ง");
+    setBusy(btn, false);
+  }
+}
+
+/* =========================================================
+   9. PROFILE / SESSION
+   ========================================================= */
+async function ensureProfile() {
+  await bootstrapProfileFn({});
+}
+
+async function loadAdminFlag() {
+  const user = auth.currentUser;
+  if (!user) return false;
+  let token = await user.getIdTokenResult();
+  if (token.claims.admin === true) return true;
+  await user.getIdToken(true);
+  token = await user.getIdTokenResult();
+  return token.claims.admin === true;
+}
+
+function updateVerifyBanner() {
+  const user = auth.currentUser;
+  $("verifyBanner").classList.toggle("hidden", !(user && !user.emailVerified));
+}
+
+async function handleUser(user) {
+  state.user = user;
+
+  $("navLogout").classList.remove("hidden");
+  $("mainNav").classList.remove("hidden");
+  $("welcomeText").textContent = "บัญชี: " + (user.displayName || user.email || "ผู้ใช้ Horizon X");
+  $("accountMeta").textContent =
+    (user.email || "—") + (user.emailVerified ? " · ยืนยันอีเมลแล้ว" : " · ยังไม่ยืนยันอีเมล");
+
+  try { await ensureProfile(); }
+  catch (e) { console.error(e); toast("เตรียมข้อมูลบัญชีไม่สำเร็จ — บางฟีเจอร์อาจใช้ไม่ได้", "warn", 6000); }
+
+  try { state.isAdmin = await loadAdminFlag(); }
+  catch (e) { console.error(e); state.isAdmin = false; }
+
+  $("navAdmin").classList.toggle("hidden", !state.isAdmin);
+  updateVerifyBanner();
+  bindWalletForms(user.uid);
+  pendingKeys = { deposit: newKey(), withdraw: newKey() };
+
+  if (!state.booted) { state.booted = true; history.replaceState(null, "", "#/dashboard"); }
+  render();
+}
+
+function handleGuest() {
+  state.user = null;
+  state.isAdmin = false;
+  state.walletStarted = false;
+  state.adminStarted = false;
+  state.walletFormsBound = false;
+  state.booted = false;
+
+  stopWallet();
+  stopAdmin();
+
+  $("navLogout").classList.add("hidden");
+  $("mainNav").classList.add("hidden");
+  $("navAdmin").classList.add("hidden");
+  $("verifyBanner").classList.add("hidden");
+  showOnly("homePage");
+}
+
+async function logout() {
+  try {
+    await signOut(auth);
+    history.replaceState(null, "", "#/");
+    showNotification("success", "ออกจากระบบสำเร็จ!", "แล้วพบกันใหม่ที่ Horizon X");
+  } catch (error) {
+    console.error(error);
+    showNotification("error", "ออกจากระบบไม่สำเร็จ", friendlyError(error));
+  }
+}
+
+/* =========================================================
+   10. CONNECTIVITY + BOOT
+   ========================================================= */
+function initConnectivity() {
+  const bar = $("offlineBar"), conn = $("connState");
+  const sync = () => {
+    const online = navigator.onLine;
+    bar.classList.toggle("hidden", online);
+    if (conn) {
+      conn.textContent = online ? "CONNECTED" : "OFFLINE — ใช้ข้อมูลแคช";
+      conn.classList.toggle("offline", !online);
+    }
+  };
+  window.addEventListener("online", () => { sync(); toast("กลับมาออนไลน์แล้ว", "success"); });
+  window.addEventListener("offline", () => { sync(); toast("อินเทอร์เน็ตหลุด — โหมดออฟไลน์", "warn", 6000); });
+  sync();
+}
+
+function hideLoading() {
+  const el = $("loadingScreen");
+  if (el && !el.classList.contains("done")) {
+    el.classList.add("done");
+    setTimeout(() => el.remove(), 600);
+  }
+}
+
+function showErrorPage(message) {
+  $("errorText").textContent = message;
+  showOnly("errorPage");
+  hideLoading();
+}
+
+function boot() {
+  createAmbientParticles();
+  initConnectivity();
+  initWalletTabs();
+  initAdminTabs();
+  initAuthForm();
+
+  $("navLogout").addEventListener("click", logout);
+  $("retryBtn").addEventListener("click", () => location.reload());
+
+  $("resendVerifyBtn").addEventListener("click", async () => {
+    const btn = $("resendVerifyBtn");
+    btn.disabled = true;
+    try {
+      const user = auth.currentUser;
+      if (!user) throw new Error("ยังไม่ได้เข้าสู่ระบบ");
+      await sendEmailVerification(user);
+      toast("ส่งอีเมลยืนยันอีกครั้งแล้ว", "success");
+    } catch (error) {
+      showNotification("error", "ส่งอีเมลไม่สำเร็จ", friendlyError(error));
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  onAuthStateChanged(auth,
+    async (user) => {
       try {
-        await reload(currentUser);
-        if (currentUser.emailVerified) {
-          renderProfile();
-          showNotification("success", "ยืนยันอีเมลแล้ว!", "บัญชีของคุณเปิดใช้งานเต็มรูปแบบแล้ว ✅");
-        } else {
-          toast("ยังไม่พบการยืนยัน ลองกดลิงก์ในอีเมลก่อน", "bad");
-        }
+        if (user) await handleUser(user);
+        else handleGuest();
       } catch (error) {
-        reportError(error, "ตรวจสอบสถานะไม่สำเร็จ");
-      }
-    });
-
-    /* =========================================================
-       14) SIGNUP / LOGIN / LOGOUT / RESET
-    ========================================================= */
-
-    $("authForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      if (busy) return;
-
-      if (!auth) {
-        showNotification("error", "ระบบยังไม่พร้อม", "ตรวจสอบ Firebase Config และการเชื่อมต่อ");
-        return;
-      }
-
-      const email = $("email").value.trim();
-      const password = $("password").value;
-      const displayName = $("displayName").value.trim();
-
-      if (!email) { toast("กรอกอีเมลก่อน", "bad"); $("email").focus(); return; }
-      if (password.length < 6) { toast("รหัสผ่านอย่างน้อย 6 ตัวอักษร", "bad"); $("password").focus(); return; }
-      if (authMode === "signup" && !displayName) { toast("กรอกชื่อที่ใช้แสดงก่อน", "bad"); $("displayName").focus(); return; }
-
-      setBusy(true);
-
-      try {
-        if (authMode === "signup") {
-          const credential = await createUserWithEmailAndPassword(auth, email, password);
-          await updateProfile(credential.user, { displayName });
-
-          try {
-            await sendEmailVerification(credential.user);
-          } catch (e) { console.warn("sendEmailVerification:", e); }
-
-          showNotification("success", "สมัครสมาชิกสำเร็จ!",
-            "ยินดีต้อนรับสู่ Horizon X 🎉 อย่าลืมยืนยันอีเมลเพื่อใช้กระเป๋าเงิน");
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-          showNotification("success", "เข้าสู่ระบบสำเร็จ!", "ยินดีต้อนรับกลับมา ✨");
-        }
-      } catch (error) {
-        reportError(error, authMode === "signup" ? "สมัครสมาชิกไม่สำเร็จ" : "เข้าสู่ระบบไม่สำเร็จ");
+        console.error("Session error:", error);
+        showErrorPage(error.message || "ไม่สามารถโหลดข้อมูลผู้ใช้ได้");
       } finally {
-        setBusy(false);
+        hideLoading();
       }
-    });
-
-    async function logout() {
-      if (!auth || busy) return;
-      setBusy(true);
-      try {
-        await signOut(auth);
-        showNotification("success", "ออกจากระบบสำเร็จ!", "แล้วพบกันใหม่ 👋");
-      } catch (error) {
-        reportError(error, "ออกจากระบบไม่สำเร็จ");
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    $("navLogout").addEventListener("click", logout);
-
-    $("forgotBtn").addEventListener("click", async () => {
-      if (busy) return;
-      if (!auth) { showNotification("error", "ระบบยังไม่พร้อม", "ตรวจสอบ Firebase Config"); return; }
-
-      const email = $("email").value.trim();
-      if (!email) { toast("กรอกอีเมลก่อน", "bad"); $("email").focus(); return; }
-
-      $("forgotBtn").disabled = true;
-      try {
-        await sendPasswordResetEmail(auth, email);
-        showNotification("success", "ส่งคำขอแล้ว", "ถ้าอีเมลนี้มีบัญชี จะได้รับลิงก์ตั้งรหัสผ่านใหม่");
-      } catch (error) {
-        reportError(error, "ส่งคำขอไม่สำเร็จ");
-      } finally {
-        $("forgotBtn").disabled = false;
-      }
-    });
-
-    /* =========================================================
-       15) NOTES — CRUD (subcollection users/{uid}/notes)
-    ========================================================= */
-
-    function notesCol() { return collection(db, COLLECTIONS.users, currentUser.uid, COLLECTIONS.notes); }
-
-    function renderNotes(list) {
-      const target = $("noteList");
-
-      if (!list.length) {
-        target.innerHTML = `<div class="empty"><span class="big">🗒️</span>ยังไม่มีบันทึก — เพิ่มรายการแรกของคุณด้านบน</div>`;
-        return;
-      }
-
-      target.innerHTML = list.map(note => `
-        <article class="list-item">
-          <div class="list-item-head">
-            <div class="list-item-title">${esc(note.title)}</div>
-            <div class="list-actions">
-              <button class="secondary small-btn" data-edit="${esc(note.id)}">แก้ไข</button>
-              <button class="danger small-btn" data-del="${esc(note.id)}">ลบ</button>
-            </div>
-          </div>
-          ${note.body ? `<div class="list-item-body">${esc(note.body)}</div>` : ""}
-          <div class="list-item-meta">
-            สร้าง ${stamp(note.createdAtMs)}${note.updatedAtMs ? " · แก้ไข " + stamp(note.updatedAtMs) : ""}
-          </div>
-        </article>
-      `).join("");
-    }
-
-    $("noteForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      if (busy || !currentUser) return;
-
-      const title = $("noteTitle").value.trim();
-      const body = $("noteBody").value.trim();
-
-      if (!title) { toast("ใส่หัวข้อก่อน", "bad"); return; }
-
-      $("noteSubmit").disabled = true;
-
-      try {
-        if (editingNoteId) {
-          await updateDoc(doc(notesCol(), editingNoteId), {
-            title, body,
-            updatedAt: serverTimestamp(),
-            updatedAtMs: Date.now()
-          });
-          toast("แก้ไขบันทึกแล้ว", "ok");
-          resetNoteForm();
-        } else {
-          await addDoc(notesCol(), {
-            uid: currentUser.uid,
-            title, body,
-            createdAt: serverTimestamp(),
-            createdAtMs: Date.now()
-          });
-          toast("เพิ่มบันทึกแล้ว", "ok");
-          $("noteTitle").value = "";
-          $("noteBody").value = "";
-        }
-        $("noteTitle").focus();
-      } catch (error) {
-        reportError(error, "บันทึกไม่สำเร็จ");
-      } finally {
-        $("noteSubmit").disabled = false;
-      }
-    });
-
-    function resetNoteForm() {
-      editingNoteId = null;
-      $("noteTitle").value = "";
-      $("noteBody").value = "";
-      $("noteSubmit").textContent = "เพิ่มบันทึก";
-      $("noteCancel").classList.add("hidden");
-    }
-
-    $("noteCancel").addEventListener("click", resetNoteForm);
-
-    $("noteList").addEventListener("click", async event => {
-      const editId = event.target.dataset.edit;
-      const delId = event.target.dataset.del;
-      if (!editId && !delId) return;
-
-      if (editId) {
-        const snap = await getDoc(doc(notesCol(), editId));
-        if (!snap.exists()) { toast("ไม่พบบันทึกนี้", "bad"); return; }
-        const data = snap.data();
-        editingNoteId = editId;
-        $("noteTitle").value = data.title || "";
-        $("noteBody").value = data.body || "";
-        $("noteSubmit").textContent = "บันทึกการแก้ไข";
-        $("noteCancel").classList.remove("hidden");
-        $("noteTitle").focus();
-        return;
-      }
-
-      if (delId) {
-        if (!confirm("ลบบันทึกนี้?")) return;
-        try {
-          await deleteDoc(doc(notesCol(), delId));
-          toast("ลบบันทึกแล้ว", "ok");
-          if (editingNoteId === delId) resetNoteForm();
-        } catch (error) {
-          reportError(error, "ลบไม่สำเร็จ");
-        }
-      }
-    });
-
-    function subscribeNotes() {
-      unsubs.notes();
-      const target = $("noteList");
-      target.innerHTML = `<div class="skeleton"></div>`;
-
-      unsubNotes = onSnapshot(notesCol(), snapshot => {
-        const list = snapshot.docs
-          .map(d => ({ id: d.id, ...d.data() }))
-          .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
-        renderNotes(list);
-      }, error => {
-        console.error("notes snapshot:", error);
-        target.innerHTML = `<div class="empty">โหลดบันทึกไม่สำเร็จ — ${esc(friendlyError(error))}</div>`;
-      });
-    }
-
-    /* =========================================================
-       16) WALLET — requests + history
-    ========================================================= */
-
-    function requestsCol() { return collection(db, COLLECTIONS.requests); }
-
-    function renderWallet(list) {
-      walletCache = list;
-
-      const pending = sumPending(list);
-      const done = list.filter(r => r.status === "approved").length;
-
-      setText("walletBalance", money(profile?.balance));
-      setText("walletPendingIn", money(pending.in));
-      setText("walletPendingOut", money(pending.out));
-      setText("walletDoneCount", String(done));
-      setText("walletAvailable", money(Math.max(0, Number(profile?.balance || 0) - pending.out)));
-      setText("dashBalance", money(profile?.balance));
-      setText("dashPending", money(pending.in + pending.out));
-
-      const target = $("walletHistory");
-
-      if (!list.length) {
-        target.innerHTML = `<div class="empty"><span class="big">💳</span>ยังไม่มีธุรกรรม — ส่งคำขอแรกของคุณด้านบน</div>`;
-        return;
-      }
-
-      target.innerHTML = list.map(item => {
-        const isIn = item.type === "topup";
-        return `
-          <article class="list-item">
-            <div class="list-item-head">
-              <div>
-                <div class="list-item-title">
-                  ${isIn ? "เงินเข้า" : "เงินออก"} ·
-                  <span class="${isIn ? "amount-in" : "amount-out"}">
-                    ${isIn ? "+" : "−"}${money(item.amount)} ฿
-                  </span>
-                </div>
-                ${item.note ? `<div class="list-item-body">${esc(item.note)}</div>` : ""}
-              </div>
-              ${statusChip(item.status)}
-            </div>
-            <div class="list-item-meta">
-              ส่งเมื่อ ${stamp(item.createdAtMs)}
-              ${item.decidedAtMs ? ` · ตัดสิน ${stamp(item.decidedAtMs)} โดย ${esc(item.decidedByName || item.decidedBy || "-")}` : ""}
-              ${item.reason ? `<br>เหตุผล: ${esc(item.reason)}` : ""}
-            </div>
-            ${item.status === "pending"
-              ? `<div class="list-actions" style="margin-top:10px;">
-                   <button class="secondary small-btn" data-cancel="${esc(item.id)}">ยกเลิกคำขอ</button>
-                 </div>`
-              : ""}
-          </article>
-        `;
-      }).join("");
-    }
-
-    $("walletForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      if (busy || !currentUser) return;
-
-      if (!currentUser.emailVerified) {
-        showNotification("info", "ยังไม่ยืนยันอีเมล", "ยืนยันอีเมลก่อนจึงจะส่งคำขอได้");
-        return;
-      }
-
-      const type = $("walletType").value;
-      const amount = Math.round(Number($("walletAmount").value) * 100) / 100;
-      const note = $("walletNote").value.trim();
-
-      if (!Number.isFinite(amount) || amount <= 0) { toast("จำนวนเงินไม่ถูกต้อง", "bad"); return; }
-      if (amount > 1000000) { toast("จำนวนเงินสูงเกิน 1,000,000", "bad"); return; }
-
-      if (Date.now() - lastRequestAt < 4000) { toast("รอสักครู่ก่อนส่งคำขอถัดไป", "bad"); return; }
-
-      if (type === "withdraw") {
-        const pendingOut = sumPending(walletCache).out;
-        const available = Number(profile?.balance || 0) - pendingOut;
-        if (amount > available) {
-          toast(`ถอนได้ไม่เกิน ${money(Math.max(0, available))} บาท`, "bad");
-          return;
-        }
-      }
-
-      setBusy(true);
-      $("walletSubmit").disabled = true;
-
-      try {
-        // กันส่งซ้ำ: เช็คคำขอ pending ประเภทเดียวกันจำนวนเท่ากัน
-        const dupSnap = await getDocs(query(
-          requestsCol(),
-          where("uid", "==", currentUser.uid),
-          where("type", "==", type),
-          where("status", "==", "pending")
-        ));
-
-        const isDup = dupSnap.docs.some(d => Number(d.data().amount) === amount);
-        if (isDup) {
-          showNotification("info", "มีคำขอซ้ำอยู่แล้ว",
-            `คุณมีคำขอ${type === "topup" ? "เติมเงิน" : "ถอนเงิน"} ${money(amount)} บาท ที่ยังรอตรวจสอบ`);
-          return;
-        }
-
-        await addDoc(requestsCol(), {
-          uid: currentUser.uid,
-          userEmail: currentUser.email || "",
-          userName: profile?.displayName || currentUser.email || "",
-          type,
-          amount,
-          note,
-          status: "pending",
-          createdAt: serverTimestamp(),
-          createdAtMs: Date.now(),
-          decidedAt: null,
-          decidedAtMs: null,
-          decidedBy: null,
-          decidedByName: null,
-          reason: ""
-        });
-
-        lastRequestAt = Date.now();
-        $("walletAmount").value = "";
-        $("walletNote").value = "";
-
-        showNotification("success", "ส่งคำขอแล้ว!",
-          `คำขอ ${money(amount)} บาท ถูกส่งเข้าระบบแล้ว สถานะ: รอตรวจสอบ`);
-      } catch (error) {
-        reportError(error, "ส่งคำขอไม่สำเร็จ");
-      } finally {
-        setBusy(false);
-        $("walletSubmit").disabled = false;
-      }
-    });
-
-    $("walletHistory").addEventListener("click", async event => {
-      const id = event.target.dataset.cancel;
-      if (!id) return;
-      if (!confirm("ยกเลิกคำขอนี้?")) return;
-
-      try {
-        await updateDoc(doc(requestsCol(), id), {
-          status: "cancelled",
-          updatedAt: serverTimestamp()
-        });
-        toast("ยกเลิกคำขอแล้ว", "ok");
-      } catch (error) {
-        reportError(error, "ยกเลิกไม่สำเร็จ");
-      }
-    });
-
-    function subscribeWallet() {
-      unsubs.wallet();
-      const target = $("walletHistory");
-      target.innerHTML = `<div class="skeleton"></div>`;
-
-      unsubWallet = onSnapshot(
-        query(requestsCol(), where("uid", "==", currentUser.uid)),
-        snapshot => {
-          const list = snapshot.docs
-            .map(d => ({ id: d.id, ...d.data() }))
-            .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
-          renderWallet(list);
-        },
-        error => {
-          console.error("wallet snapshot:", error);
-          target.innerHTML = `<div class="empty">โหลดประวัติไม่สำเร็จ — ${esc(friendlyError(error))}</div>`;
-        }
-      );
-    }
-
-    /* =========================================================
-       17) ADMIN
-    ========================================================= */
-
-    function renderAdmin(list) {
-      const target = $("adminList");
-
-      if (!list.length) {
-        target.innerHTML = `<div class="empty"><span class="big">📭</span>ไม่มีรายการในหมวดนี้</div>`;
-        return;
-      }
-
-      target.innerHTML = list.map(item => {
-        const isIn = item.type === "topup";
-        return `
-          <article class="list-item">
-            <div class="list-item-head">
-              <div>
-                <div class="list-item-title">
-                  ${isIn ? "เติมเงิน" : "ถอนเงิน"} ·
-                  <span class="${isIn ? "amount-in" : "amount-out"}">${money(item.amount)} ฿</span>
-                </div>
-                <div class="list-item-body">
-                  ${esc(item.userName || "-")} · ${esc(item.userEmail || "-")}
-                  ${item.note ? `<br>หมายเหตุ: ${esc(item.note)}` : ""}
-                </div>
-              </div>
-              ${statusChip(item.status)}
-            </div>
-            <div class="list-item-meta">
-              UID: ${esc(item.uid)} · ส่งเมื่อ ${stamp(item.createdAtMs)}
-              ${item.decidedAtMs ? ` · ตัดสิน ${stamp(item.decidedAtMs)}` : ""}
-              ${item.reason ? `<br>เหตุผล: ${esc(item.reason)}` : ""}
-            </div>
-            ${item.status === "pending"
-              ? `<div class="list-actions" style="margin-top:10px;">
-                   <button class="secondary small-btn" data-approve="${esc(item.id)}">อนุมัติ</button>
-                   <button class="danger small-btn" data-reject="${esc(item.id)}">ปฏิเสธ</button>
-                 </div>`
-              : ""}
-          </article>
-        `;
-      }).join("");
-    }
-
-    function refreshAdminList() {
-      const list = adminCache
-        .filter(r => adminFilter === "all" ? true : r.status === adminFilter)
-        .sort((a, b) => (b.createdAtMs || 0) - (a.createdAtMs || 0));
-      renderAdmin(list);
-    }
-
-    document.querySelectorAll("#adminPage .tab").forEach(tab => {
-      tab.addEventListener("click", () => {
-        adminFilter = tab.dataset.filter;
-        document.querySelectorAll("#adminPage .tab").forEach(t => t.classList.toggle("active", t === tab));
-        refreshAdminList();
-      });
-    });
-
-    /** อนุมัติแบบ atomic — เช็คสถานะซ้ำ + ยอดเงินจริงใน transaction */
-    async function decideRequest(id, decision) {
-      const reason = decision === "rejected"
-        ? (prompt("เหตุผลที่ปฏิเสธ (ไม่บังคับ)") || "").trim()
-        : "";
-
-      setBusy(true);
-
-      try {
-        await runTransaction(db, async tx => {
-          const reqRef = doc(db, COLLECTIONS.requests, id);
-          const reqSnap = await tx.get(reqRef);
-
-          if (!reqSnap.exists()) throw new Error("ไม่พบคำขอนี้");
-          const req = reqSnap.data();
-
-          if (req.status !== "pending") throw new Error("รายการนี้ถูกดำเนินการไปแล้ว");
-
-          const userRef = doc(db, COLLECTIONS.users, req.uid);
-          const userSnap = await tx.get(userRef);
-          const balance = Number(userSnap.exists() ? userSnap.data().balance || 0 : 0);
-          const amount = Number(req.amount || 0);
-
-          if (decision === "approved") {
-            if (req.type === "topup") {
-              tx.update(userRef, { balance: balance + amount, updatedAt: serverTimestamp() });
-            } else {
-              if (amount > balance) {
-                throw new Error("ยอดเงินของผู้ใช้ไม่พอสำหรับการถอนนี้");
-              }
-              tx.update(userRef, { balance: balance - amount, updatedAt: serverTimestamp() });
-            }
-          }
-
-          tx.update(reqRef, {
-            status: decision,
-            reason,
-            decidedAt: serverTimestamp(),
-            decidedAtMs: Date.now(),
-            decidedBy: currentUser.uid,
-            decidedByName: profile?.displayName || currentUser.email || "admin",
-            updatedAt: serverTimestamp()
-          });
-        });
-
-        toast(decision === "approved" ? "อนุมัติรายการแล้ว" : "ปฏิเสธรายการแล้ว", "ok");
-        await refreshProfile();
-      } catch (error) {
-        reportError(error, "ดำเนินการไม่สำเร็จ");
-      } finally {
-        setBusy(false);
-      }
-    }
-
-    $("adminList").addEventListener("click", event => {
-      const approve = event.target.dataset.approve;
-      const reject = event.target.dataset.reject;
-      if (approve) decideRequest(approve, "approved");
-      if (reject) decideRequest(reject, "rejected");
-    });
-
-    function subscribeAdmin() {
-      unsubs.admin();
-      const target = $("adminList");
-      target.innerHTML = `<div class="skeleton"></div>`;
-
-      unsubAdmin = onSnapshot(requestsCol(), snapshot => {
-        adminCache = snapshot.docs.map(d => ({ id: d.id, ...d.data() }));
-        refreshAdminList();
-      }, error => {
-        console.error("admin snapshot:", error);
-        target.innerHTML = `<div class="empty">โหลดรายการไม่สำเร็จ — ${esc(friendlyError(error))}</div>`;
-      });
-    }
-
-    $("adjustForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      if (busy || profile?.role !== "admin") return;
-
-      const email = $("adjustEmail").value.trim().toLowerCase();
-      const mode = $("adjustMode").value;
-      const amount = Number($("adjustAmount").value);
-
-      if (!email) { toast("ใส่อีเมลผู้ใช้", "bad"); return; }
-      if (!Number.isFinite(amount)) { toast("จำนวนเงินไม่ถูกต้อง", "bad"); return; }
-
-      setBusy(true);
-
-      try {
-        const snap = await getDocs(query(
-          collection(db, COLLECTIONS.users),
-          where("email", "==", email),
-          limit(1)
-        ));
-
-        if (snap.empty) throw new Error("ไม่พบผู้ใช้ที่ใช้อีเมลนี้");
-        const userRef = snap.docs[0].ref;
-
-        await runTransaction(db, async tx => {
-          const userSnap = await tx.get(userRef);
-          const current = Number(userSnap.data().balance || 0);
-          const next = mode === "set" ? amount : current + amount;
-          tx.update(userRef, { balance: next, updatedAt: serverTimestamp() });
-        });
-
-        toast(`ปรับยอดของ ${email} แล้ว`, "ok");
-        $("adjustAmount").value = "";
-        await refreshProfile();
-      } catch (error) {
-        reportError(error, "ปรับยอดไม่สำเร็จ");
-      } finally {
-        setBusy(false);
-      }
-    });
-
-    /* =========================================================
-       18) BOOT
-    ========================================================= */
-
-    async function initializeFirebase() {
-      const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
-
-      // Firestore พร้อม offline cache (หลายแท็บ)
-      try {
-        db = initializeFirestore(app, {
-          localCache: persistentLocalCache({ tabManager: persistentMultipleTabManager() })
-        });
-      } catch (e) {
-        console.warn("Firestore cache fallback:", e);
-        const { getFirestore } = await import("https://www.gstatic.com/firebasejs/12.4.0/firebase-firestore.js");
-        db = getFirestore(app);
-      }
-
-      auth = getAuth(app);
-
-      if (APP_CHECK_SITE_KEY) {
-        try {
-          initializeAppCheck(app, {
-            provider: new ReCaptchaV3Provider(APP_CHECK_SITE_KEY),
-            isTokenAutoRefreshEnabled: true
-          });
-        } catch (e) { console.warn("App Check:", e); }
-      }
-
-      try {
-        if (await isSupported()) getAnalytics(app);
-      } catch (e) { console.warn("Analytics unavailable:", e); }
-
-      onAuthStateChanged(auth, async user => {
-        $("bootLoader").classList.add("done");
-
-        if (!user) {
-          currentUser = null;
-          profile = null;
-          walletCache = [];
-          adminCache = [];
-          Object.values(unsubs).forEach(fn => fn());
-          setMode("login");
-          showPage("home");
-          renderProfile();
-          return;
-        }
-
-        currentUser = user;
-
-        try {
-          profile = await ensureUserDoc(user);
-        } catch (error) {
-          console.error("ensureUserDoc:", error);
-          profile = { uid: user.uid, role: "user", balance: 0, email: user.email, displayName: user.displayName };
-          toast("อ่านข้อมูลบัญชีไม่สำเร็จ — " + friendlyError(error), "bad");
-        }
-
-        renderProfile();
-        showPage("dashboard");
-
-        subscribeNotes();
-        subscribeWallet();
-        if (profile?.role === "admin") subscribeAdmin();
-      }, error => {
-        $("bootLoader").classList.add("done");
-        reportError(error, "ตรวจสอบสถานะบัญชีไม่สำเร็จ");
-      });
-    }
-
-    createAmbientParticles();
-    syncOnlineState();
-
-    // กันหน้าโหลดค้างถ้า Firebase ตอบช้า
-    setTimeout(() => $("bootLoader").classList.add("done"), 6000);
-
-    initializeFirebase().catch(error => {
-      $("bootLoader").classList.add("done");
-      console.error("Firebase init:", error);
-      showNotification("error", "เริ่มต้นระบบไม่สำเร็จ",
-        "ตรวจสอบ Firebase Config, การเชื่อมต่อ และการตั้งค่าโปรเจกต์");
-    });
-  </script>
+    },
+    (error) => { console.error("Auth state error:", error); showErrorPage("ตรวจสอบสถานะบัญชีไม่สำเร็จ"); }
+  );
+
+  window.addEventListener("unhandledrejection", (e) => console.error("Unhandled:", e.reason));
+}
+
+boot();
+</script>
 </body>
 </html>

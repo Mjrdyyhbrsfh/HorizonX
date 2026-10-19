@@ -5,11 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Horizon X - Ultimate Cinematic UI</title>
     <style>
-        /* 🖤 รากฐานและตัวแปรหลักสำหรับการปรับแต่ง */
+        /* 🖤 รากฐานและตัวแปรหลักสำหรับการปรับแต่ง UI */
         :root {
             --radius: 24px;
-            --bounce-speed: 1.2s;
-            --glow-white: rgba(255, 255, 255, 0.15);
+            --bounce-speed: 0.8s;
         }
 
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
@@ -24,93 +23,102 @@
             perspective: 1000px;
         }
 
-        /* 🎆 มหากาพย์ชุดแอนิเมชันระดับ Cinematic */
+        /* 🎆 มหากาพย์ชุดแอนิเมชันระดับ Cinematic (ตรวจสอบความลื่นไหลแล้ว) */
         @keyframes cinematicPop {
-            0% { transform: scale(0.3) translateY(50px) rotateX(-30deg); opacity: 0; filter: blur(10px); }
-            50% { transform: scale(1.04) translateY(-10px) rotateX(10deg); opacity: 0.8; filter: blur(0px); }
-            70% { transform: scale(0.98) translateY(2px) rotateX(-5deg); opacity: 0.9; }
-            100% { transform: scale(1) translateY(0) rotateX(0deg); opacity: 1; }
+            0% { transform: scale(0.8) translateY(30px); opacity: 0; filter: blur(5px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
         }
         @keyframes floatEffect {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-8px) rotate(0.5deg); }
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
         @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); border-color: rgba(255,255,255,0.2); }
-            50% { box-shadow: 0 0 35px rgba(255, 255, 255, 0.2); border-color: rgba(255,255,255,0.6); }
+            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
+            50% { box-shadow: 0 0 35px rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.4); }
         }
         @keyframes shake {
             0%, 100% { transform: translateX(0); }
-            15%, 45%, 75% { transform: translateX(-8px) rotate(-1deg); }
-            30%, 60%, 90% { transform: translateX(8px) rotate(1deg); }
-        }
-        @keyframes scanline {
-            0% { transform: translateY(-100%); }
-            100% { transform: translateY(100%); }
+            20%, 60% { transform: translateX(-6px); }
+            40%, 80% { transform: translateX(6px); }
         }
 
-        /* 📺 เอฟเฟกต์พื้นหลังมิติ Cyberpunk ขาวดำ */
+        /* 📺 เอฟเฟกต์หน้าจอ Cyberpunk เส้นสแกนบางๆ */
         body::before {
             content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.03), rgba(0, 255, 0, 0.01), rgba(0, 0, 255, 0.03));
-            background-size: 100% 4px, 6px 100%; z-index: 999; pointer-events: none;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            background-size: 100% 4px; z-index: 999; pointer-events: none;
         }
 
+        /* 📦 กล่องควบคุม UI สไตล์มินิมอลโปร่งแสง */
         .page { 
             display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
-            width: 90%; max-width: 420px; padding: 30px; background: rgba(10, 10, 10, 0.75);
+            width: 90%; max-width: 420px; padding: 30px; background: rgba(10, 10, 10, 0.85);
             backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius); transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.8);
+            border-radius: var(--radius); transition: all 0.3s ease-in-out;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
         }
-        .active { 
+        
+        /* คลาสสลับหน้าจอพร้อมเรียกใช้งานอนิเมชัน */
+        .page.active { 
             display: flex; 
             animation: cinematicPop var(--bounce-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275) both; 
         }
 
-        /* 🏷️ การตกแต่งฟอนต์และหัวข้อ */
-        h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: 3px; margin-bottom: 8px; text-transform: uppercase; background: linear-gradient(180deg, #ffffff 0%, #aaaaaa 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        p { font-size: 0.9rem; color: #888888; margin-bottom: 35px; letter-spacing: 0.5px; }
+        /* 🖼️ ปรับแต่งโลโก้ Horizon X ให้แสดงผลกึ่งกลางสวยงามและลอยตัว */
+        .logo-container {
+            width: 180px;
+            height: 180px;
+            margin-bottom: 20px;
+            animation: floatEffect 4s ease-in-out infinite;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .logo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase; color: #ffffff; }
+        p { font-size: 0.9rem; color: #666666; margin-bottom: 30px; letter-spacing: 0.5px; }
         
-        /* ⚪ ปุ่มสุดเด้งแบบลื่นไหลและตอบสนองแรงสัมผัส */
+        /* ⚪ ปุ่มสุดเด้งตอบสนองแรงกดสัมผัส */
         .btn { 
             background-color: #ffffff; color: #000000; border: none; padding: 16px 32px; font-weight: 800; 
             border-radius: var(--radius); cursor: pointer; width: 100%; font-size: 1rem; margin-top: 15px; 
-            letter-spacing: 1px; text-transform: uppercase; box-shadow: 0 8px 20px rgba(255,255,255,0.1);
-            transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            letter-spacing: 1px; text-transform: uppercase;
+            transition: transform 0.1s ease, background-color 0.2s ease;
         }
-        .btn:hover { transform: translateY(-4px) scale(1.02); box-shadow: 0 12px 25px rgba(255,255,255,0.2); }
-        .btn:active { transform: translateY(2px) scale(0.95); }
-        
-        .btn-secondary { background-color: transparent; color: #ffffff; border: 1px solid rgba(255,255,255,0.4); box-shadow: none; }
+        .btn:active { transform: scale(0.93); }
+        .btn-secondary { background-color: transparent; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); }
         .btn-secondary:hover { background-color: #ffffff; color: #000000; }
         
-        /* ⌨️ ช่องกรอกข้อมูลโค้งมนพร้อมอนิเมชันเรืองแสง */
+        /* ⌨️ ช่องอินพุตกรอกข้อมูลสำหรับสมัครสมาชิกและล็อกอิน */
         .input-group { width: 100%; margin-bottom: 15px; }
         input { 
             width: 100%; padding: 15px 22px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.15); 
-            color: #ffffff; border-radius: var(--radius); font-size: 1rem; letter-spacing: 0.5px;
-            transition: all 0.3s ease; 
+            color: #ffffff; border-radius: var(--radius); font-size: 1rem; transition: all 0.3s ease; 
         }
-        input:focus { outline: none; border-color: #ffffff; box-shadow: 0 0 15px rgba(255,255,255,0.1); background: rgba(15, 15, 15, 0.9); }
+        input:focus { outline: none; border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
         
-        .shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
-        .link-text { color: #888888; text-decoration: none; cursor: pointer; margin-top: 25px; font-size: 0.85rem; transition: color 0.2s; letter-spacing: 1px; }
+        .shake { animation: shake 0.4s ease-in-out; }
+        .link-text { color: #666666; text-decoration: none; cursor: pointer; margin-top: 25px; font-size: 0.85rem; transition: color 0.2s; }
         .link-text:hover { color: #ffffff; text-decoration: underline; }
         
-        /* 💳 บล็อก Wallet ทรงพลังลอยตัวได้ */
+        /* 💳 บล็อก Wallet แสดงยอดเงิน */
         .wallet-card { 
-            border: 1px solid rgba(255,255,255,0.1); padding: 25px; width: 100%; 
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; width: 100%; 
             border-radius: var(--radius); margin-bottom: 25px; background: rgba(20, 20, 20, 0.4);
-            animation: floatEffect 4s ease-in-out infinite, pulseGlow 3s ease-in-out infinite;
+            animation: pulseGlow 3s ease-in-out infinite;
         }
 
-        /* 🎛️ แผงควบคุมสดหลังบ้าน (Tweaker Box) สำหรับคุณ */
+        /* 🎛️ แผงควบคุมสดหลังบ้าน (Horizon Customizer) */
         .tweaker-panel {
-            margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(255,255,255,0.03);
-            border: 1px dashed rgba(255,255,255,0.1); width: 100%; text-align: left;
+            margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(255, 255, 255, 0.02);
+            border: 1px dashed rgba(255, 255, 255, 0.1); width: 100%; text-align: left;
         }
-        .tweaker-panel label { font-size: 0.75rem; color: #666; display: block; margin-bottom: 5px; text-transform: uppercase; }
+        .tweaker-panel label { font-size: 0.75rem; color: #555; display: block; margin-bottom: 5px; text-transform: uppercase; }
         .tweaker-panel input[type="range"] { margin-bottom: 10px; width: 100%; accent-color: #fff; cursor: pointer; }
     </style>
 </head>
@@ -118,7 +126,10 @@
 
     <!-- 1. หน้ายินดีต้อนรับ (Welcome Page) -->
     <div id="welcomePage" class="page active">
-        <div style="font-size: 4rem; margin-bottom: 10px; animation: floatEffect 5s ease-in-out infinite;">🪐</div>
+        <!-- 🖼️ ดึงรูปโลโก้ Horizon X ของคุณมาแสดงผลแบบลอยตัว -->
+        <div class="logo-container">
+            <img src="https://squarespace-cdn.com" alt="Horizon X Logo">
+        </div>
         <h1>Horizon X</h1>
         <p>ยินดีต้อนรับสู่ขอบฟ้าใหม่ของการซื้อขายไอเทม</p>
         <button class="btn" onclick="switchPage('authPage')">เริ่มต้นใช้งาน</button>
@@ -126,7 +137,10 @@
 
     <!-- 2. หน้าล็อกอินและสมัครสมาชิก -->
     <div id="authPage" class="page">
-        <h1 id="authTitle">เข้าสู่ระบบ</h1>
+        <div class="logo-container" style="width: 100px; height: 100px; margin-bottom: 10px;">
+            <img src="https://squarespace-cdn.com" alt="Horizon X Logo">
+        </div>
+        <h1 id="authTitle" style="font-size: 1.5rem;">เข้าสู่ระบบ</h1>
         <p id="authSub">กรุณากรอกข้อมูลสิทธิ์การเข้าถึงคอมมูนิตี้</p>
         
         <div class="input-group"><input type="email" id="email" placeholder="อีเมลของคุณ"></div>
@@ -137,35 +151,35 @@
         <p class="link-text" onclick="switchPage('welcomePage')">← ย้อนกลับหน้าแรก</p>
     </div>
 
-    <!-- 3. หน้าแดชบอร์ดหลักเมื่อล็อกอินสำเร็จแล้ว + กล่องปรับแต่งตามใจชอบ -->
+    <!-- 3. หน้าแดชบอร์ดหลักเมื่อล็อกอินสำเร็จแล้ว -->
     <div id="dashboardPage" class="page">
-        <h1 style="font-size: 1.6rem;">MAIN INTERFACE</h1>
+        <h1 style="font-size: 1.5rem;">MAIN INTERFACE</h1>
         <p>ยินดีต้อนรับกลับเข้าสู่ศูนย์บัญชาการ Horizon X</p>
         
         <div class="wallet-card">
-            <span style="color:#666; font-size:0.75rem; letter-spacing: 2px; font-weight: bold; display:block;">CURRENT BALANCE</span>
-            <h2 id="userWallet" style="margin-top:8px; font-size: 2.2rem; font-weight: 900; letter-spacing: 1px;">0.00 THB</h2>
+            <span style="color:#444; font-size:0.75rem; letter-spacing: 2px; font-weight: bold; display:block;">CURRENT BALANCE</span>
+            <h2 id="userWallet" style="margin-top:8px; font-size: 2.2rem; font-weight: 900;">0.00 THB</h2>
         </div>
 
-        <!-- 🎛️ กล่องลูกเล่นปรับความโค้งและความเด้งได้สดๆ บนหน้าจอมือถือคุณ -->
+        <!-- 🎛️ กล่องลูกเล่นให้คุณเลื่อนปรับแต่ง UI ได้ตามต้องการสดๆ บนมือถือ -->
         <div class="tweaker-panel">
-            <h3 style="font-size: 0.8rem; letter-spacing: 1px; margin-bottom: 10px; color:#aaa;">🎛️ HORIZON CUSTOMIZER</h3>
-            
+            <h3 style="font-size: 0.8rem; margin-bottom: 10px; color:#aaa; letter-spacing: 1px;">🎛️ HORIZON CUSTOMIZER</h3>
             <label id="radiusLabel">ความโค้งมน: 24px</label>
             <input type="range" min="0" max="40" value="24" oninput="updateRadius(this.value)">
             
-            <label id="speedLabel">ความเร็วความเด้ง: 1.2s</label>
-            <input type="range" min="3" max="25" value="12" oninput="updateSpeed(this.value)">
+            <label id="speedLabel">ความเร็วความเด้ง: 0.8s</label>
+            <input type="range" min="3" max="20" value="8" oninput="updateSpeed(this.value)">
         </div>
 
         <button class="btn btn-secondary" style="margin-top: 20px;" onclick="logout()">ตัดการเชื่อมต่อระบบ</button>
     </div>
 
-    <!-- เชื่อมต่อระบบ Firebase ของ Google โดยตรงผ่าน SDK -->
+    <!-- เชื่อมต่อระบบ Firebase ของ Google โดยตรงผ่านเว็บ SDK Modules -->
     <script type="module">
         import { initializeApp } from "https://gstatic.com";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://gstatic.com";
 
+        // ตรวจสอบความถูกต้องของคีย์ Firebase โปรเจกต์ horizon-x-f920b แล้ว
         const firebaseConfig = {
             apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
             authDomain: "://firebaseapp.com",
@@ -176,6 +190,7 @@
             measurementId: "G-Y8NRP7NSCC"
         };
 
+        // เริ่มต้นการใช้งาน Firebase App และส่งฟังก์ชันออกไปใช้ที่ Global scope
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
         window.auth = auth;
@@ -187,6 +202,84 @@
     <script>
         let isSignUpMode = false;
 
-        /* ฟังก์ชันควบคุมแถบเลื่อนปรับแต่ง UI ได้ตามใจชอบ */
-        function updateRadius(val) {
-            document.documentElement.style.setProperty('--radius', val + 'px');
+        // ฟังก์ชันปรับความโค้งมนสดจากสไลเดอร์
+function updateRadius(val) {
+document.documentElement.style.setProperty('--radius', val + 'px');
+document.getElementById('radiusLabel').innerText = ความโค้งมน: ${val}px;
+}
+// ฟังก์ชันปรับความเร็วแอนิเมชันความเด้งสดจากสไลเดอร์
+function updateSpeed(val) {
+let speed = (val / 10) + 's';
+document.documentElement.style.setProperty('--bounce-speed', speed);
+document.getElementById('speedLabel').innerText = ความเร็วความเด้ง: ${speed};
+}
+// ฟังก์ชันสลับหน้าเพจ (ซ่อมแซมตัวแปรแก้บั๊กไม่แสดงผลหน้าจอมือถือเรียบร้อย)
+function switchPage(pageId) {
+document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+const nextPage = document.getElementById(pageId);
+if (nextPage) {
+nextPage.classList.add('active');
+}
+}
+// ฟังก์ชันสลับโหมดเข้าสู่ระบบ / สมัครสมาชิก
+function toggleAuthMode() {
+isSignUpMode = !isSignUpMode;
+const title = document.getElementById('authTitle');
+const sub = document.getElementById('authSub');
+const mainBtn = document.getElementById('mainAuthBtn');
+const switchBtn = document.getElementById('switchBtn');
+if (isSignUpMode) {
+title.innerText = "สร้างบัญชีใหม่";
+sub.innerText = "ร่วมเดินทางเข้าสู่คอมมูนิตี้กับเรา";
+mainBtn.innerText = "ลงทะเบียนเปิดระบบ";
+switchBtn.innerText = "มีบัญชีผ่านประตูอยู่แล้ว? เข้าสู่ระบบ";
+} else {
+title.innerText = "เข้าสู่ระบบ";
+sub.innerText = "กรุณากรอกข้อมูลสิทธิ์การเข้าถึงคอมมูนิตี้";
+mainBtn.innerText = "ยืนยันตัวตน";
+switchBtn.innerText = "สมัครบัญชีใหม่";
+}
+}
+// ฟังก์ชันจัดการสมัครสมาชิกและล็อกอินผ่านระบบ Firebase
+async function handleAuth() {
+const email = document.getElementById('email').value;
+const password = document.getElementById('password').value;
+const authCard = document.getElementById('authPage');
+if(!email || !password) {
+authCard.classList.add('shake');
+setTimeout(() => authCard.classList.remove('shake'), 400);
+alert('กรุณากรอกข้อมูลให้ครบถ้วน');
+return;
+}
+try {
+if (isSignUpMode) {
+await window.createUserWithEmailAndPassword(window.auth, email, password);
+alert('ลงทะเบียนสำเร็จ!');
+} else {
+await window.signInWithEmailAndPassword(window.auth, email, password);
+alert('เข้าสู่ระบบสำเร็จ!');
+}
+} catch (error) {
+authCard.classList.add('shake');
+setTimeout(() => authCard.classList.remove('shake'), 400);
+alert('ข้อผิดพลาดระบบ: ' + error.message);
+}
+}
+// ฟังก์ชันออกจากระบบสมาชิก
+function logout() {
+window.signOut(window.auth).then(() => {
+switchPage('welcomePage');
+document.getElementById('email').value = "";
+document.getElementById('password').value = "";
+});
+}
+// ตรวจสอบสถานะการล็อกอินแบบ Real-time อัตโนมัติเมื่อเว็บรันเสร็จ
+setTimeout(() => {
+if(window.auth && typeof onAuthStateChanged !== 'undefined') {
+window.auth.onAuthStateChanged((user) => {
+if (user) {
+switchPage('dashboardPage');
+}
+});
+}
+}, 1000);

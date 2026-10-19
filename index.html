@@ -15,7 +15,6 @@
       --border: #292929;
       --text: #f5f5f5;
       --muted: #929292;
-      --accent: #fff;
       --green: #8affaa;
       --red: #ff8585;
     }
@@ -27,23 +26,24 @@
       min-height: 100vh;
       background: var(--bg);
       color: var(--text);
-      font-family: system-ui, sans-serif;
+      font-family: system-ui, -apple-system, sans-serif;
     }
 
     button, input { font: inherit; }
     button { cursor: pointer; }
 
     .navbar {
-      height: 72px;
-      padding: 0 7%;
+      min-height: 72px;
+      padding: 14px 6%;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      gap: 12px;
       border-bottom: 1px solid var(--border);
     }
 
     .logo {
-      font-size: 22px;
+      font-size: 21px;
       font-weight: 900;
       letter-spacing: 2px;
     }
@@ -52,37 +52,37 @@
 
     .container {
       width: min(100% - 32px, 440px);
-      margin: 60px auto;
+      margin: 55px auto;
     }
 
     .hero {
       text-align: center;
-      margin-bottom: 32px;
+      margin-bottom: 30px;
     }
 
     .eyebrow {
       color: var(--muted);
-      font-size: 11px;
+      font-size: 10px;
       letter-spacing: 4px;
     }
 
     h1 {
-      font-size: clamp(32px, 8vw, 48px);
-      margin: 12px 0;
+      font-size: clamp(32px, 8vw, 46px);
+      margin: 13px 0;
       letter-spacing: -1px;
     }
 
     .muted {
       color: var(--muted);
+      font-size: 13px;
       line-height: 1.8;
-      font-size: 14px;
     }
 
     .panel {
-      background: linear-gradient(145deg, #141414, #090909);
+      background: linear-gradient(145deg, #151515, #090909);
       border: 1px solid var(--border);
       border-radius: 20px;
-      padding: 26px;
+      padding: 25px;
     }
 
     .tabs {
@@ -93,15 +93,15 @@
     }
 
     .tab {
-      border: 1px solid var(--border);
+      min-height: 43px;
+      border: 1px solid #333;
       border-radius: 10px;
       background: transparent;
       color: #999;
-      padding: 12px;
     }
 
     .tab.active {
-      color: #000;
+      color: #050505;
       background: #fff;
       border-color: #fff;
     }
@@ -117,11 +117,11 @@
 
     input {
       width: 100%;
-      min-height: 48px;
-      padding: 12px 14px;
-      background: #080808;
+      min-height: 47px;
+      padding: 12px;
       border: 1px solid #333;
       border-radius: 10px;
+      background: #080808;
       color: #fff;
       outline: none;
     }
@@ -131,49 +131,54 @@
     .primary {
       width: 100%;
       min-height: 49px;
-      border: 1px solid white;
+      border: 1px solid #fff;
       border-radius: 10px;
-      background: white;
+      background: #fff;
       color: #050505;
       font-weight: 800;
       transition: .2s;
     }
 
     .primary:hover { background: #ddd; }
-    .primary:disabled { opacity: .55; cursor: wait; }
+
+    button:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
 
     .secondary {
-      padding: 10px 14px;
+      min-height: 40px;
+      padding: 9px 13px;
       border: 1px solid #444;
       border-radius: 9px;
-      color: white;
       background: #111;
+      color: #fff;
     }
 
     .hidden { display: none !important; }
 
     .dashboard-title {
+      font-size: 29px;
       overflow-wrap: anywhere;
-      font-size: 28px;
     }
 
     .stat {
       margin: 22px 0;
       padding: 18px;
-      background: #080808;
       border: 1px solid #282828;
       border-radius: 14px;
+      background: #080808;
     }
 
     footer {
-      padding: 25px;
+      padding: 25px 12px;
       text-align: center;
       color: #555;
-      font-size: 10px;
+      font-size: 9px;
       letter-spacing: 2px;
     }
 
-    /* ===== GLOBAL NOTIFICATION ===== */
+    /* ===== GLOBAL NOTIFICATION MODAL ===== */
 
     .notification-overlay {
       --notice-accent: #8affaa;
@@ -201,7 +206,7 @@
 
     .notification-overlay.info {
       --notice-accent: #d0d0d0;
-      --notice-glow: rgba(255,255,255,.1);
+      --notice-glow: rgba(255,255,255,.10);
     }
 
     .notification-overlay.active {
@@ -220,14 +225,15 @@
       background: linear-gradient(145deg,#191919,#080808);
       border: 1px solid #383838;
       border-radius: 23px;
-      box-shadow: 0 25px 100px #000,0 0 50px var(--notice-glow);
+      box-shadow: 0 25px 100px #000,
+                  0 0 50px var(--notice-glow);
       transform: translateY(25px) scale(.92);
       transition: transform .35s;
     }
 
     .notification-overlay.active .notification-card {
       transform: translateY(0) scale(1);
-      animation: cardIn .4s both;
+      animation: noticeCardIn .4s both;
     }
 
     .notification-card::before {
@@ -241,22 +247,23 @@
       box-shadow: 0 0 18px var(--notice-accent);
     }
 
-    .notice-icon {
-      width: 75px;
-      height: 75px;
+    .notification-icon {
       display: grid;
       place-items: center;
+      width: 78px;
+      height: 78px;
       margin: 0 auto 18px;
-      color: #080808;
-      background: var(--notice-accent);
+      border: 1px solid var(--notice-accent);
       border-radius: 50%;
+      background: var(--notice-accent);
+      color: #080808;
       box-shadow: 0 0 35px var(--notice-glow);
-      animation: pop .45s both;
+      animation: noticePop .45s both;
     }
 
-    .notice-icon svg {
-      width: 35px;
-      height: 35px;
+    .notification-icon svg {
+      width: 36px;
+      height: 36px;
       fill: none;
       stroke: currentColor;
       stroke-width: 2.5;
@@ -264,9 +271,12 @@
       stroke-linejoin: round;
     }
 
-    .notice-emoji { font-size: 24px; margin-bottom: 8px; }
+    .notification-emoji {
+      font-size: 24px;
+      margin-bottom: 9px;
+    }
 
-    .notice-label {
+    .notification-label {
       color: var(--notice-accent);
       font-size: 10px;
       font-weight: 800;
@@ -274,21 +284,22 @@
       margin-bottom: 10px;
     }
 
-    .notice-title {
+    .notification-title {
       font-size: 24px;
       margin: 0 0 12px;
       overflow-wrap: anywhere;
     }
 
-    .notice-description {
+    .notification-description {
+      max-width: 270px;
+      margin: 0 auto 24px;
       color: #aaa;
       font-size: 13px;
       line-height: 1.8;
-      margin: 0 auto 24px;
       overflow-wrap: anywhere;
     }
 
-    .notice-ok {
+    .notification-ok {
       width: 100%;
       min-height: 48px;
       border: 1px solid var(--notice-accent);
@@ -300,21 +311,26 @@
       letter-spacing: 2px;
     }
 
-    .notice-foot {
+    .notification-footnote {
       margin-top: 17px;
       color: #555;
       font-size: 9px;
       letter-spacing: 2px;
     }
 
-    @keyframes cardIn {
+    @keyframes noticeCardIn {
       from { opacity: 0; transform: translateY(25px) scale(.92); }
       to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
-    @keyframes pop {
-      from { opacity: 0; transform: scale(.5); }
-      to { opacity: 1; transform: scale(1); }
+    @keyframes noticePop {
+      from { opacity: 0; transform: scale(.5) rotate(-12deg); }
+      to { opacity: 1; transform: scale(1) rotate(0); }
+    }
+
+    @media (max-width: 420px) {
+      .container { margin: 35px auto; }
+      .panel { padding: 20px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -339,10 +355,8 @@
     <section id="homePage" class="container">
       <div class="hero">
         <div class="eyebrow">BEYOND THE ORDINARY</div>
-        <h1>Horizon X<span>.</span></h1>
-        <p class="muted">
-          อีกระดับของประสบการณ์ดิจิทัล
-        </p>
+        <h1>Horizon X.</h1>
+        <p class="muted">อีกระดับของประสบการณ์ดิจิทัล</p>
       </div>
 
       <div class="panel">
@@ -358,9 +372,8 @@
         <form id="authForm">
           <div id="nameField" class="field hidden">
             <label for="displayName">ชื่อที่ใช้แสดง</label>
-            <input id="displayName" type="text"
-              maxlength="40" autocomplete="nickname"
-              placeholder="ชื่อของคุณ">
+            <input id="displayName" type="text" maxlength="40"
+              autocomplete="nickname" placeholder="ชื่อของคุณ">
           </div>
 
           <div class="field">
@@ -381,13 +394,13 @@
           </button>
         </form>
 
-        <button id="forgotBtn" class="secondary"
-          style="width:100%;margin-top:12px" type="button">
+        <button id="forgotBtn" class="secondary" type="button"
+          style="width:100%;margin-top:12px">
           ลืมรหัสผ่าน?
         </button>
 
-        <p class="muted" style="font-size:11px;margin-bottom:0">
-          บัญชีของคุณจะได้รับการจัดการผ่าน Firebase Authentication
+        <p class="muted" style="font-size:11px">
+          ระบบบัญชีใช้ Firebase Authentication
         </p>
       </div>
     </section>
@@ -396,17 +409,13 @@
     <section id="dashboardPage" class="container hidden">
       <div class="panel">
         <div class="eyebrow">HORIZON X / DASHBOARD</div>
-        <h1 class="dashboard-title">
-          ยินดีต้อนรับ
-        </h1>
+        <h1 class="dashboard-title">ยินดีต้อนรับ</h1>
         <p id="welcomeText" class="muted"></p>
 
         <div class="stat">
           <div class="eyebrow">ACCOUNT STATUS</div>
           <h2>บัญชีพร้อมใช้งาน</h2>
-          <p class="muted">
-            คุณเข้าสู่ระบบ Horizon X แล้ว
-          </p>
+          <p class="muted">คุณเข้าสู่ระบบ Horizon X แล้ว</p>
         </div>
 
         <button id="dashboardLogout" class="primary" type="button">
@@ -418,34 +427,33 @@
 
   <footer>HORIZON X · BEYOND THE ORDINARY</footer>
 
-  <!-- NOTIFICATION MODAL -->
+  <!-- GLOBAL NOTIFICATION -->
   <div id="notificationOverlay" class="notification-overlay"
     role="dialog" aria-modal="true"
     aria-labelledby="notificationTitle"
     aria-describedby="notificationDescription"
     aria-hidden="true">
     <div class="notification-card">
-      <div id="notificationIcon" class="notice-icon"
+      <div id="notificationIcon" class="notification-icon"
         aria-hidden="true"></div>
-      <div id="notificationEmoji" class="notice-emoji">🎉</div>
-      <div id="notificationLabel" class="notice-label">
+      <div id="notificationEmoji" class="notification-emoji">🎉</div>
+      <div id="notificationLabel" class="notification-label">
         SYSTEM SUCCESS
       </div>
-      <h2 id="notificationTitle" class="notice-title">สำเร็จ!</h2>
-      <p id="notificationDescription" class="notice-description"></p>
-      <button id="notificationOk" class="notice-ok" type="button">
+      <h2 id="notificationTitle" class="notification-title">สำเร็จ!</h2>
+      <p id="notificationDescription" class="notification-description"></p>
+      <button id="notificationOk" class="notification-ok" type="button">
         ตกลง →
       </button>
-      <div class="notice-foot">HORIZON X · BEYOND THE ORDINARY</div>
+      <div class="notification-footnote">
+        HORIZON X · BEYOND THE ORDINARY
+      </div>
     </div>
   </div>
 
-  <!-- FIREBASE + APP -->
   <script type="module">
-    import {
-      initializeApp,
-      getApps
-    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    import { initializeApp, getApps }
+      from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
 
     import {
       getAuth,
@@ -457,18 +465,15 @@
       sendPasswordResetEmail
     } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-    /*
-      STEP 1:
-      เปลี่ยนค่าทุกช่องให้ตรงกับ Firebase Console
-      Project settings > General > Your apps > SDK setup
-    */
+    /* ===== YOUR FIREBASE CONFIG ===== */
     const firebaseConfig = {
-      apiKey: "YOUR_API_KEY",
-      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-      projectId: "YOUR_PROJECT_ID",
-      storageBucket: "YOUR_PROJECT_ID.firebasestorage.app",
-      messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-      appId: "YOUR_APP_ID"
+      apiKey: "AIzaSyD96Cs3NteaSwrJMFXKfROGBuvTHvMYDE",
+      authDomain: "horizon-x-f920b.firebaseapp.com",
+      projectId: "horizon-x-f920b",
+      storageBucket: "horizon-x-f920b.firebasestorage.app",
+      messagingSenderId: "621329414639",
+      appId: "1:621329414639:web:16024b58edcb6348491e1a",
+      measurementId: "G-Y8NRP7NSCC"
     };
 
     const $ = id => document.getElementById(id);
@@ -529,6 +534,8 @@
     }
 
     function closeNotification() {
+      if (!overlay.classList.contains("active")) return;
+
       overlay.classList.remove("active");
       overlay.setAttribute("aria-hidden", "true");
 
@@ -538,6 +545,7 @@
     }
 
     window.showNotification = showNotification;
+    window.closeNotification = closeNotification;
 
     noticeOk.addEventListener("click", closeNotification);
 
@@ -568,6 +576,7 @@
       $("displayName").required = signup;
       $("password").autocomplete =
         signup ? "new-password" : "current-password";
+
       $("submitBtn").textContent =
         signup ? "สร้างบัญชี" : "เข้าสู่ระบบ";
     }
@@ -585,7 +594,7 @@
         "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
         "auth/too-many-requests": "ลองใหม่ภายหลัง",
         "auth/network-request-failed": "เชื่อมต่ออินเทอร์เน็ตไม่สำเร็จ",
-        "auth/operation-not-allowed": "โปรดเปิด Email/Password ใน Firebase",
+        "auth/operation-not-allowed": "เปิด Email/Password ใน Firebase ก่อน",
         "auth/unauthorized-domain": "โดเมนเว็บไซต์ยังไม่ได้รับอนุญาตใน Firebase"
       };
 
@@ -597,16 +606,12 @@
       busy = value;
       $("submitBtn").disabled = value;
       $("forgotBtn").disabled = value;
+      $("dashboardLogout").disabled = value;
+      $("navLogout").disabled = value;
+
       $("submitBtn").textContent = value
         ? "กำลังดำเนินการ..."
         : mode === "signup" ? "สร้างบัญชี" : "เข้าสู่ระบบ";
-    }
-
-    function validConfig(config) {
-      return config.apiKey !== "YOUR_API_KEY" &&
-        config.projectId !== "YOUR_PROJECT_ID" &&
-        config.appId !== "YOUR_APP_ID" &&
-        Boolean(config.apiKey && config.projectId && config.appId);
     }
 
     $("authForm").addEventListener("submit", async event => {
@@ -615,9 +620,8 @@
 
       if (!auth) {
         showNotification(
-          "error",
-          "ระบบยังไม่พร้อม",
-          "กรุณาตั้งค่า Firebase Config ก่อนใช้งาน"
+          "error", "ระบบยังไม่พร้อม",
+          "กรุณาตรวจสอบ Firebase Configuration"
         );
         return;
       }
@@ -638,26 +642,34 @@
             await updateProfile(credential.user, { displayName });
           }
 
+          $("welcomeText").textContent =
+            "บัญชี: " + (displayName || credential.user.email);
+
           showPage("dashboard");
+
           showNotification(
-            "success",
-            "สมัครสมาชิกสำเร็จ!",
-            "ยินดีต้อนรับสู่ Horizon X 🎉"
+            "success", "สมัครสมาชิกสำเร็จ!",
+            "บัญชีของคุณพร้อมใช้งานแล้ว ยินดีต้อนรับสู่ Horizon X 🎉"
           );
         } else {
           const credential = await signInWithEmailAndPassword(
             auth, email, password
           );
 
+          $("welcomeText").textContent =
+            "บัญชี: " + (credential.user.displayName ||
+              credential.user.email);
+
           showPage("dashboard");
+
           showNotification(
-            "success",
-            "เข้าสู่ระบบสำเร็จ!",
+            "success", "เข้าสู่ระบบสำเร็จ!",
             "ยินดีต้อนรับกลับมา ขอให้สนุกกับ Horizon X ✨"
           );
         }
       } catch (error) {
         console.error("Authentication error:", error);
+
         showNotification(
           "error",
           mode === "signup"
@@ -678,15 +690,17 @@
       try {
         await signOut(auth);
         showPage("home");
+
         showNotification(
-          "success",
-          "ออกจากระบบสำเร็จ!",
+          "success", "ออกจากระบบสำเร็จ!",
           "คุณออกจากระบบ Horizon X เรียบร้อยแล้ว 👋"
         );
       } catch (error) {
         console.error("Sign-out error:", error);
+
         showNotification(
-          "error", "ออกจากระบบไม่สำเร็จ", friendlyError(error)
+          "error", "ออกจากระบบไม่สำเร็จ",
+          friendlyError(error)
         );
       } finally {
         setBusy(false);
@@ -697,10 +711,12 @@
     $("dashboardLogout").addEventListener("click", logout);
 
     $("forgotBtn").addEventListener("click", async () => {
+      if (busy) return;
+
       if (!auth) {
         showNotification(
           "error", "ระบบยังไม่พร้อม",
-          "กรุณาตั้งค่า Firebase ก่อนใช้งาน"
+          "กรุณาตรวจสอบ Firebase Configuration"
         );
         return;
       }
@@ -710,32 +726,34 @@
       if (!email) {
         showNotification(
           "info", "กรอกอีเมลก่อน",
-          "กรอกอีเมลในช่องด้านบนเพื่อรับลิงก์ตั้งรหัสผ่านใหม่"
+          "กรอกอีเมลในช่องด้านบนเพื่อขอลิงก์ตั้งรหัสผ่านใหม่"
         );
         $("email").focus();
         return;
       }
 
+      $("forgotBtn").disabled = true;
+
       try {
         await sendPasswordResetEmail(auth, email);
+
         showNotification(
-          "success",
-          "ส่งคำขอแล้ว",
+          "success", "ส่งคำขอแล้ว",
           "หากอีเมลนี้มีบัญชี คุณจะได้รับอีเมลสำหรับตั้งรหัสผ่านใหม่"
         );
       } catch (error) {
         console.error("Password reset error:", error);
+
         showNotification(
-          "error", "ส่งคำขอไม่สำเร็จ", friendlyError(error)
+          "error", "ส่งคำขอไม่สำเร็จ",
+          friendlyError(error)
         );
+      } finally {
+        $("forgotBtn").disabled = false;
       }
     });
 
     try {
-      if (!validConfig(firebaseConfig)) {
-        throw new Error("Firebase Config ยังไม่ได้ตั้งค่า");
-      }
-
       const app = getApps().length
         ? getApps()[0]
         : initializeApp(firebaseConfig);
@@ -753,11 +771,12 @@
       });
     } catch (error) {
       console.error("Firebase initialization error:", error);
+
       showPage("home");
+
       showNotification(
-        "error",
-        "Firebase ยังไม่พร้อม",
-        "ใส่ Firebase Config จริง และเปิด Email/Password Sign-in ก่อนใช้งาน"
+        "error", "เริ่มต้นระบบไม่สำเร็จ",
+        "ตรวจสอบ Firebase Config และการตั้งค่าโปรเจกต์"
       );
     }
   </script>

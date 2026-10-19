@@ -22,23 +22,28 @@
             40%, 80% { transform: translateX(6px); }
         }
 
-        .page { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 90%; max-width: 400px; padding: 20px; }
+        .page { display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; width: 90%; max-width: 400px; padding: 25px; }
         .active { display: flex; }
 
         /* ส่วนหน้าร้าน */
         h1 { font-size: 2rem; letter-spacing: 2px; margin-bottom: 10px; animation: modernBounce 1s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; }
         p { font-size: 0.9rem; color: #aaaaaa; margin-bottom: 30px; }
         
-        /* ปุ่มและอินพุต */
-        .btn { background-color: #ffffff; color: #000000; border: none; padding: 14px 30px; font-weight: bold; border-radius: 4px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 15px; animation: modernBounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; transition: transform 0.1s ease; }
+        /* ⚪ ปรับปุ่มให้อวบอิ่ม โค้งมนนุ่มนวล (ลบความเหลี่ยมกระด้าง) */
+        .btn { background-color: #ffffff; color: #000000; border: none; padding: 14px 30px; font-weight: bold; border-radius: 25px; cursor: pointer; width: 100%; font-size: 1rem; margin-top: 15px; animation: modernBounce 1.2s cubic-bezier(0.175, 0.885, 0.32, 1.275) both; transition: transform 0.1s ease, background-color 0.2s ease; }
         .btn:active { transform: scale(0.93); }
         .btn-secondary { background-color: transparent; color: #ffffff; border: 1px solid #ffffff; }
         
         .input-group { width: 100%; margin-bottom: 15px; text-align: left; }
-        input { width: 100%; padding: 12px; background: #000000; border: 1px solid #ffffff; color: #ffffff; border-radius: 4px; font-size: 1rem; }
+        
+        /* ⚪ ปรับช่องกรอกข้อมูลให้มีขอบโค้งมนสวยงามรับกับปุ่ม */
+        input { width: 100%; padding: 14px 20px; background: #000000; border: 1px solid #ffffff; color: #ffffff; border-radius: 25px; font-size: 1rem; transition: border-color 0.2s ease; }
         input:focus { outline: none; border-color: #aaaaaa; }
         .shake { animation: shake 0.4s ease-in-out; }
-        .link-text { color: #ffffff; text-decoration: underline; cursor: pointer; margin-top: 15px; font-size: 0.85rem; }
+        .link-text { color: #ffffff; text-decoration: underline; cursor: pointer; margin-top: 20px; font-size: 0.85rem; }
+        
+        /* ⚪ ปรับกร่องกล่องกระเป๋าเงิน Wallet ให้โค้งมนมีมิติ */
+        .wallet-card { border: 1px solid #ffffff; padding: 25px; width: 100%; border-radius: 20px; margin-bottom: 25px; background: #0a0a0a; }
     </style>
 </head>
 <body>
@@ -71,9 +76,9 @@
     <div id="dashboardPage" class="page">
         <h1>หน้าหลัก Horizon X</h1>
         <p>ยินดีต้อนรับเข้าสู่ระบบหลังบ้านสำเร็จรูป</p>
-        <div style="border: 1px solid #ffffff; padding: 20px; width: 100%; border-radius: 4px; margin-bottom: 20px;">
-            <span style="color:#aaa; font-size:0.8rem;">WALLET</span>
-            <h2 id="userWallet" style="margin-top:5px;">0.00 THB</h2>
+        <div class="wallet-card">
+            <span style="color:#aaa; font-size:0.8rem; letter-spacing: 1px;">WALLET</span>
+            <h2 id="userWallet" style="margin-top:5px; font-size: 1.8rem;">0.00 THB</h2>
         </div>
         <button class="btn btn-secondary" onclick="logout()">ออกจากระบบ</button>
     </div>
@@ -83,7 +88,7 @@
         import { initializeApp } from "https://gstatic.com";
         import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://gstatic.com";
 
-        // คีย์จริงของร้าน Horizon X
+        // คีย์จริงของร้าน Horizon X ของคุณ
         const firebaseConfig = {
             apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
             authDomain: "horizon-x-f920b.firebaseapp.com",
@@ -166,11 +171,12 @@
             });
         }
 
-        // ตรวจสอบสถานะล็อกอินอัตโนมัติ
+        // ตรวจสอบสถานะล็อกอินอัตโนมัติแบบเรียลไทม์
         setTimeout(() => {
             if(window.auth) {
                 onAuthStateChanged(window.auth, (user) => {
                     if (user) {
+                    
                         switchPage('dashboardPage');
                     }
                 });

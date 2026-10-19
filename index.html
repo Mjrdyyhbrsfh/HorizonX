@@ -1,285 +1,626 @@
+
 <!DOCTYPE html>
 <html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Horizon X - Ultimate Cinematic UI</title>
-    <style>
-        /* 🖤 รากฐานและตัวแปรหลักสำหรับการปรับแต่ง UI */
-        :root {
-            --radius: 24px;
-            --bounce-speed: 0.8s;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#020202">
+  <title>Horizon X - Ultimate Cinematic UI</title>
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, sans-serif; }
-        body { 
-            background-color: #020202; 
-            color: #ffffff; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-            overflow: hidden;
-            perspective: 1000px;
-        }
+  <style>
+    :root {
+      --radius: 24px;
+      --bounce-speed: 0.8s;
+    }
 
-        /* 🎆 มหากาพย์ชุดแอนิเมชันระดับ Cinematic (ตรวจสอบความลื่นไหลแล้ว) */
-        @keyframes cinematicPop {
-            0% { transform: scale(0.8) translateY(30px); opacity: 0; filter: blur(5px); }
-            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
-        }
-        @keyframes floatEffect {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-        }
-        @keyframes pulseGlow {
-            0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.05); border-color: rgba(255, 255, 255, 0.1); }
-            50% { box-shadow: 0 0 35px rgba(255, 255, 255, 0.15); border-color: rgba(255, 255, 255, 0.4); }
-        }
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            20%, 60% { transform: translateX(-6px); }
-            40%, 80% { transform: translateX(6px); }
-        }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Roboto, sans-serif;
+    }
 
-        /* 📺 เอฟเฟกต์หน้าจอ Cyberpunk เส้นสแกนบางๆ */
-        body::before {
-            content: " "; display: block; position: fixed; top: 0; left: 0; bottom: 0; right: 0;
-            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
-            background-size: 100% 4px; z-index: 999; pointer-events: none;
-        }
+    body {
+      background: #020202;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 20px 0;
+      overflow-x: hidden;
+      perspective: 1000px;
+    }
 
-        /* 📦 กล่องควบคุม UI สไตล์มินิมอลโปร่งแสง */
-        .page { 
-            display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
-            width: 90%; max-width: 420px; padding: 30px; background: rgba(10, 10, 10, 0.85);
-            backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: var(--radius); transition: all 0.3s ease-in-out;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.8);
-        }
-        
-        /* คลาสสลับหน้าจอพร้อมเรียกใช้งานอนิเมชัน */
-        .page.active { 
-            display: flex; 
-            animation: cinematicPop var(--bounce-speed) cubic-bezier(0.175, 0.885, 0.32, 1.275) both; 
-        }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      background: linear-gradient(
+        rgba(18, 16, 16, 0) 50%,
+        rgba(0, 0, 0, 0.18) 50%
+      );
+      background-size: 100% 4px;
+      z-index: 999;
+      pointer-events: none;
+    }
 
-        /* 🖼️ ปรับแต่งโลโก้ Horizon X ให้แสดงผลกึ่งกลางสวยงามและลอยตัว */
-        .logo-container {
-            width: 180px;
-            height: 180px;
-            margin-bottom: 20px;
-            animation: floatEffect 4s ease-in-out infinite;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        .logo-container img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-        }
+    @keyframes cinematicPop {
+      from {
+        transform: scale(.92) translateY(20px);
+        opacity: 0;
+        filter: blur(5px);
+      }
+      to {
+        transform: scale(1) translateY(0);
+        opacity: 1;
+        filter: blur(0);
+      }
+    }
 
-        h1 { font-size: 1.8rem; font-weight: 800; letter-spacing: 2px; margin-bottom: 8px; text-transform: uppercase; color: #ffffff; }
-        p { font-size: 0.9rem; color: #666666; margin-bottom: 30px; letter-spacing: 0.5px; }
-        
-        /* ⚪ ปุ่มสุดเด้งตอบสนองแรงกดสัมผัส */
-        .btn { 
-            background-color: #ffffff; color: #000000; border: none; padding: 16px 32px; font-weight: 800; 
-            border-radius: var(--radius); cursor: pointer; width: 100%; font-size: 1rem; margin-top: 15px; 
-            letter-spacing: 1px; text-transform: uppercase;
-            transition: transform 0.1s ease, background-color 0.2s ease;
-        }
-        .btn:active { transform: scale(0.93); }
-        .btn-secondary { background-color: transparent; color: #ffffff; border: 1px solid rgba(255, 255, 255, 0.3); }
-        .btn-secondary:hover { background-color: #ffffff; color: #000000; }
-        
-        /* ⌨️ ช่องอินพุตกรอกข้อมูลสำหรับสมัครสมาชิกและล็อกอิน */
-        .input-group { width: 100%; margin-bottom: 15px; }
-        input { 
-            width: 100%; padding: 15px 22px; background: rgba(0, 0, 0, 0.6); border: 1px solid rgba(255, 255, 255, 0.15); 
-            color: #ffffff; border-radius: var(--radius); font-size: 1rem; transition: all 0.3s ease; 
-        }
-        input:focus { outline: none; border-color: #ffffff; box-shadow: 0 0 15px rgba(255, 255, 255, 0.1); }
-        
-        .shake { animation: shake 0.4s ease-in-out; }
-        .link-text { color: #666666; text-decoration: none; cursor: pointer; margin-top: 25px; font-size: 0.85rem; transition: color 0.2s; }
-        .link-text:hover { color: #ffffff; text-decoration: underline; }
-        
-        /* 💳 บล็อก Wallet แสดงยอดเงิน */
-        .wallet-card { 
-            border: 1px solid rgba(255, 255, 255, 0.1); padding: 25px; width: 100%; 
-            border-radius: var(--radius); margin-bottom: 25px; background: rgba(20, 20, 20, 0.4);
-            animation: pulseGlow 3s ease-in-out infinite;
-        }
+    @keyframes floatEffect {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
 
-        /* 🎛️ แผงควบคุมสดหลังบ้าน (Horizon Customizer) */
-        .tweaker-panel {
-            margin-top: 25px; padding: 15px; border-radius: 15px; background: rgba(255, 255, 255, 0.02);
-            border: 1px dashed rgba(255, 255, 255, 0.1); width: 100%; text-align: left;
-        }
-        .tweaker-panel label { font-size: 0.75rem; color: #555; display: block; margin-bottom: 5px; text-transform: uppercase; }
-        .tweaker-panel input[type="range"] { margin-bottom: 10px; width: 100%; accent-color: #fff; cursor: pointer; }
-    </style>
+    @keyframes pulseGlow {
+      0%, 100% {
+        box-shadow: 0 0 20px rgba(255,255,255,.05);
+        border-color: rgba(255,255,255,.1);
+      }
+      50% {
+        box-shadow: 0 0 35px rgba(255,255,255,.12);
+        border-color: rgba(255,255,255,.35);
+      }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
+    }
+
+    .page {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      width: 90%;
+      max-width: 420px;
+      padding: 30px;
+      background: rgba(10,10,10,.88);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius);
+      box-shadow: 0 30px 60px rgba(0,0,0,.8);
+    }
+
+    .page.active {
+      display: flex;
+      animation: cinematicPop var(--bounce-speed)
+        cubic-bezier(.175,.885,.32,1.275) both;
+    }
+
+    .logo-container {
+      width: 180px;
+      height: 180px;
+      margin-bottom: 20px;
+      animation: floatEffect 4s ease-in-out infinite;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    .logo-fallback {
+      font-size: 2rem;
+      font-weight: 900;
+      letter-spacing: 3px;
+      border: 2px solid #fff;
+      padding: 22px;
+      transform: skewX(-8deg);
+    }
+
+    h1 {
+      font-size: 1.8rem;
+      font-weight: 800;
+      letter-spacing: 2px;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    p {
+      font-size: .9rem;
+      color: #888;
+      margin-bottom: 25px;
+      letter-spacing: .3px;
+      line-height: 1.6;
+    }
+
+    .btn {
+      background: #fff;
+      color: #000;
+      border: none;
+      padding: 16px 20px;
+      font-weight: 800;
+      border-radius: var(--radius);
+      cursor: pointer;
+      width: 100%;
+      font-size: .95rem;
+      margin-top: 12px;
+      letter-spacing: .5px;
+      transition: transform .15s, background .2s;
+    }
+
+    .btn:active {
+      transform: scale(.96);
+    }
+
+    .btn:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.3);
+    }
+
+    .btn-secondary:hover {
+      background: #fff;
+      color: #000;
+    }
+
+    .input-group {
+      width: 100%;
+      margin-bottom: 14px;
+    }
+
+    input:not([type="range"]) {
+      width: 100%;
+      padding: 15px 18px;
+      background: rgba(0,0,0,.6);
+      border: 1px solid rgba(255,255,255,.15);
+      color: #fff;
+      border-radius: var(--radius);
+      font-size: 1rem;
+      transition: border-color .2s, box-shadow .2s;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: #fff;
+      box-shadow: 0 0 15px rgba(255,255,255,.1);
+    }
+
+    .shake {
+      animation: shake .4s ease-in-out;
+    }
+
+    .link-text {
+      color: #888;
+      cursor: pointer;
+      margin-top: 22px;
+      font-size: .85rem;
+    }
+
+    .link-text:hover {
+      color: #fff;
+      text-decoration: underline;
+    }
+
+    .status {
+      font-size: .82rem;
+      color: #bbb;
+      min-height: 20px;
+      margin: 5px 0 10px;
+      overflow-wrap: anywhere;
+    }
+
+    .wallet-card {
+      border: 1px solid rgba(255,255,255,.1);
+      padding: 25px 15px;
+      width: 100%;
+      border-radius: var(--radius);
+      margin-bottom: 22px;
+      background: rgba(20,20,20,.4);
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    .tweaker-panel {
+      margin-top: 5px;
+      padding: 16px;
+      border-radius: 15px;
+      background: rgba(255,255,255,.02);
+      border: 1px dashed rgba(255,255,255,.15);
+      width: 100%;
+      text-align: left;
+    }
+
+    .tweaker-panel label {
+      font-size: .75rem;
+      color: #999;
+      display: block;
+      margin: 12px 0 6px;
+    }
+
+    .tweaker-panel input[type="range"] {
+      width: 100%;
+      accent-color: #fff;
+      cursor: pointer;
+    }
+
+    @media (max-width: 360px) {
+      .page { padding: 22px 18px; }
+      .logo-container { width: 140px; height: 140px; }
+      h1 { font-size: 1.5rem; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
 </head>
+
 <body>
-
-    <!-- 1. หน้ายินดีต้อนรับ (Welcome Page) -->
-    <div id="welcomePage" class="page active">
-        <!-- 🖼️ ดึงรูปโลโก้ Horizon X ของคุณมาแสดงผลแบบลอยตัว -->
-        <div class="logo-container">
-            <img src="https://squarespace-cdn.com" alt="Horizon X Logo">
-        </div>
-        <h1>Horizon X</h1>
-        <p>ยินดีต้อนรับสู่ขอบฟ้าใหม่ของการซื้อขายไอเทม</p>
-        <button class="btn" onclick="switchPage('authPage')">เริ่มต้นใช้งาน</button>
+  <!-- Welcome -->
+  <section id="welcomePage" class="page active">
+    <div class="logo-container">
+      <div class="logo-fallback">HX</div>
     </div>
 
-    <!-- 2. หน้าล็อกอินและสมัครสมาชิก -->
-    <div id="authPage" class="page">
-        <div class="logo-container" style="width: 100px; height: 100px; margin-bottom: 10px;">
-            <img src="https://squarespace-cdn.com" alt="Horizon X Logo">
-        </div>
-        <h1 id="authTitle" style="font-size: 1.5rem;">เข้าสู่ระบบ</h1>
-        <p id="authSub">กรุณากรอกข้อมูลสิทธิ์การเข้าถึงคอมมูนิตี้</p>
-        
-        <div class="input-group"><input type="email" id="email" placeholder="อีเมลของคุณ"></div>
-        <div class="input-group"><input type="password" id="password" placeholder="รหัสผ่านผ่านประตู"></div>
+    <h1>Horizon X</h1>
+    <p>ยินดีต้อนรับสู่ขอบฟ้าใหม่ของการซื้อขายไอเทม</p>
 
-        <button class="btn" id="mainAuthBtn" onclick="handleAuth()">ยืนยันตัวตน</button>
-        <button class="btn btn-secondary" id="switchBtn" onclick="toggleAuthMode()">สมัครบัญชีใหม่</button>
-        <p class="link-text" onclick="switchPage('welcomePage')">← ย้อนกลับหน้าแรก</p>
+    <button class="btn" id="startBtn">เริ่มต้นใช้งาน</button>
+  </section>
+
+  <!-- Login / Register -->
+  <section id="authPage" class="page">
+    <div class="logo-container"
+      style="width:90px;height:90px;margin-bottom:10px">
+      <div class="logo-fallback" style="font-size:1.3rem;padding:12px">
+        HX
+      </div>
     </div>
 
-    <!-- 3. หน้าแดชบอร์ดหลักเมื่อล็อกอินสำเร็จแล้ว -->
-    <div id="dashboardPage" class="page">
-        <h1 style="font-size: 1.5rem;">MAIN INTERFACE</h1>
-        <p>ยินดีต้อนรับกลับเข้าสู่ศูนย์บัญชาการ Horizon X</p>
-        
-        <div class="wallet-card">
-            <span style="color:#444; font-size:0.75rem; letter-spacing: 2px; font-weight: bold; display:block;">CURRENT BALANCE</span>
-            <h2 id="userWallet" style="margin-top:8px; font-size: 2.2rem; font-weight: 900;">0.00 THB</h2>
-        </div>
+    <h1 id="authTitle" style="font-size:1.5rem">เข้าสู่ระบบ</h1>
+    <p id="authSub">กรุณากรอกอีเมลและรหัสผ่านของคุณ</p>
 
-        <!-- 🎛️ กล่องลูกเล่นให้คุณเลื่อนปรับแต่ง UI ได้ตามต้องการสดๆ บนมือถือ -->
-        <div class="tweaker-panel">
-            <h3 style="font-size: 0.8rem; margin-bottom: 10px; color:#aaa; letter-spacing: 1px;">🎛️ HORIZON CUSTOMIZER</h3>
-            <label id="radiusLabel">ความโค้งมน: 24px</label>
-            <input type="range" min="0" max="40" value="24" oninput="updateRadius(this.value)">
-            
-            <label id="speedLabel">ความเร็วความเด้ง: 0.8s</label>
-            <input type="range" min="3" max="20" value="8" oninput="updateSpeed(this.value)">
-        </div>
+    <form id="authForm" style="width:100%">
+      <div class="input-group">
+        <input
+          type="email"
+          id="email"
+          placeholder="อีเมลของคุณ"
+          autocomplete="email"
+          maxlength="254"
+          required
+        >
+      </div>
 
-        <button class="btn btn-secondary" style="margin-top: 20px;" onclick="logout()">ตัดการเชื่อมต่อระบบ</button>
+      <div class="input-group">
+        <input
+          type="password"
+          id="password"
+          placeholder="รหัสผ่าน (อย่างน้อย 6 ตัวอักษร)"
+          autocomplete="current-password"
+          minlength="6"
+          required
+        >
+      </div>
+
+      <p id="authStatus" class="status" role="status"
+        aria-live="polite"></p>
+
+      <button class="btn" id="mainAuthBtn" type="submit">
+        ยืนยันตัวตน
+      </button>
+
+      <button class="btn btn-secondary" id="switchBtn" type="button">
+        สมัครบัญชีใหม่
+      </button>
+    </form>
+
+    <p class="link-text" id="backBtn">← ย้อนกลับหน้าแรก</p>
+  </section>
+
+  <!-- Dashboard -->
+  <section id="dashboardPage" class="page">
+    <h1 style="font-size:1.5rem">MAIN INTERFACE</h1>
+    <p>ยินดีต้อนรับสู่ศูนย์บัญชาการ Horizon X</p>
+
+    <div class="wallet-card">
+      <span style="color:#888;font-size:.75rem;letter-spacing:2px">
+        CURRENT BALANCE
+      </span>
+      <h2 id="userWallet"
+        style="margin-top:8px;font-size:2.2rem;font-weight:900">
+        0.00 THB
+      </h2>
+      <p id="userEmail"
+        style="margin:10px 0 0;overflow-wrap:anywhere"></p>
     </div>
 
-    <!-- เชื่อมต่อระบบ Firebase ของ Google โดยตรงผ่านเว็บ SDK Modules -->
-    <script type="module">
-        import { initializeApp } from "https://gstatic.com";
-        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://gstatic.com";
+    <div class="tweaker-panel">
+      <h3 style="font-size:.8rem;margin-bottom:10px;color:#ccc">
+        HORIZON CUSTOMIZER
+      </h3>
 
-        // ตรวจสอบความถูกต้องของคีย์ Firebase โปรเจกต์ horizon-x-f920b แล้ว
-        const firebaseConfig = {
-            apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
-            authDomain: "://firebaseapp.com",
-            projectId: "horizon-x-f920b",
-            storageBucket: "horizon-x-f920b.firebasestorage.app",
-            messagingSenderId: "621329414639",
-            appId: "1:621329414639:web:16024b58edcb6348491e1a",
-            measurementId: "G-Y8NRP7NSCC"
-        };
+      <label id="radiusLabel" for="radiusRange">
+        ความโค้งมน: 24px
+      </label>
+      <input type="range" id="radiusRange"
+        min="0" max="40" value="24">
 
-        // เริ่มต้นการใช้งาน Firebase App และส่งฟังก์ชันออกไปใช้ที่ Global scope
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        window.auth = auth;
-        window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-        window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-        window.signOut = signOut;
-    </script>
+      <label id="speedLabel" for="speedRange">
+        ความเร็วแอนิเมชัน: 0.8s
+      </label>
+      <input type="range" id="speedRange"
+        min="3" max="20" value="8">
+    </div>
 
-    <script>
-        let isSignUpMode = false;
+    <button class="btn btn-secondary" id="logoutBtn"
+      style="margin-top:20px">
+      ออกจากระบบ
+    </button>
+  </section>
 
-        // ฟังก์ชันปรับความโค้งมนสดจากสไลเดอร์
-function updateRadius(val) {
-document.documentElement.style.setProperty('--radius', val + 'px');
-document.getElementById('radiusLabel').innerText = ความโค้งมน: ${val}px;
-}
-// ฟังก์ชันปรับความเร็วแอนิเมชันความเด้งสดจากสไลเดอร์
-function updateSpeed(val) {
-let speed = (val / 10) + 's';
-document.documentElement.style.setProperty('--bounce-speed', speed);
-document.getElementById('speedLabel').innerText = ความเร็วความเด้ง: ${speed};
-}
-// ฟังก์ชันสลับหน้าเพจ (ซ่อมแซมตัวแปรแก้บั๊กไม่แสดงผลหน้าจอมือถือเรียบร้อย)
-function switchPage(pageId) {
-document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-const nextPage = document.getElementById(pageId);
-if (nextPage) {
-nextPage.classList.add('active');
-}
-}
-// ฟังก์ชันสลับโหมดเข้าสู่ระบบ / สมัครสมาชิก
-function toggleAuthMode() {
-isSignUpMode = !isSignUpMode;
-const title = document.getElementById('authTitle');
-const sub = document.getElementById('authSub');
-const mainBtn = document.getElementById('mainAuthBtn');
-const switchBtn = document.getElementById('switchBtn');
-if (isSignUpMode) {
-title.innerText = "สร้างบัญชีใหม่";
-sub.innerText = "ร่วมเดินทางเข้าสู่คอมมูนิตี้กับเรา";
-mainBtn.innerText = "ลงทะเบียนเปิดระบบ";
-switchBtn.innerText = "มีบัญชีผ่านประตูอยู่แล้ว? เข้าสู่ระบบ";
-} else {
-title.innerText = "เข้าสู่ระบบ";
-sub.innerText = "กรุณากรอกข้อมูลสิทธิ์การเข้าถึงคอมมูนิตี้";
-mainBtn.innerText = "ยืนยันตัวตน";
-switchBtn.innerText = "สมัครบัญชีใหม่";
-}
-}
-// ฟังก์ชันจัดการสมัครสมาชิกและล็อกอินผ่านระบบ Firebase
-async function handleAuth() {
-const email = document.getElementById('email').value;
-const password = document.getElementById('password').value;
-const authCard = document.getElementById('authPage');
-if(!email || !password) {
-authCard.classList.add('shake');
-setTimeout(() => authCard.classList.remove('shake'), 400);
-alert('กรุณากรอกข้อมูลให้ครบถ้วน');
-return;
-}
-try {
-if (isSignUpMode) {
-await window.createUserWithEmailAndPassword(window.auth, email, password);
-alert('ลงทะเบียนสำเร็จ!');
-} else {
-await window.signInWithEmailAndPassword(window.auth, email, password);
-alert('เข้าสู่ระบบสำเร็จ!');
-}
-} catch (error) {
-authCard.classList.add('shake');
-setTimeout(() => authCard.classList.remove('shake'), 400);
-alert('ข้อผิดพลาดระบบ: ' + error.message);
-}
-}
-// ฟังก์ชันออกจากระบบสมาชิก
-function logout() {
-window.signOut(window.auth).then(() => {
-switchPage('welcomePage');
-document.getElementById('email').value = "";
-document.getElementById('password').value = "";
-});
-}
-// ตรวจสอบสถานะการล็อกอินแบบ Real-time อัตโนมัติเมื่อเว็บรันเสร็จ
-setTimeout(() => {
-if(window.auth && typeof onAuthStateChanged !== 'undefined') {
-window.auth.onAuthStateChanged((user) => {
-if (user) {
-switchPage('dashboardPage');
-}
-});
-}
-}, 1000);
+  <script type="module">
+    import { initializeApp }
+      from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
+
+    // ตรวจสอบข้อมูลโปรเจกต์ใน Firebase Console ก่อนใช้งาน
+    const firebaseConfig = {
+      apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
+      authDomain: "horizon-x-f920b.firebaseapp.com",
+      projectId: "horizon-x-f920b",
+      storageBucket: "horizon-x-f920b.firebasestorage.app",
+      messagingSenderId: "621329414639",
+      appId: "1:621329414639:web:16024b58edcb6348491e1a",
+      measurementId: "G-Y8NRP7NSCC"
+    };
+
+    const welcomePage = document.getElementById("welcomePage");
+    const authPage = document.getElementById("authPage");
+    const dashboardPage = document.getElementById("dashboardPage");
+
+    const authForm = document.getElementById("authForm");
+    const emailInput = document.getElementById("email");
+    const passwordInput = document.getElementById("password");
+    const authStatus = document.getElementById("authStatus");
+    const mainAuthBtn = document.getElementById("mainAuthBtn");
+    const switchBtn = document.getElementById("switchBtn");
+
+    let isSignUpMode = false;
+    let isSubmitting = false;
+    let authReady = false;
+
+    function switchPage(pageId) {
+      document.querySelectorAll(".page").forEach(page => {
+        page.classList.remove("active");
+      });
+
+      const page = document.getElementById(pageId);
+      if (page) page.classList.add("active");
+    }
+
+    function showError(message) {
+      authStatus.textContent = message;
+      authPage.classList.remove("shake");
+
+      // บังคับให้แอนิเมชันเริ่มใหม่
+      void authPage.offsetWidth;
+      authPage.classList.add("shake");
+    }
+
+    function getFirebaseError(error) {
+      const messages = {
+        "auth/email-already-in-use":
+          "อีเมลนี้มีบัญชีอยู่แล้ว กรุณาเข้าสู่ระบบ",
+        "auth/invalid-email":
+          "รูปแบบอีเมลไม่ถูกต้อง",
+        "auth/weak-password":
+          "รหัสผ่านไม่ปลอดภัยพอ กรุณาใช้รหัสผ่านอย่างน้อย 6 ตัวอักษร",
+        "auth/invalid-credential":
+          "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+        "auth/user-not-found":
+          "ไม่พบบัญชีนี้ กรุณาตรวจสอบอีเมล",
+        "auth/wrong-password":
+          "รหัสผ่านไม่ถูกต้อง",
+        "auth/too-many-requests":
+          "มีการลองเข้าสู่ระบบหลายครั้งเกินไป กรุณารอสักครู่",
+        "auth/network-request-failed":
+          "เชื่อมต่ออินเทอร์เน็ตไม่ได้ กรุณาลองใหม่",
+        "auth/operation-not-allowed":
+          "ยังไม่ได้เปิดใช้งานวิธีเข้าสู่ระบบนี้ใน Firebase",
+        "auth/unauthorized-domain":
+          "โดเมนเว็บไซต์นี้ยังไม่ได้รับอนุญาตใน Firebase"
+      };
+
+      return messages[error.code] ||
+        "เกิดข้อผิดพลาด: " + (error.message || "กรุณาลองใหม่");
+    }
+
+    function toggleAuthMode() {
+      isSignUpMode = !isSignUpMode;
+
+      document.getElementById("authTitle").textContent =
+        isSignUpMode ? "สร้างบัญชีใหม่" : "เข้าสู่ระบบ";
+
+      document.getElementById("authSub").textContent =
+        isSignUpMode
+          ? "สร้างบัญชีเพื่อเข้าร่วมคอมมูนิตี้ Horizon X"
+          : "กรุณากรอกอีเมลและรหัสผ่านของคุณ";
+
+      mainAuthBtn.textContent =
+        isSignUpMode ? "ลงทะเบียน" : "ยืนยันตัวตน";
+
+      switchBtn.textContent =
+        isSignUpMode
+          ? "มีบัญชีอยู่แล้ว? เข้าสู่ระบบ"
+          : "สมัครบัญชีใหม่";
+
+      passwordInput.autocomplete =
+        isSignUpMode ? "new-password" : "current-password";
+
+      authStatus.textContent = "";
+    }
+
+    async function handleAuth(event) {
+      event.preventDefault();
+
+      if (isSubmitting) return;
+
+      if (!authReady) {
+        showError("ระบบกำลังเชื่อมต่อ กรุณารอสักครู่");
+        return;
+      }
+
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
+
+      if (!email || !password) {
+        showError("กรุณากรอกอีเมลและรหัสผ่าน");
+        return;
+      }
+
+      isSubmitting = true;
+      mainAuthBtn.disabled = true;
+      switchBtn.disabled = true;
+      mainAuthBtn.textContent = "กำลังดำเนินการ...";
+      authStatus.textContent = "";
+
+      try {
+        if (isSignUpMode) {
+          await createUserWithEmailAndPassword(
+            auth, email, password
+          );
+        } else {
+          await signInWithEmailAndPassword(
+            auth, email, password
+          );
+        }
+
+        // onAuthStateChanged จะพาไปหน้า Dashboard
+        // หลัง Firebase ยืนยันสถานะผู้ใช้
+      } catch (error) {
+        showError(getFirebaseError(error));
+      } finally {
+        isSubmitting = false;
+        mainAuthBtn.disabled = false;
+        switchBtn.disabled = false;
+        mainAuthBtn.textContent =
+          isSignUpMode ? "ลงทะเบียน" : "ยืนยันตัวตน";
+      }
+    }
+
+    async function logout() {
+      try {
+        await signOut(auth);
+        emailInput.value = "";
+        passwordInput.value = "";
+        authStatus.textContent = "";
+      } catch (error) {
+        alert("ออกจากระบบไม่สำเร็จ กรุณาลองใหม่");
+        console.error("Sign out error:", error);
+      }
+    }
+
+    function updateRadius(value) {
+      document.documentElement.style.setProperty(
+        "--radius", value + "px"
+      );
+      document.getElementById("radiusLabel").textContent =
+        "ความโค้งมน: " + value + "px";
+    }
+
+    function updateSpeed(value) {
+      const speed = (Number(value) / 10) + "s";
+
+      document.documentElement.style.setProperty(
+        "--bounce-speed", speed
+      );
+
+      document.getElementById("speedLabel").textContent =
+        "ความเร็วแอนิเมชัน: " + speed;
+    }
+
+    // ผูกปุ่มด้วย JavaScript Module โดยตรง
+    document.getElementById("startBtn").addEventListener(
+      "click", () => switchPage("authPage")
+    );
+
+    document.getElementById("backBtn").addEventListener(
+      "click", () => switchPage("welcomePage")
+    );
+
+    switchBtn.addEventListener("click", toggleAuthMode);
+    authForm.addEventListener("submit", handleAuth);
+
+    document.getElementById("logoutBtn").addEventListener(
+      "click", logout
+    );
+
+    document.getElementById("radiusRange").addEventListener(
+      "input", event => updateRadius(event.target.value)
+    );
+
+    document.getElementById("speedRange").addEventListener(
+      "input", event => updateSpeed(event.target.value)
+    );
+
+    // Firebase Authentication
+    let auth;
+
+    try {
+      const app = initializeApp(firebaseConfig);
+      auth = getAuth(app);
+      authReady = true;
+
+      onAuthStateChanged(auth, user => {
+        if (user) {
+          document.getElementById("userEmail").textContent =
+            user.email || "";
+
+          switchPage("dashboardPage");
+        } else {
+          switchPage("welcomePage");
+        }
+      }, error => {
+        authReady = false;
+        console.error("Auth state error:", error);
+        authStatus.textContent =
+          "ตรวจสอบสถานะบัญชีไม่ได้ กรุณารีโหลดหน้าเว็บ";
+      });
+    } catch (error) {
+      authReady = false;
+      console.error("Firebase initialization error:", error);
+
+      authStatus.textContent =
+        "เชื่อมต่อ Firebase ไม่สำเร็จ กรุณาตรวจสอบการตั้งค่า";
+    }
+  </script>
+</body>
+</html>

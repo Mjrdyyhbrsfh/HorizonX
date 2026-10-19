@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#050505">
+<meta name="description" content="Horizon X — Beyond the ordinary.">
 <title>Horizon X</title>
 
 <style>
@@ -15,49 +17,98 @@
   --muted: #999;
   --width: 1120px;
   --radius: 18px;
+  --ease: cubic-bezier(.16, 1, .3, 1);
 }
 
 * { box-sizing: border-box; }
 
+html { scroll-behavior: smooth; }
+
 body {
   margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  isolation: isolate;
   background: var(--bg);
   color: var(--text);
   font-family: Arial, sans-serif;
-  min-height: 100vh;
 }
 
 button, input { font: inherit; }
 button { cursor: pointer; }
 
-button:focus-visible, input:focus-visible {
+button:focus-visible,
+input:focus-visible {
   outline: 2px solid white;
   outline-offset: 3px;
 }
+
+button:disabled { cursor: wait; opacity: .6; }
 
 .hidden { display: none !important; }
 
 .container {
   width: min(var(--width), calc(100% - 32px));
-  margin: auto;
+  margin-inline: auto;
 }
+
+/* Ambient background */
+
+body::before {
+  content: "";
+  position: fixed;
+  inset: -30%;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    radial-gradient(ellipse at 20% 20%,
+      rgba(255,255,255,.065), transparent 35%),
+    radial-gradient(ellipse at 80% 70%,
+      rgba(150,150,150,.07), transparent 35%);
+  animation: ambientDrift 14s ease-in-out infinite alternate;
+}
+
+@keyframes ambientDrift {
+  from { transform: translate(-2%, -1%) scale(1); }
+  to { transform: translate(2%, 1%) scale(1.08); }
+}
+
+/* Header */
 
 header {
   height: 76px;
-  border-bottom: 1px solid var(--line);
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
+  position: relative;
+  border-bottom: 1px solid var(--line);
+}
+
+header::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -1px;
+  width: 35%;
+  height: 1px;
+  pointer-events: none;
+  background: linear-gradient(90deg, transparent, white, transparent);
+  animation: scanLine 5s ease-in-out infinite alternate;
+}
+
+@keyframes scanLine {
+  from { left: 0; opacity: .25; }
+  to { left: 65%; opacity: .9; }
 }
 
 .brand {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: none;
+  border: 0;
+  background: transparent;
   color: white;
-  border: none;
   font-weight: bold;
   letter-spacing: 4px;
 }
@@ -66,33 +117,115 @@ header {
   width: 42px;
   height: 42px;
   object-fit: contain;
+  transition: transform .4s var(--ease), filter .4s;
 }
 
-button {
-  transition: background .2s, transform .2s, border-color .2s;
+.brand:hover img {
+  transform: rotate(-10deg) scale(1.1);
+  filter: drop-shadow(0 0 10px rgba(255,255,255,.6));
 }
+
+.nav-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Buttons */
 
 .btn {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
   padding: 11px 18px;
   border: 1px solid #333;
   border-radius: 30px;
-  background: transparent;
+  background: rgba(255,255,255,.015);
   color: white;
+  transition:
+    transform .22s var(--ease),
+    background .25s,
+    border-color .25s,
+    box-shadow .25s;
 }
 
 .btn:hover {
-  border-color: white;
+  border-color: #aaa;
+  background: rgba(255,255,255,.055);
+  box-shadow: 0 0 22px rgba(255,255,255,.06);
   transform: translateY(-2px);
 }
 
+.btn:active { transform: scale(.94); }
+
 .primary {
   background: white;
-  color: black;
+  color: #050505;
   border-color: white;
   font-weight: bold;
 }
 
-.primary:hover { background: #ddd; }
+.primary:hover {
+  background: #ddd;
+  border-color: white;
+  box-shadow: 0 0 25px rgba(255,255,255,.17);
+}
+
+.ripple {
+  position: absolute;
+  z-index: -1;
+  border-radius: 50%;
+  background: rgba(150,150,150,.35);
+  pointer-events: none;
+  transform: scale(0);
+  animation: rippleExpand .65s ease-out forwards;
+}
+
+@keyframes rippleExpand {
+  to { transform: scale(1); opacity: 0; }
+}
+
+/* Page layout and transitions */
+
+.page {
+  min-height: calc(100vh - 140px);
+}
+
+.page-enter {
+  animation: pageEnter .48s var(--ease) both;
+}
+
+.page-exit {
+  animation: pageExit .22s ease-in both;
+  pointer-events: none;
+}
+
+@keyframes pageEnter {
+  from {
+    opacity: 0;
+    transform: translateY(18px) scale(.985);
+    filter: blur(7px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes pageExit {
+  from {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-8px) scale(.99);
+    filter: blur(5px);
+  }
+}
+
+/* Home */
 
 .hero {
   min-height: calc(100vh - 140px);
@@ -102,14 +235,25 @@ button {
   justify-content: center;
   text-align: center;
   padding: 40px 0 70px;
-  animation: appear .7s ease;
 }
 
 .hero-logo {
   width: min(420px, 82vw);
   aspect-ratio: 1;
   object-fit: contain;
-  animation: float 5s ease-in-out infinite;
+  filter: drop-shadow(0 0 12px rgba(255,255,255,.07));
+  animation: float 5s ease-in-out infinite,
+             logoGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-9px); }
+}
+
+@keyframes logoGlow {
+  from { filter: drop-shadow(0 0 8px rgba(255,255,255,.04)); }
+  to { filter: drop-shadow(0 0 25px rgba(255,255,255,.23)); }
 }
 
 .eyebrow {
@@ -117,6 +261,30 @@ button {
   font-size: 12px;
   letter-spacing: 5px;
   text-transform: uppercase;
+}
+
+.hero .eyebrow,
+.hero h1,
+.hero > p,
+.hero .actions {
+  animation: heroReveal .8s var(--ease) both;
+}
+
+.hero h1 { animation-delay: .08s; }
+.hero > p { animation-delay: .16s; }
+.hero .actions { animation-delay: .24s; }
+
+@keyframes heroReveal {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+    filter: blur(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
+  }
 }
 
 .hero h1 {
@@ -139,11 +307,19 @@ button {
   margin-top: 20px;
 }
 
+.small {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+/* Authentication */
+
 .auth-wrap {
-  min-height: calc(100vh - 120px);
+  min-height: calc(100vh - 140px);
   display: grid;
   place-items: center;
-  padding: 30px 0;
+  padding: 35px 0;
 }
 
 .card {
@@ -151,8 +327,14 @@ button {
   padding: 30px;
   border: 1px solid var(--line);
   border-radius: 24px;
-  background: var(--panel);
-  animation: appear .35s ease;
+  background: rgba(16,16,16,.92);
+  box-shadow: 0 20px 70px rgba(0,0,0,.25);
+  transition: border-color .3s, box-shadow .3s;
+}
+
+.card:hover {
+  border-color: #454545;
+  box-shadow: 0 20px 75px rgba(0,0,0,.4);
 }
 
 .auth-logo {
@@ -161,6 +343,7 @@ button {
   height: 90px;
   object-fit: contain;
   margin: 0 auto 15px;
+  animation: float 5s ease-in-out infinite;
 }
 
 .card h2 { text-align: center; }
@@ -170,6 +353,7 @@ button {
   color: var(--muted);
   font-size: 14px;
   margin-bottom: 24px;
+  line-height: 1.7;
 }
 
 .tabs {
@@ -187,6 +371,7 @@ button {
   background: transparent;
   border: none;
   border-radius: 8px;
+  transition: background .25s, color .25s, transform .2s;
 }
 
 .tab.active {
@@ -194,7 +379,12 @@ button {
   background: #292929;
 }
 
-.field { display: block; margin: 17px 0; }
+.tab:active { transform: scale(.97); }
+
+.field {
+  display: block;
+  margin: 17px 0;
+}
 
 .field span {
   display: block;
@@ -209,6 +399,15 @@ button {
   border-radius: 10px;
   background: #080808;
   color: white;
+  transition: border-color .25s, box-shadow .25s, background .25s;
+}
+
+.field input:focus {
+  border-color: #aaa;
+  background: #111;
+  box-shadow: 0 0 0 3px rgba(255,255,255,.05),
+              0 0 18px rgba(255,255,255,.04);
+  outline: none;
 }
 
 .field input::placeholder { color: #666; }
@@ -218,11 +417,14 @@ button {
 .message {
   min-height: 20px;
   font-size: 13px;
-  color: #ccc;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
 }
 
 .error { color: #ff9999; }
 .success { color: #a8efb2; }
+
+/* Dashboard */
 
 .dashboard { padding: 40px 0 70px; }
 
@@ -234,27 +436,50 @@ button {
   margin-bottom: 25px;
 }
 
-.dash-head h1 { margin-bottom: 5px; }
+.dash-head h1 { margin: 10px 0 5px; }
 
 .muted { color: var(--muted); }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(12, 1fr);
+  grid-template-columns: repeat(12, minmax(0, 1fr));
   gap: 16px;
 }
 
 .panel {
+  min-width: 0;
+  padding: 24px;
   background: var(--panel);
   border: 1px solid var(--line);
   border-radius: var(--radius);
-  padding: 24px;
-  min-width: 0;
+  transition:
+    transform .35s var(--ease),
+    border-color .3s,
+    box-shadow .3s;
+}
+
+.panel:hover {
+  transform: translateY(-5px);
+  border-color: #555;
+  box-shadow: 0 12px 35px rgba(0,0,0,.24);
 }
 
 .wallet { grid-column: span 7; }
 .profile { grid-column: span 5; }
 .settings { grid-column: span 12; }
+
+.dashboard.page-enter .panel {
+  animation: cardReveal .55s var(--ease) both;
+}
+
+.dashboard.page-enter .panel:nth-child(1) { animation-delay: .06s; }
+.dashboard.page-enter .panel:nth-child(2) { animation-delay: .14s; }
+.dashboard.page-enter .panel:nth-child(3) { animation-delay: .22s; }
+
+@keyframes cardReveal {
+  from { opacity: 0; transform: translateY(24px) scale(.97); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
 
 .panel-head {
   display: flex;
@@ -269,6 +494,7 @@ button {
   padding: 5px 10px;
   font-size: 11px;
   color: #bbb;
+  white-space: nowrap;
 }
 
 .balance {
@@ -277,28 +503,26 @@ button {
   margin: 25px 0 5px;
 }
 
-.small {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.7;
-}
-
 .profile-row {
   display: flex;
   align-items: center;
   gap: 14px;
   margin: 25px 0;
+  min-width: 0;
 }
 
 .avatar {
   width: 55px;
   height: 55px;
+  flex-shrink: 0;
   display: grid;
   place-items: center;
   border: 1px solid #555;
   border-radius: 50%;
   font-weight: bold;
 }
+
+#profileName { overflow-wrap: anywhere; }
 
 #profileEmail {
   display: block;
@@ -328,6 +552,10 @@ input[type="range"] {
   accent-color: white;
 }
 
+#resetBtn { margin-top: 22px; }
+
+/* Footer */
+
 footer {
   border-top: 1px solid var(--line);
   padding: 22px 0;
@@ -338,46 +566,92 @@ footer {
   gap: 12px;
 }
 
+/* Toast */
+
 .toast {
   position: fixed;
   bottom: 24px;
   left: 50%;
-  transform: translateX(-50%);
-  background: white;
-  color: black;
+  max-width: calc(100vw - 32px);
   padding: 12px 18px;
+  border: 1px solid #444;
   border-radius: 30px;
+  background: #f5f5f5;
+  color: #050505;
   font-size: 13px;
-  z-index: 10;
+  text-align: center;
+  box-shadow: 0 8px 35px rgba(0,0,0,.45);
+  z-index: 100;
+  animation: toastIn .35s var(--ease) both;
 }
 
-@keyframes appear {
-  from { opacity: 0; transform: translateY(12px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 18px) scale(.92);
+    filter: blur(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0) scale(1);
+    filter: blur(0);
+  }
 }
 
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
-}
+/* Mobile */
 
 @media (max-width: 700px) {
   header { height: 65px; }
-  .brand { letter-spacing: 2px; font-size: 12px; }
-  .brand img { width: 34px; height: 34px; }
-  .btn { padding: 9px 13px; font-size: 13px; }
+
+  .brand {
+    letter-spacing: 2px;
+    font-size: 12px;
+    gap: 7px;
+  }
+
+  .brand img {
+    width: 34px;
+    height: 34px;
+  }
+
+  .nav-actions { gap: 5px; }
+
+  .btn {
+    padding: 9px 13px;
+    font-size: 13px;
+  }
+
   .wallet, .profile { grid-column: span 12; }
+
   .settings-grid { grid-template-columns: 1fr; }
+
   .card { padding: 23px; }
   .panel { padding: 18px; }
+
   .hero h1 { letter-spacing: 5px; }
+
+  .hero-logo { width: min(320px, 78vw); }
+
+  .dash-head {
+    align-items: flex-start;
+  }
+
   footer { flex-direction: column; }
+}
+
+@media (max-width: 380px) {
+  .brand { letter-spacing: 1px; }
+  .nav-actions .btn { padding: 8px 9px; }
+  .hero h1 { letter-spacing: 3px; }
+  .eyebrow { letter-spacing: 3px; }
+  .card { padding: 18px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation: none !important;
     transition: none !important;
+    scroll-behavior: auto !important;
   }
 }
 </style>
@@ -385,49 +659,75 @@ footer {
 
 <body>
 <header class="container">
-  <button class="brand" id="homeBtn" type="button">
-    <img src="./horizon-x.png" alt="Horizon X">
+  <button class="brand" id="homeBtn" type="button"
+          aria-label="กลับหน้าแรก Horizon X">
+    <img src="./horizon-x.png" alt="">
     HORIZON X
   </button>
 
-  <div>
-    <button class="btn hidden" id="dashNav" type="button">Dashboard</button>
-    <button class="btn primary" id="loginNav" type="button">เข้าสู่ระบบ</button>
-    <button class="btn hidden" id="logoutNav" type="button">ออกจากระบบ</button>
-  </div>
+  <nav class="nav-actions" aria-label="เมนูหลัก">
+    <button class="btn hidden" id="dashNav" type="button">
+      Dashboard
+    </button>
+    <button class="btn primary" id="loginNav" type="button">
+      เข้าสู่ระบบ
+    </button>
+    <button class="btn hidden" id="logoutNav" type="button">
+      ออกจากระบบ
+    </button>
+  </nav>
 </header>
 
 <main class="container">
-  <section class="hero" id="homePage">
+
+  <!-- HOME -->
+  <section class="hero page" id="homePage">
     <img class="hero-logo" src="./horizon-x.png" alt="Horizon X Logo">
+
     <div class="eyebrow">Beyond the ordinary</div>
     <h1>HORIZON X</h1>
+
     <p>
-      พื้นที่ดิจิทัลสไตล์มินิมอล
-      เรียบง่าย ทันสมัย และออกแบบมาเพื่อประสบการณ์ที่ลื่นไหล
+      อีกระดับของการช้อปปิ้ง พบกับสินค้าไลฟ์สไตล์ที่คัดสรรมาเพื่อคุณ ในโลกของ Horizon X
+      
     </p>
+
     <div class="actions">
-      <button class="btn primary" id="startBtn" type="button">เริ่มต้นใช้งาน ↗</button>
-      <button class="btn" id="aboutBtn" type="button">เกี่ยวกับเรา</button>
+      <button class="btn primary" id="startBtn" type="button">
+        เริ่มต้นใช้งาน ↗
+      </button>
+      <button class="btn" id="aboutBtn" type="button">
+        เกี่ยวกับเรา
+      </button>
     </div>
+
     <p class="small">MINIMAL DESIGN · MONOCHROME · HORIZON X</p>
   </section>
 
-  <section class="auth-wrap hidden" id="authPage">
+  <!-- AUTHENTICATION -->
+  <section class="auth-wrap page hidden" id="authPage">
     <div class="card">
       <img class="auth-logo" src="./horizon-x.png" alt="Horizon X">
+
       <h2 id="authTitle">ยินดีต้อนรับกลับ</h2>
-      <p class="subtitle" id="authSubtitle">เข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ</p>
+      <p class="subtitle" id="authSubtitle">
+        เข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ
+      </p>
 
       <div class="tabs">
-        <button class="tab active" id="signInTab" type="button">เข้าสู่ระบบ</button>
-        <button class="tab" id="signUpTab" type="button">สมัครสมาชิก</button>
+        <button class="tab active" id="signInTab" type="button">
+          เข้าสู่ระบบ
+        </button>
+        <button class="tab" id="signUpTab" type="button">
+          สมัครสมาชิก
+        </button>
       </div>
 
       <form id="authForm">
         <label class="field hidden" id="nameWrap">
           <span>ชื่อที่แสดง</span>
-          <input id="displayName" type="text" maxlength="40" placeholder="ชื่อของคุณ">
+          <input id="displayName" type="text" maxlength="40"
+                 autocomplete="nickname" placeholder="ชื่อของคุณ">
         </label>
 
         <label class="field">
@@ -446,21 +746,28 @@ footer {
         <button class="btn primary full" id="submitBtn" type="submit">
           เข้าสู่ระบบ
         </button>
+
         <p class="message" id="authMessage" aria-live="polite"></p>
       </form>
 
-      <button class="btn full" id="backBtn" type="button">กลับหน้าแรก</button>
+      <button class="btn full" id="backBtn" type="button">
+        กลับหน้าแรก
+      </button>
     </div>
   </section>
 
-  <section class="dashboard hidden" id="dashboardPage">
+  <!-- DASHBOARD -->
+  <section class="dashboard page hidden" id="dashboardPage">
     <div class="dash-head">
       <div>
         <div class="eyebrow">Personal space</div>
         <h1>Dashboard</h1>
         <div class="muted">ยินดีต้อนรับสู่ Horizon X</div>
       </div>
-      <button class="btn" id="dashLogoutBtn" type="button">ออกจากระบบ</button>
+
+      <button class="btn" id="dashLogoutBtn" type="button">
+        ออกจากระบบ
+      </button>
     </div>
 
     <div class="grid">
@@ -469,8 +776,11 @@ footer {
           <strong>ยอดคงเหลือ</strong>
           <span class="pill">DEMO WALLET</span>
         </div>
+
         <div class="balance">฿0.00</div>
-        <div class="small">กระเป๋าเงินตัวอย่าง · ยังไม่เชื่อมระบบเงินจริง</div>
+        <div class="small">
+          กระเป๋าเงินตัวอย่าง · ยังไม่เชื่อมระบบเงินจริง
+        </div>
       </article>
 
       <article class="panel profile">
@@ -478,6 +788,7 @@ footer {
           <strong>โปรไฟล์ของคุณ</strong>
           <span class="pill">ACCOUNT</span>
         </div>
+
         <div class="profile-row">
           <div class="avatar" id="avatar">HX</div>
           <div>
@@ -485,6 +796,7 @@ footer {
             <span id="profileEmail"></span>
           </div>
         </div>
+
         <div class="small">สถานะ: เข้าสู่ระบบแล้ว</div>
       </article>
 
@@ -498,7 +810,7 @@ footer {
           <div>
             <div class="range-head">
               <label for="widthRange">ความกว้างเนื้อหา</label>
-              <output id="widthValue">1120 px</output>
+              <output id="widthValue" for="widthRange">1120 px</output>
             </div>
             <input id="widthRange" type="range" min="900" max="1400"
                    step="20" value="1120">
@@ -507,19 +819,20 @@ footer {
           <div>
             <div class="range-head">
               <label for="radiusRange">ความโค้งของการ์ด</label>
-              <output id="radiusValue">18 px</output>
+              <output id="radiusValue" for="radiusRange">18 px</output>
             </div>
             <input id="radiusRange" type="range" min="8" max="30"
                    step="2" value="18">
           </div>
         </div>
 
-        <button class="btn" id="resetBtn" type="button" style="margin-top:22px">
+        <button class="btn" id="resetBtn" type="button">
           คืนค่าเริ่มต้น
         </button>
       </article>
     </div>
   </section>
+
 </main>
 
 <footer class="container">
@@ -527,11 +840,12 @@ footer {
   <span>Built for a clearer digital horizon.</span>
 </footer>
 
-<div class="toast hidden" id="toast" role="status" aria-live="polite"></div>
+<div class="toast hidden" id="toast" role="status"
+     aria-live="polite"></div>
 
 <script type="module">
-import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+import { initializeApp }
+  from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
 
 import {
   getAuth,
@@ -543,11 +857,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
 /*
-  ถ้าต้องการใช้ระบบสมาชิกจริง:
-  1. สร้างโปรเจกต์ที่ Firebase Console
-  2. เปิด Authentication > Sign-in method > Email/Password
-  3. คัดลอกค่าจาก Project settings > Your apps มาใส่ด้านล่าง
+  FIREBASE SETUP
+  1. Firebase Console > Create project
+  2. Authentication > Sign-in method > Email/Password > Enable
+  3. Project settings > Your apps > Web app
+  4. Copy the real config into the object below
 */
+
 const firebaseConfig = {
   apiKey: "ใส่_API_KEY_ของคุณ",
   authDomain: "horizon-x-f920b.firebaseapp.com",
@@ -558,38 +874,109 @@ const firebaseConfig = {
 };
 
 const $ = id => document.getElementById(id);
+
 const homePage = $("homePage");
 const authPage = $("authPage");
 const dashboardPage = $("dashboardPage");
 
+const pages = {
+  home: homePage,
+  auth: authPage,
+  dashboard: dashboardPage
+};
+
 let auth = null;
 let isSignUp = false;
-let toastTimeout;
+let currentPage = null;
+let pageTransitionId = 0;
+let toastTimeout = null;
 
 $("year").textContent = new Date().getFullYear();
 
-function showToast(text) {
+/* Notifications */
+
+function showToast(message) {
   const toast = $("toast");
-  toast.textContent = text;
-  toast.classList.remove("hidden");
+
   clearTimeout(toastTimeout);
-  toastTimeout = setTimeout(() => toast.classList.add("hidden"), 2600);
+  toast.textContent = message;
+  toast.classList.remove("hidden");
+
+  toastTimeout = setTimeout(() => {
+    toast.classList.add("hidden");
+  }, 2800);
 }
 
+/* Page transition */
+
 function showPage(page) {
-  homePage.classList.toggle("hidden", page !== "home");
-  authPage.classList.toggle("hidden", page !== "auth");
-  dashboardPage.classList.toggle("hidden", page !== "dashboard");
+  const target = pages[page];
+  if (!target) return;
 
   $("loginNav").classList.toggle("hidden", page === "dashboard");
   $("dashNav").classList.toggle("hidden", page !== "dashboard");
   $("logoutNav").classList.toggle("hidden", page !== "dashboard");
 
-  window.scrollTo({ top: 0, behavior: "smooth" });
+  if (currentPage === page && !target.classList.contains("hidden")) {
+    return;
+  }
+
+  const transitionId = ++pageTransitionId;
+  const previous = Object.values(pages).find(
+    element => !element.classList.contains("hidden")
+  );
+
+  const reducedMotion = window.matchMedia(
+    "(prefers-reduced-motion: reduce)"
+  ).matches;
+
+  function revealTarget() {
+    if (transitionId !== pageTransitionId) return;
+
+    Object.values(pages).forEach(element => {
+      element.classList.add("hidden");
+      element.classList.remove("page-enter", "page-exit");
+    });
+
+    target.classList.remove("hidden");
+    target.classList.add("page-enter");
+    currentPage = page;
+
+    window.scrollTo({
+      top: 0,
+      behavior: reducedMotion ? "auto" : "smooth"
+    });
+
+    if (page === "dashboard" && auth?.currentUser) {
+      renderUser(auth.currentUser);
+    }
+
+    setTimeout(() => {
+      if (transitionId === pageTransitionId) {
+        target.classList.remove("page-enter");
+      }
+    }, reducedMotion ? 0 : 600);
+  }
+
+  if (!previous || previous === target || reducedMotion) {
+    revealTarget();
+    return;
+  }
+
+  previous.classList.remove("page-enter");
+  previous.classList.add("page-exit");
+
+  setTimeout(() => {
+    if (transitionId === pageTransitionId) {
+      revealTarget();
+    }
+  }, 220);
 }
 
-function setMessage(text, type = "") {
-  $("authMessage").textContent = text;
+/* Auth form modes */
+
+function setMessage(message, type = "") {
+  $("authMessage").textContent = message;
   $("authMessage").className = "message " + type;
 }
 
@@ -601,42 +988,80 @@ function setAuthMode(signUp) {
   $("nameWrap").classList.toggle("hidden", !signUp);
   $("displayName").required = signUp;
 
-  $("authTitle").textContent =
-    signUp ? "สร้างบัญชีใหม่" : "ยินดีต้อนรับกลับ";
+  $("authTitle").textContent = signUp
+    ? "สร้างบัญชีใหม่"
+    : "ยินดีต้อนรับกลับ";
 
-  $("authSubtitle").textContent =
-    signUp ? "สมัครสมาชิก Horizon X" : "เข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ";
+  $("authSubtitle").textContent = signUp
+    ? "สมัครสมาชิก Horizon X"
+    : "เข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ";
 
-  $("submitBtn").textContent =
-    signUp ? "สมัครสมาชิก" : "เข้าสู่ระบบ";
+  $("submitBtn").textContent = signUp
+    ? "สมัครสมาชิก"
+    : "เข้าสู่ระบบ";
 
-  $("password").autocomplete = signUp ? "new-password" : "current-password";
+  $("password").autocomplete = signUp
+    ? "new-password"
+    : "current-password";
+
   setMessage("");
 }
 
+function openAuth(signUp = false) {
+  if (auth?.currentUser) {
+    showPage("dashboard");
+    return;
+  }
+
+  $("authForm").reset();
+  setAuthMode(signUp);
+  showPage("auth");
+}
+
+/* User profile */
+
 function renderUser(user) {
-  const name = user.displayName || user.email?.split("@")[0] || "ผู้ใช้งาน";
+  const name =
+    user.displayName ||
+    user.email?.split("@")[0] ||
+    "ผู้ใช้งาน";
+
   $("profileName").textContent = name;
   $("profileEmail").textContent = user.email || "";
   $("avatar").textContent = name.slice(0, 2).toUpperCase();
 }
 
+/* Friendly Firebase errors */
+
 function friendlyError(error) {
   const messages = {
-    "auth/email-already-in-use": "อีเมลนี้ถูกใช้งานแล้ว",
-    "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
-    "auth/weak-password": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
-    "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
-    "auth/too-many-requests": "ลองหลายครั้งเกินไป กรุณารอสักครู่",
-    "auth/network-request-failed": "เชื่อมต่ออินเทอร์เน็ตไม่ได้"
+    "auth/email-already-in-use":
+      "อีเมลนี้ถูกใช้งานแล้ว",
+    "auth/invalid-email":
+      "รูปแบบอีเมลไม่ถูกต้อง",
+    "auth/weak-password":
+      "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+    "auth/invalid-credential":
+      "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+    "auth/user-not-found":
+      "ไม่พบบัญชีนี้ กรุณาตรวจสอบอีเมล",
+    "auth/wrong-password":
+      "รหัสผ่านไม่ถูกต้อง",
+    "auth/too-many-requests":
+      "ลองหลายครั้งเกินไป กรุณารอสักครู่",
+    "auth/network-request-failed":
+      "เชื่อมต่ออินเทอร์เน็ตไม่ได้",
+    "auth/operation-not-allowed":
+      "กรุณาเปิดใช้งาน Email/Password ใน Firebase",
+    "auth/unauthorized-domain":
+      "โดเมนเว็บไซต์ยังไม่ได้รับอนุญาตใน Firebase"
   };
-  return messages[error.code] || "เกิดข้อผิดพลาด กรุณาตรวจสอบ Firebase configuration";
+
+  return messages[error.code] ||
+    "เกิดข้อผิดพลาด กรุณาตรวจสอบ Firebase configuration";
 }
 
-function openAuth(signUp = false) {
-  setAuthMode(signUp);
-  showPage("auth");
-}
+/* Navigation */
 
 $("homeBtn").addEventListener("click", () => {
   showPage(auth?.currentUser ? "dashboard" : "home");
@@ -649,26 +1074,22 @@ $("backBtn").addEventListener("click", () => showPage("home"));
 $("signInTab").addEventListener("click", () => setAuthMode(false));
 $("signUpTab").addEventListener("click", () => setAuthMode(true));
 
-$("dashNav").addEventListener("click", () => showPage("dashboard"));
-$("aboutBtn").addEventListener("click", () => {
-  showToast("Horizon X — เรียบง่าย มินิมอล และไม่มีพื้นหลังลาย");
+$("dashNav").addEventListener("click", () => {
+  if (auth?.currentUser) showPage("dashboard");
 });
 
-async function logout() {
-  if (auth) await signOut(auth);
-  showPage("home");
-  showToast("ออกจากระบบแล้ว");
-}
+$("aboutBtn").addEventListener("click", () => {
+  showToast("Horizon X — Beyond the ordinary.");
+});
 
-$("logoutNav").addEventListener("click", logout);
-$("dashLogoutBtn").addEventListener("click", logout);
+/* Login and registration */
 
 $("authForm").addEventListener("submit", async event => {
   event.preventDefault();
 
   if (!auth) {
     setMessage(
-      "ยังไม่ได้ตั้งค่า Firebase กรุณาใส่ค่าจาก Firebase Console ให้ครบ",
+      "ยังไม่ได้ตั้งค่า Firebase กรุณาใส่ Configuration จริงก่อน",
       "error"
     );
     return;
@@ -679,36 +1100,83 @@ $("authForm").addEventListener("submit", async event => {
   const name = $("displayName").value.trim();
   const submit = $("submitBtn");
 
+  const modeAtSubmit = isSignUp;
+
   submit.disabled = true;
   submit.textContent = "กำลังดำเนินการ…";
   setMessage("");
 
   try {
-    if (isSignUp) {
-      const result = await createUserWithEmailAndPassword(auth, email, password);
+    if (modeAtSubmit) {
+      const result = await createUserWithEmailAndPassword(
+        auth, email, password
+      );
 
       if (name) {
-        await updateProfile(result.user, { displayName: name });
+        await updateProfile(result.user, {
+          displayName: name
+        });
       }
 
       renderUser(result.user);
       setMessage("สมัครสมาชิกสำเร็จ", "success");
+      showToast("ยินดีต้อนรับสู่ Horizon X");
+      showPage("dashboard");
     } else {
-      await signInWithEmailAndPassword(auth, email, password);
+      const result = await signInWithEmailAndPassword(
+        auth, email, password
+      );
+
+      renderUser(result.user);
       setMessage("เข้าสู่ระบบสำเร็จ", "success");
+      showToast("เข้าสู่ระบบสำเร็จ");
+      showPage("dashboard");
     }
   } catch (error) {
     setMessage(friendlyError(error), "error");
   } finally {
     submit.disabled = false;
-    submit.textContent = isSignUp ? "สมัครสมาชิก" : "เข้าสู่ระบบ";
+    submit.textContent = isSignUp
+      ? "สมัครสมาชิก"
+      : "เข้าสู่ระบบ";
   }
 });
+
+/* Sign out */
+
+async function logout() {
+  if (!auth?.currentUser) {
+    showPage("home");
+    return;
+  }
+
+  const buttons = [$("logoutNav"), $("dashLogoutBtn")];
+  buttons.forEach(button => button.disabled = true);
+
+  try {
+    await signOut(auth);
+    showPage("home");
+    showToast("ออกจากระบบแล้ว");
+  } catch (error) {
+    console.error("Sign-out error:", error);
+    showToast("ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง");
+  } finally {
+    buttons.forEach(button => button.disabled = false);
+  }
+}
+
+$("logoutNav").addEventListener("click", logout);
+$("dashLogoutBtn").addEventListener("click", logout);
+
+/* Firebase initialization */
 
 const configured =
   firebaseConfig.apiKey !== "ใส่_API_KEY_ของคุณ" &&
   firebaseConfig.messagingSenderId !== "ใส่_MESSAGING_SENDER_ID" &&
-  firebaseConfig.appId !== "ใส่_APP_ID_ของคุณ";
+  firebaseConfig.appId !== "ใส่_APP_ID_ของคุณ" &&
+  firebaseConfig.apiKey.trim() !== "" &&
+  firebaseConfig.messagingSenderId.trim() !== "" &&
+  firebaseConfig.appId.trim() !== "";
 
 if (configured) {
   try {
@@ -724,34 +1192,80 @@ if (configured) {
       }
     });
   } catch (error) {
-    console.error(error);
+    console.error("Firebase initialization error:", error);
     showPage("home");
+    showToast("Firebase ตั้งค่าไม่ถูกต้อง");
   }
 } else {
   showPage("home");
 }
 
 /* Dashboard customization */
+
 $("widthRange").addEventListener("input", event => {
   const value = Number(event.target.value);
-  document.documentElement.style.setProperty("--width", value + "px");
-  $("widthValue").value = value + " px";
+
+  document.documentElement.style.setProperty(
+    "--width", value + "px"
+  );
+
+  $("widthValue").textContent = value + " px";
 });
 
 $("radiusRange").addEventListener("input", event => {
   const value = Number(event.target.value);
-  document.documentElement.style.setProperty("--radius", value + "px");
-  $("radiusValue").value = value + " px";
+
+  document.documentElement.style.setProperty(
+    "--radius", value + "px"
+  );
+
+  $("radiusValue").textContent = value + " px";
 });
 
 $("resetBtn").addEventListener("click", () => {
   $("widthRange").value = 1120;
   $("radiusRange").value = 18;
+
   document.documentElement.style.setProperty("--width", "1120px");
   document.documentElement.style.setProperty("--radius", "18px");
-  $("widthValue").value = "1120 px";
-  $("radiusValue").value = "18 px";
+
+  $("widthValue").textContent = "1120 px";
+  $("radiusValue").textContent = "18 px";
+
   showToast("คืนค่าการตั้งค่าแล้ว");
+});
+
+/* Ripple effect for buttons */
+
+document.querySelectorAll("button").forEach(button => {
+  button.addEventListener("click", event => {
+    if (button.disabled) return;
+
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height) * 1.5;
+
+    const x = event.clientX
+      ? event.clientX - rect.left
+      : rect.width / 2;
+
+    const y = event.clientY
+      ? event.clientY - rect.top
+      : rect.height / 2;
+
+    const ripple = document.createElement("span");
+
+    ripple.className = "ripple";
+    ripple.style.width = size + "px";
+    ripple.style.height = size + "px";
+    ripple.style.left = (x - size / 2) + "px";
+    ripple.style.top = (y - size / 2) + "px";
+
+    button.appendChild(ripple);
+
+    ripple.addEventListener("animationend", () => {
+      ripple.remove();
+    }, { once: true });
+  });
 });
 </script>
 </body>

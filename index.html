@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="th">
 <head>
@@ -6,7 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#050505">
   <meta name="description" content="Horizon X — Beyond the ordinary.">
-  <title>Horizon X</title>
+  <title>Horizon X — Beyond the Ordinary</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 
   <style>
     :root {
@@ -17,40 +19,172 @@
       --muted: #929292;
       --green: #8affaa;
       --red: #ff8585;
+      --blue: #9cb5ff;
+      --accent: #8affaa;
+      --ease: cubic-bezier(.2,.8,.2,1);
     }
 
     * { box-sizing: border-box; }
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, sans-serif;
+    html {
+      scroll-behavior: smooth;
+      scrollbar-color: #444 #050505;
     }
 
-    button, input { font: inherit; }
+    body {
+      position: relative;
+      isolation: isolate;
+      margin: 0;
+      min-height: 100vh;
+      overflow-x: hidden;
+      background: var(--bg);
+      color: var(--text);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", sans-serif;
+    }
+
+    body, button, input { font-family: inherit; }
+
+    button, input { font-size: inherit; }
     button { cursor: pointer; }
 
+    button:focus-visible,
+    input:focus-visible {
+      outline: 2px solid var(--green);
+      outline-offset: 4px;
+    }
+
+    ::selection {
+      color: #050505;
+      background: var(--green);
+    }
+
+    .hidden { display: none !important; }
+
+    /* =========================================
+       ANIMATED BACKGROUND
+    ========================================= */
+
+    .fx-background {
+      position: fixed;
+      inset: 0;
+      z-index: -2;
+      overflow: hidden;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 50% 0%, #141a16 0%, #080808 45%, #050505 80%);
+    }
+
+    .fx-grid {
+      position: absolute;
+      inset: -50%;
+      opacity: .18;
+      background-image:
+        linear-gradient(#8affaa18 1px, transparent 1px),
+        linear-gradient(90deg, #8affaa18 1px, transparent 1px);
+      background-size: 48px 48px;
+      transform: perspective(500px) rotateX(55deg);
+      animation: gridMove 22s linear infinite;
+      mask-image: linear-gradient(transparent, black 40%, transparent);
+      -webkit-mask-image: linear-gradient(transparent, black 40%, transparent);
+    }
+
+    .fx-glow {
+      position: absolute;
+      width: 320px;
+      height: 320px;
+      border-radius: 50%;
+      background: var(--green);
+      filter: blur(110px);
+      opacity: .12;
+      animation: glowFloat 12s ease-in-out infinite alternate;
+    }
+
+    .fx-glow-one {
+      top: 5%;
+      left: -180px;
+    }
+
+    .fx-glow-two {
+      right: -200px;
+      bottom: 5%;
+      background: #718cff;
+      animation-delay: -5s;
+    }
+
+    .fx-scanline {
+      position: absolute;
+      inset: 0;
+      opacity: .13;
+      background: repeating-linear-gradient(
+        to bottom,
+        transparent 0,
+        transparent 3px,
+        #ffffff0a 4px
+      );
+    }
+
+    #particles {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .ambient-particle {
+      position: absolute;
+      bottom: -12px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+      opacity: 0;
+      animation: ambientRise var(--duration, 12s) linear var(--delay, 0s) infinite;
+    }
+
+    /* =========================================
+       NAVIGATION
+    ========================================= */
+
     .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
       min-height: 72px;
       padding: 14px 6%;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      border-bottom: 1px solid var(--border);
+      border-bottom: 1px solid #ffffff16;
+      background: #050505b8;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      animation: navEnter .8s both;
     }
 
     .logo {
       font-size: 21px;
-      font-weight: 900;
-      letter-spacing: 2px;
+      font-weight: 950;
+      letter-spacing: 3px;
+      transition: letter-spacing .3s, text-shadow .3s;
     }
 
-    .logo span { color: #888; }
+    .logo:hover {
+      letter-spacing: 5px;
+      text-shadow: 0 0 25px #ffffff70;
+    }
+
+    .logo span {
+      color: var(--green);
+    }
+
+    /* =========================================
+       PAGE LAYOUT
+    ========================================= */
 
     .container {
+      position: relative;
       width: min(100% - 32px, 440px);
       margin: 55px auto;
     }
@@ -58,6 +192,81 @@
     .hero {
       text-align: center;
       margin-bottom: 30px;
+    }
+
+    .hero-enhanced {
+      animation: heroEnter .9s var(--ease) both;
+    }
+
+    .hero-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      padding: 9px 13px;
+      margin-bottom: 20px;
+      border: 1px solid #ffffff20;
+      border-radius: 100px;
+      background: #ffffff06;
+      color: #c9c9c9;
+      font-size: 9px;
+      letter-spacing: 2px;
+      animation: badgeFloat 4s ease-in-out infinite;
+    }
+
+    .live-dot {
+      width: 7px;
+      height: 7px;
+      flex-shrink: 0;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+      animation: dotPulse 1.5s infinite;
+    }
+
+    .hero-art {
+      position: relative;
+      height: 190px;
+      margin: 0 auto 25px;
+      overflow: hidden;
+      border: 1px solid #ffffff25;
+      border-radius: 18px;
+      background: #0b0b0b;
+      box-shadow: 0 15px 55px #0008, 0 0 30px #8affaa08;
+    }
+
+    .hero-image {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: .76;
+      filter: grayscale(100%) contrast(1.15);
+      animation: imageReveal 1.4s both, imageDrift 18s ease-in-out infinite alternate;
+      transition: filter .6s, opacity .6s;
+    }
+
+    .hero-art:hover .hero-image {
+      filter: grayscale(20%) contrast(1.15);
+      opacity: .98;
+    }
+
+    .hero-image-overlay {
+      position: absolute;
+      inset: 0;
+      background:
+        linear-gradient(0deg, #050505 0%, transparent 60%),
+        linear-gradient(90deg, #05050555, transparent, #05050555);
+      pointer-events: none;
+    }
+
+    .hero-image-text {
+      position: absolute;
+      bottom: 13px;
+      left: 15px;
+      color: #ffffffa0;
+      font-size: 9px;
+      letter-spacing: 4px;
     }
 
     .eyebrow {
@@ -72,18 +281,88 @@
       letter-spacing: -1px;
     }
 
+    .hero-title {
+      font-size: clamp(35px, 9vw, 52px);
+      font-weight: 950;
+      letter-spacing: -2px;
+      animation: titleEnter 1s .15s both;
+      overflow-wrap: anywhere;
+    }
+
+    .glitch {
+      position: relative;
+      display: inline-block;
+      color: var(--green);
+      text-shadow: 0 0 22px #8affaa40;
+      animation: glitchPulse 5s infinite;
+    }
+
+    .hero-subtitle {
+      animation: fadeUp .8s .35s both;
+    }
+
+    .hero-line {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 22px;
+      color: #6e776f;
+      font-size: 8px;
+      letter-spacing: 3px;
+    }
+
+    .hero-line span:first-child,
+    .hero-line span:last-child {
+      width: 25px;
+      height: 1px;
+      background: #8affaa80;
+    }
+
     .muted {
       color: var(--muted);
       font-size: 13px;
       line-height: 1.8;
     }
 
+    /* =========================================
+       GLASS PANEL
+    ========================================= */
+
     .panel {
-      background: linear-gradient(145deg, #151515, #090909);
-      border: 1px solid var(--border);
-      border-radius: 20px;
+      position: relative;
+      overflow: hidden;
       padding: 25px;
+      border: 1px solid #ffffff1c;
+      border-radius: 20px;
+      background: linear-gradient(145deg, #171717dc, #080808ef);
+      box-shadow: 0 25px 80px #0007, inset 0 1px #ffffff08;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      animation: panelEnter .8s .2s both;
+      transition: border-color .35s, box-shadow .35s;
     }
+
+    .panel::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -120%;
+      width: 70%;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, var(--green), transparent);
+      animation: panelShine 7s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    .panel:focus-within {
+      border-color: #8affaa60;
+      box-shadow: 0 25px 80px #0008, 0 0 30px #8affaa0b;
+    }
+
+    /* =========================================
+       TABS AND FORM
+    ========================================= */
 
     .tabs {
       display: grid;
@@ -96,23 +375,37 @@
       min-height: 43px;
       border: 1px solid #333;
       border-radius: 10px;
-      background: transparent;
+      background: #ffffff03;
       color: #999;
+      transition: .3s;
+    }
+
+    .tab:hover {
+      border-color: #8affaa70;
+      color: #fff;
     }
 
     .tab.active {
       color: #050505;
       background: #fff;
       border-color: #fff;
+      box-shadow: 0 0 22px #ffffff12;
     }
 
-    .field { margin-bottom: 17px; }
+    .field {
+      margin-bottom: 17px;
+      animation: fadeUp .4s both;
+    }
 
     label {
       display: block;
       margin-bottom: 8px;
       font-size: 12px;
       color: #bbb;
+    }
+
+    .input-wrap {
+      position: relative;
     }
 
     input {
@@ -124,26 +417,93 @@
       background: #080808;
       color: #fff;
       outline: none;
+      transition: border-color .25s, box-shadow .25s, background .25s;
     }
 
-    input:focus { border-color: #aaa; }
+    input:hover { border-color: #666; }
+
+    input:focus {
+      border-color: var(--green);
+      background: #0d110e;
+      box-shadow: 0 0 0 3px #8affaa12, 0 0 22px #8affaa0a;
+    }
+
+    input::placeholder { color: #505050; }
+
+    .password-input {
+      padding-right: 62px;
+    }
+
+    .password-toggle {
+      position: absolute;
+      top: 50%;
+      right: 9px;
+      transform: translateY(-50%);
+      padding: 7px;
+      border: 1px solid #333;
+      border-radius: 7px;
+      background: #151515;
+      color: #aaa;
+      font-size: 10px;
+    }
+
+    .password-toggle:hover {
+      color: var(--green);
+      border-color: var(--green);
+    }
+
+    /* =========================================
+       BUTTONS
+    ========================================= */
+
+    .primary,
+    .secondary,
+    .notification-ok {
+      position: relative;
+      overflow: hidden;
+      transition: transform .2s, box-shadow .25s, background .25s;
+    }
 
     .primary {
       width: 100%;
       min-height: 49px;
+      padding: 12px;
       border: 1px solid #fff;
       border-radius: 10px;
       background: #fff;
       color: #050505;
       font-weight: 800;
-      transition: .2s;
     }
 
-    .primary:hover { background: #ddd; }
+    .primary::after,
+    .notification-ok::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: -120%;
+      width: 70%;
+      background: linear-gradient(100deg, transparent, #ffffffa0, transparent);
+      transform: skewX(-20deg);
+      transition: left .6s;
+      pointer-events: none;
+    }
 
-    button:disabled {
-      opacity: .55;
-      cursor: wait;
+    .primary:hover::after,
+    .notification-ok:hover::after {
+      left: 150%;
+    }
+
+    .primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 30px #ffffff18;
+      background: #e7ffed;
+    }
+
+    .primary:active,
+    .secondary:active,
+    .notification-ok:active {
+      transform: scale(.97);
     }
 
     .secondary {
@@ -155,19 +515,83 @@
       color: #fff;
     }
 
-    .hidden { display: none !important; }
+    .secondary:hover {
+      border-color: #8affaa80;
+      box-shadow: 0 0 20px #8affaa0b;
+    }
+
+    button:disabled {
+      opacity: .55;
+      cursor: wait;
+      transform: none !important;
+    }
+
+    .forgot-button {
+      width: 100%;
+      margin-top: 12px;
+    }
+
+    .form-note {
+      font-size: 11px;
+    }
+
+    /* =========================================
+       DASHBOARD
+    ========================================= */
 
     .dashboard-title {
       font-size: 29px;
       overflow-wrap: anywhere;
+      animation: fadeUp .7s both;
+    }
+
+    .welcome-name {
+      color: var(--green);
+      overflow-wrap: anywhere;
     }
 
     .stat {
+      position: relative;
       margin: 22px 0;
       padding: 18px;
+      overflow: hidden;
       border: 1px solid #282828;
       border-radius: 14px;
       background: #080808;
+      transition: border-color .3s, transform .3s;
+    }
+
+    .stat:hover {
+      transform: translateY(-3px);
+      border-color: #8affaa50;
+    }
+
+    .stat::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 2px;
+      height: 100%;
+      background: var(--green);
+      box-shadow: 0 0 15px var(--green);
+    }
+
+    .status-line {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--green);
+      font-size: 11px;
+    }
+
+    .status-line::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 10px var(--green);
     }
 
     footer {
@@ -178,11 +602,14 @@
       letter-spacing: 2px;
     }
 
-    /* ===== GLOBAL NOTIFICATION MODAL ===== */
+    /* =========================================
+       NOTIFICATION MODAL
+    ========================================= */
 
     .notification-overlay {
       --notice-accent: #8affaa;
       --notice-glow: rgba(90,255,140,.14);
+
       position: fixed;
       inset: 0;
       z-index: 99999;
@@ -190,9 +617,9 @@
       align-items: center;
       justify-content: center;
       padding: 20px;
-      background: rgba(0,0,0,.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: #000b;
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
@@ -222,18 +649,17 @@
       padding: 32px 25px 24px;
       overflow: hidden;
       text-align: center;
-      background: linear-gradient(145deg,#191919,#080808);
+      background: linear-gradient(145deg, #191919, #080808);
       border: 1px solid #383838;
       border-radius: 23px;
-      box-shadow: 0 25px 100px #000,
-                  0 0 50px var(--notice-glow);
+      box-shadow: 0 25px 100px #000, 0 0 50px var(--notice-glow);
       transform: translateY(25px) scale(.92);
       transition: transform .35s;
     }
 
     .notification-overlay.active .notification-card {
+      animation: modalEpic .55s cubic-bezier(.16,1,.3,1) both;
       transform: translateY(0) scale(1);
-      animation: noticeCardIn .4s both;
     }
 
     .notification-card::before {
@@ -247,7 +673,22 @@
       box-shadow: 0 0 18px var(--notice-accent);
     }
 
+    .notification-card::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: inherit;
+      background: linear-gradient(
+        120deg, transparent 25%, #ffffff08 50%, transparent 75%
+      );
+      background-size: 200% 100%;
+      animation: modalShimmer 4s linear infinite;
+      pointer-events: none;
+    }
+
     .notification-icon {
+      position: relative;
+      z-index: 1;
       display: grid;
       place-items: center;
       width: 78px;
@@ -257,7 +698,7 @@
       border-radius: 50%;
       background: var(--notice-accent);
       color: #080808;
-      box-shadow: 0 0 35px var(--notice-glow);
+      box-shadow: 0 0 25px var(--notice-glow), 0 0 70px var(--notice-glow);
       animation: noticePop .45s both;
     }
 
@@ -272,11 +713,15 @@
     }
 
     .notification-emoji {
+      position: relative;
+      z-index: 1;
       font-size: 24px;
       margin-bottom: 9px;
     }
 
     .notification-label {
+      position: relative;
+      z-index: 1;
       color: var(--notice-accent);
       font-size: 10px;
       font-weight: 800;
@@ -285,21 +730,29 @@
     }
 
     .notification-title {
+      position: relative;
+      z-index: 1;
       font-size: 24px;
       margin: 0 0 12px;
       overflow-wrap: anywhere;
+      animation: fadeUp .45s .1s both;
     }
 
     .notification-description {
+      position: relative;
+      z-index: 1;
       max-width: 270px;
       margin: 0 auto 24px;
       color: #aaa;
       font-size: 13px;
       line-height: 1.8;
       overflow-wrap: anywhere;
+      animation: fadeUp .45s .2s both;
     }
 
     .notification-ok {
+      position: relative;
+      z-index: 1;
       width: 100%;
       min-height: 48px;
       border: 1px solid var(--notice-accent);
@@ -309,18 +762,115 @@
       font-size: 12px;
       font-weight: 800;
       letter-spacing: 2px;
+      animation: fadeUp .45s .3s both;
     }
 
     .notification-footnote {
+      position: relative;
+      z-index: 1;
       margin-top: 17px;
       color: #555;
       font-size: 9px;
       letter-spacing: 2px;
     }
 
-    @keyframes noticeCardIn {
-      from { opacity: 0; transform: translateY(25px) scale(.92); }
+    .fx-particle {
+      position: fixed;
+      z-index: 100000;
+      width: 4px;
+      height: 4px;
+      border-radius: 50%;
+      background: var(--green);
+      box-shadow: 0 0 12px var(--green);
+      pointer-events: none;
+      animation: particleBurst 1s ease-out forwards;
+    }
+
+    /* =========================================
+       KEYFRAMES
+    ========================================= */
+
+    @keyframes gridMove {
+      to { background-position: 0 48px; }
+    }
+
+    @keyframes glowFloat {
+      from { transform: translate3d(0,0,0); }
+      to { transform: translate3d(70px,50px,0); }
+    }
+
+    @keyframes ambientRise {
+      0% { opacity: 0; transform: translateY(0); }
+      10% { opacity: .65; }
+      85% { opacity: .35; }
+      100% { opacity: 0; transform: translateY(-105vh); }
+    }
+
+    @keyframes navEnter {
+      from { opacity: 0; transform: translateY(-15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes heroEnter {
+      from { opacity: 0; transform: translateY(25px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes panelEnter {
+      from { opacity: 0; transform: translateY(22px) scale(.98); }
       to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes titleEnter {
+      from { opacity: 0; letter-spacing: 8px; filter: blur(8px); }
+      to { opacity: 1; letter-spacing: -2px; filter: blur(0); }
+    }
+
+    @keyframes imageReveal {
+      from { opacity: 0; }
+      to { opacity: .76; }
+    }
+
+    @keyframes imageDrift {
+      from { transform: scale(1); }
+      to { transform: scale(1.09); }
+    }
+
+    @keyframes badgeFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    @keyframes dotPulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: .35; }
+    }
+
+    @keyframes glitchPulse {
+      0%, 90%, 100% { transform: translateX(0); }
+      92% { transform: translateX(-2px); }
+      94% { transform: translateX(2px); }
+      96% { transform: translateX(-1px); }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes panelShine {
+      0%, 70%, 100% { left: -120%; }
+      85% { left: 150%; }
+    }
+
+    @keyframes modalEpic {
+      0% { opacity: 0; transform: translateY(35px) scale(.82) rotateX(8deg); }
+      70% { opacity: 1; transform: translateY(-4px) scale(1.015); }
+      100% { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @keyframes modalShimmer {
+      to { background-position: -200% 0; }
     }
 
     @keyframes noticePop {
@@ -328,21 +878,42 @@
       to { opacity: 1; transform: scale(1) rotate(0); }
     }
 
+    @keyframes particleBurst {
+      from { opacity: 1; transform: translate(0,0) scale(1); }
+      to { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(0); }
+    }
+
     @media (max-width: 420px) {
       .container { margin: 35px auto; }
       .panel { padding: 20px; }
+      .hero-art { height: 155px; }
+      .hero-title { letter-spacing: -1px; }
+      .hero-badge { font-size: 8px; letter-spacing: 1.5px; }
+      .notification-card { padding: 28px 20px 22px; }
     }
 
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after {
-        animation: none !important;
-        transition: none !important;
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        scroll-behavior: auto !important;
+        transition-duration: .01ms !important;
       }
     }
   </style>
 </head>
 
 <body>
+  <!-- BACKGROUND EFFECTS -->
+  <div class="fx-background" aria-hidden="true">
+    <div class="fx-grid"></div>
+    <div class="fx-glow fx-glow-one"></div>
+    <div class="fx-glow fx-glow-two"></div>
+    <div class="fx-scanline"></div>
+    <div id="particles"></div>
+  </div>
+
+  <!-- NAVBAR -->
   <header class="navbar">
     <div class="logo">HORIZON <span>X</span></div>
     <button id="navLogout" class="secondary hidden" type="button">
@@ -353,10 +924,37 @@
   <main>
     <!-- HOME / AUTH -->
     <section id="homePage" class="container">
-      <div class="hero">
+      <div class="hero hero-enhanced">
+        <div class="hero-badge">
+          <span class="live-dot"></span>
+          NEXT GENERATION EXPERIENCE
+        </div>
+
+        <div class="hero-art">
+          <img
+            class="hero-image"
+            src="https://images.unsplash.com/photo-1462331940025-496dfbfc7564?auto=format&amp;fit=crop&amp;w=1000&amp;q=85"
+            alt="Horizon X futuristic space"
+          >
+          <div class="hero-image-overlay"></div>
+          <div class="hero-image-text">HX / 001</div>
+        </div>
+
         <div class="eyebrow">BEYOND THE ORDINARY</div>
-        <h1>Horizon X.</h1>
-        <p class="muted">อีกระดับของประสบการณ์ดิจิทัล</p>
+
+        <h1 class="hero-title">
+          HORIZON <span class="glitch">X</span>
+        </h1>
+
+        <p class="muted hero-subtitle">
+          อีกระดับของประสบการณ์ดิจิทัล
+        </p>
+
+        <div class="hero-line">
+          <span></span>
+          <span>EXPLORE THE UNKNOWN</span>
+          <span></span>
+        </div>
       </div>
 
       <div class="panel">
@@ -372,21 +970,46 @@
         <form id="authForm">
           <div id="nameField" class="field hidden">
             <label for="displayName">ชื่อที่ใช้แสดง</label>
-            <input id="displayName" type="text" maxlength="40"
-              autocomplete="nickname" placeholder="ชื่อของคุณ">
+            <input
+              id="displayName"
+              type="text"
+              maxlength="40"
+              autocomplete="nickname"
+              placeholder="ชื่อของคุณ"
+            >
           </div>
 
           <div class="field">
             <label for="email">อีเมล</label>
-            <input id="email" type="email" required
-              autocomplete="email" placeholder="you@example.com">
+            <input
+              id="email"
+              type="email"
+              required
+              autocomplete="email"
+              placeholder="you@example.com"
+            >
           </div>
 
           <div class="field">
             <label for="password">รหัสผ่าน</label>
-            <input id="password" type="password" required
-              minlength="6" autocomplete="current-password"
-              placeholder="อย่างน้อย 6 ตัวอักษร">
+            <div class="input-wrap">
+              <input
+                id="password"
+                class="password-input"
+                type="password"
+                required
+                minlength="6"
+                autocomplete="current-password"
+                placeholder="อย่างน้อย 6 ตัวอักษร"
+              >
+              <button
+                id="passwordToggle"
+                class="password-toggle"
+                type="button"
+                aria-label="แสดงรหัสผ่าน"
+                aria-pressed="false"
+              >แสดง</button>
+            </div>
           </div>
 
           <button id="submitBtn" class="primary" type="submit">
@@ -394,12 +1017,11 @@
           </button>
         </form>
 
-        <button id="forgotBtn" class="secondary" type="button"
-          style="width:100%;margin-top:12px">
+        <button id="forgotBtn" class="secondary forgot-button" type="button">
           ลืมรหัสผ่าน?
         </button>
 
-        <p class="muted" style="font-size:11px">
+        <p class="muted form-note">
           ระบบบัญชีใช้ Firebase Authentication
         </p>
       </div>
@@ -409,13 +1031,18 @@
     <section id="dashboardPage" class="container hidden">
       <div class="panel">
         <div class="eyebrow">HORIZON X / DASHBOARD</div>
-        <h1 class="dashboard-title">ยินดีต้อนรับ</h1>
+
+        <h1 class="dashboard-title">
+          ยินดีต้อนรับ
+        </h1>
+
         <p id="welcomeText" class="muted"></p>
 
         <div class="stat">
           <div class="eyebrow">ACCOUNT STATUS</div>
           <h2>บัญชีพร้อมใช้งาน</h2>
           <p class="muted">คุณเข้าสู่ระบบ Horizon X แล้ว</p>
+          <div class="status-line">CONNECTED</div>
         </div>
 
         <button id="dashboardLogout" class="primary" type="button">
@@ -428,23 +1055,35 @@
   <footer>HORIZON X · BEYOND THE ORDINARY</footer>
 
   <!-- GLOBAL NOTIFICATION -->
-  <div id="notificationOverlay" class="notification-overlay"
-    role="dialog" aria-modal="true"
+  <div
+    id="notificationOverlay"
+    class="notification-overlay"
+    role="dialog"
+    aria-modal="true"
     aria-labelledby="notificationTitle"
     aria-describedby="notificationDescription"
-    aria-hidden="true">
+    aria-hidden="true"
+    inert
+  >
     <div class="notification-card">
-      <div id="notificationIcon" class="notification-icon"
-        aria-hidden="true"></div>
+      <div id="notificationIcon" class="notification-icon" aria-hidden="true"></div>
+
       <div id="notificationEmoji" class="notification-emoji">🎉</div>
+
       <div id="notificationLabel" class="notification-label">
         SYSTEM SUCCESS
       </div>
-      <h2 id="notificationTitle" class="notification-title">สำเร็จ!</h2>
+
+      <h2 id="notificationTitle" class="notification-title">
+        สำเร็จ!
+      </h2>
+
       <p id="notificationDescription" class="notification-description"></p>
+
       <button id="notificationOk" class="notification-ok" type="button">
         ตกลง →
       </button>
+
       <div class="notification-footnote">
         HORIZON X · BEYOND THE ORDINARY
       </div>
@@ -452,8 +1091,19 @@
   </div>
 
   <script type="module">
-    import { initializeApp, getApps }
-      from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    /* =========================================
+       FIREBASE IMPORTS
+    ========================================= */
+
+    import {
+      initializeApp,
+      getApps
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+
+    import {
+      getAnalytics,
+      isSupported
+    } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-analytics.js";
 
     import {
       getAuth,
@@ -465,7 +1115,10 @@
       sendPasswordResetEmail
     } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
 
-    /* ===== YOUR FIREBASE CONFIG ===== */
+    /* =========================================
+       YOUR FIREBASE CONFIGURATION
+    ========================================= */
+
     const firebaseConfig = {
       apiKey: "AIzaSyD96Cs3NteaSwrJMFXKfROGBuvTHvMYDE",
       authDomain: "horizon-x-f920b.firebaseapp.com",
@@ -475,6 +1128,10 @@
       appId: "1:621329414639:web:16024b58edcb6348491e1a",
       measurementId: "G-Y8NRP7NSCC"
     };
+
+    /* =========================================
+       DOM ELEMENTS
+    ========================================= */
 
     const $ = id => document.getElementById(id);
 
@@ -486,10 +1143,20 @@
     const noticeIcon = $("notificationIcon");
     const noticeOk = $("notificationOk");
 
-    let previousFocus = null;
     let auth = null;
     let mode = "login";
     let busy = false;
+    let previousFocus = null;
+    let noticeTimer = null;
+    let authObserverStarted = false;
+
+    const reducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    );
+
+    /* =========================================
+       NOTIFICATION TYPES
+    ========================================= */
 
     const noticeTypes = {
       success: {
@@ -497,11 +1164,13 @@
         label: "SYSTEM SUCCESS",
         icon: '<path d="m5 12 4 4L19 6"></path>'
       },
+
       error: {
         emoji: "❌",
         label: "SYSTEM ERROR",
         icon: '<path d="M18 6 6 18"></path><path d="m6 6 12 12"></path>'
       },
+
       info: {
         emoji: "💡",
         label: "SYSTEM NOTICE",
@@ -509,28 +1178,119 @@
       }
     };
 
+    /* =========================================
+       PARTICLE EFFECTS
+    ========================================= */
+
+    function createAmbientParticles() {
+      if (reducedMotion.matches) return;
+
+      const container = $("particles");
+      const fragment = document.createDocumentFragment();
+
+      for (let i = 0; i < 18; i++) {
+        const particle = document.createElement("span");
+
+        particle.className = "ambient-particle";
+        particle.style.left = (Math.random() * 100) + "%";
+        particle.style.setProperty(
+          "--duration",
+          (10 + Math.random() * 15) + "s"
+        );
+        particle.style.setProperty(
+          "--delay",
+          (-Math.random() * 20) + "s"
+        );
+
+        fragment.appendChild(particle);
+      }
+
+      container.appendChild(fragment);
+    }
+
+    function burstParticles() {
+      if (reducedMotion.matches) return;
+
+      const card = document.querySelector(".notification-card");
+      if (!card) return;
+
+      const rect = card.getBoundingClientRect();
+      const originX = rect.left + rect.width / 2;
+      const originY = rect.top + rect.height / 2;
+
+      const fragment = document.createDocumentFragment();
+      const particles = [];
+
+      for (let i = 0; i < 24; i++) {
+        const particle = document.createElement("span");
+
+        particle.className = "fx-particle";
+        particle.style.left = originX + "px";
+        particle.style.top = originY + "px";
+
+        const angle = (Math.PI * 2 * i) / 24;
+        const distance = 45 + Math.random() * 100;
+
+        particle.style.setProperty(
+          "--dx",
+          Math.cos(angle) * distance + "px"
+        );
+
+        particle.style.setProperty(
+          "--dy",
+          Math.sin(angle) * distance + "px"
+        );
+
+        fragment.appendChild(particle);
+        particles.push(particle);
+      }
+
+      document.body.appendChild(fragment);
+
+      particles.forEach(particle => {
+        particle.addEventListener("animationend", () => {
+          particle.remove();
+        }, { once: true });
+      });
+    }
+
+    /* =========================================
+       GLOBAL NOTIFICATION MODAL
+    ========================================= */
+
     function showNotification(type, title, message) {
       const config = noticeTypes[type] || noticeTypes.info;
+      const actualType = noticeTypes[type] ? type : "info";
 
       if (!overlay.classList.contains("active")) {
         previousFocus = document.activeElement;
       }
 
       overlay.classList.remove("success", "error", "info", "active");
-      overlay.classList.add(noticeTypes[type] ? type : "info");
+      overlay.classList.add(actualType);
 
       noticeEmoji.textContent = config.emoji;
       noticeLabel.textContent = config.label;
       noticeTitle.textContent = title || "แจ้งเตือน";
       noticeDescription.textContent = message || "";
 
+      /* SVG is selected only from the fixed, trusted definitions above. */
       noticeIcon.innerHTML =
-        '<svg viewBox="0 0 24 24">' + config.icon + '</svg>';
+        '<svg viewBox="0 0 24 24" aria-hidden="true">' +
+        config.icon +
+        '</svg>';
 
+      overlay.inert = false;
       overlay.setAttribute("aria-hidden", "false");
+
       void overlay.offsetWidth;
       overlay.classList.add("active");
+
       noticeOk.focus({ preventScroll: true });
+
+      if (actualType === "success") {
+        burstParticles();
+      }
     }
 
     function closeNotification() {
@@ -538,6 +1298,7 @@
 
       overlay.classList.remove("active");
       overlay.setAttribute("aria-hidden", "true");
+      overlay.inert = true;
 
       if (previousFocus && previousFocus.isConnected) {
         previousFocus.focus({ preventScroll: true });
@@ -550,15 +1311,23 @@
     noticeOk.addEventListener("click", closeNotification);
 
     overlay.addEventListener("click", event => {
-      if (event.target === overlay) closeNotification();
-    });
-
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape" &&
-          overlay.classList.contains("active")) {
+      if (event.target === overlay) {
         closeNotification();
       }
     });
+
+    document.addEventListener("keydown", event => {
+      if (
+        event.key === "Escape" &&
+        overlay.classList.contains("active")
+      ) {
+        closeNotification();
+      }
+    });
+
+    /* =========================================
+       PAGE NAVIGATION
+    ========================================= */
 
     function showPage(page) {
       $("homePage").classList.toggle("hidden", page !== "home");
@@ -566,44 +1335,122 @@
       $("navLogout").classList.toggle("hidden", page !== "dashboard");
     }
 
+    /* =========================================
+       LOGIN / SIGNUP TABS
+    ========================================= */
+
     function setMode(nextMode) {
       mode = nextMode;
+
       const signup = mode === "signup";
 
       $("loginTab").classList.toggle("active", !signup);
       $("signupTab").classList.toggle("active", signup);
       $("nameField").classList.toggle("hidden", !signup);
-      $("displayName").required = signup;
-      $("password").autocomplete =
-        signup ? "new-password" : "current-password";
 
-      $("submitBtn").textContent =
-        signup ? "สร้างบัญชี" : "เข้าสู่ระบบ";
+      $("displayName").required = signup;
+      $("password").autocomplete = signup
+        ? "new-password"
+        : "current-password";
+
+      $("submitBtn").textContent = signup
+        ? "สร้างบัญชี"
+        : "เข้าสู่ระบบ";
     }
 
-    $("loginTab").addEventListener("click", () => setMode("login"));
-    $("signupTab").addEventListener("click", () => setMode("signup"));
+    $("loginTab").addEventListener("click", () => {
+      setMode("login");
+    });
+
+    $("signupTab").addEventListener("click", () => {
+      setMode("signup");
+    });
+
+    /* =========================================
+       PASSWORD VISIBILITY
+    ========================================= */
+
+    $("passwordToggle").addEventListener("click", () => {
+      const passwordInput = $("password");
+      const isPassword = passwordInput.type === "password";
+
+      passwordInput.type = isPassword ? "text" : "password";
+
+      $("passwordToggle").textContent = isPassword
+        ? "ซ่อน"
+        : "แสดง";
+
+      $("passwordToggle").setAttribute(
+        "aria-label",
+        isPassword ? "ซ่อนรหัสผ่าน" : "แสดงรหัสผ่าน"
+      );
+
+      $("passwordToggle").setAttribute(
+        "aria-pressed",
+        String(isPassword)
+      );
+    });
+
+    /* =========================================
+       FIREBASE ERROR MESSAGES
+    ========================================= */
 
     function friendlyError(error) {
       const messages = {
-        "auth/email-already-in-use": "อีเมลนี้มีบัญชีอยู่แล้ว",
-        "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
-        "auth/weak-password": "รหัสผ่านไม่ปลอดภัยพอ",
-        "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
-        "auth/user-not-found": "ไม่พบบัญชีนี้",
-        "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
-        "auth/too-many-requests": "ลองใหม่ภายหลัง",
-        "auth/network-request-failed": "เชื่อมต่ออินเทอร์เน็ตไม่สำเร็จ",
-        "auth/operation-not-allowed": "เปิด Email/Password ใน Firebase ก่อน",
-        "auth/unauthorized-domain": "โดเมนเว็บไซต์ยังไม่ได้รับอนุญาตใน Firebase"
+        "auth/email-already-in-use":
+          "อีเมลนี้มีบัญชีอยู่แล้ว",
+
+        "auth/invalid-email":
+          "รูปแบบอีเมลไม่ถูกต้อง",
+
+        "auth/weak-password":
+          "รหัสผ่านไม่ปลอดภัยพอ",
+
+        "auth/invalid-credential":
+          "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+
+        "auth/user-not-found":
+          "ไม่พบบัญชีนี้",
+
+        "auth/wrong-password":
+          "รหัสผ่านไม่ถูกต้อง",
+
+        "auth/too-many-requests":
+          "ลองใหม่ภายหลัง",
+
+        "auth/network-request-failed":
+          "เชื่อมต่ออินเทอร์เน็ตไม่สำเร็จ",
+
+        "auth/operation-not-allowed":
+          "เปิด Email/Password ใน Firebase Authentication ก่อน",
+
+        "auth/unauthorized-domain":
+          "โดเมนเว็บไซต์ยังไม่ได้รับอนุญาตใน Firebase",
+
+        "auth/weak-password":
+          "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+
+        "auth/invalid-api-key":
+          "Firebase API key ไม่ถูกต้อง",
+
+        "auth/app-not-authorized":
+          "แอปนี้ไม่ได้รับอนุญาตให้ใช้ Firebase โปรเจกต์นี้",
+
+        "auth/requests-to-this-api-have-been-blocked":
+          "คำขอถูกบล็อก โปรดตรวจสอบการตั้งค่า Firebase"
       };
 
       return messages[error.code] ||
         "เกิดข้อผิดพลาด กรุณาตรวจสอบการตั้งค่าแล้วลองอีกครั้ง";
     }
 
+    /* =========================================
+       LOADING STATE
+    ========================================= */
+
     function setBusy(value) {
       busy = value;
+
       $("submitBtn").disabled = value;
       $("forgotBtn").disabled = value;
       $("dashboardLogout").disabled = value;
@@ -611,17 +1458,25 @@
 
       $("submitBtn").textContent = value
         ? "กำลังดำเนินการ..."
-        : mode === "signup" ? "สร้างบัญชี" : "เข้าสู่ระบบ";
+        : mode === "signup"
+          ? "สร้างบัญชี"
+          : "เข้าสู่ระบบ";
     }
+
+    /* =========================================
+       SIGNUP / LOGIN
+    ========================================= */
 
     $("authForm").addEventListener("submit", async event => {
       event.preventDefault();
+
       if (busy) return;
 
       if (!auth) {
         showNotification(
-          "error", "ระบบยังไม่พร้อม",
-          "กรุณาตรวจสอบ Firebase Configuration"
+          "error",
+          "ระบบยังไม่พร้อม",
+          "กรุณาตรวจสอบ Firebase Configuration และการเชื่อมต่อ"
         );
         return;
       }
@@ -630,16 +1485,31 @@
       const password = $("password").value;
       const displayName = $("displayName").value.trim();
 
+      if (mode === "signup" && !displayName) {
+        showNotification(
+          "info",
+          "กรอกชื่อก่อน",
+          "กรุณากรอกชื่อที่ต้องการใช้แสดง"
+        );
+
+        $("displayName").focus();
+        return;
+      }
+
       setBusy(true);
 
       try {
         if (mode === "signup") {
           const credential = await createUserWithEmailAndPassword(
-            auth, email, password
+            auth,
+            email,
+            password
           );
 
           if (displayName) {
-            await updateProfile(credential.user, { displayName });
+            await updateProfile(credential.user, {
+              displayName: displayName
+            });
           }
 
           $("welcomeText").textContent =
@@ -648,22 +1518,26 @@
           showPage("dashboard");
 
           showNotification(
-            "success", "สมัครสมาชิกสำเร็จ!",
+            "success",
+            "สมัครสมาชิกสำเร็จ!",
             "บัญชีของคุณพร้อมใช้งานแล้ว ยินดีต้อนรับสู่ Horizon X 🎉"
           );
         } else {
           const credential = await signInWithEmailAndPassword(
-            auth, email, password
+            auth,
+            email,
+            password
           );
 
           $("welcomeText").textContent =
-            "บัญชี: " + (credential.user.displayName ||
-              credential.user.email);
+            "บัญชี: " +
+            (credential.user.displayName || credential.user.email);
 
           showPage("dashboard");
 
           showNotification(
-            "success", "เข้าสู่ระบบสำเร็จ!",
+            "success",
+            "เข้าสู่ระบบสำเร็จ!",
             "ยินดีต้อนรับกลับมา ขอให้สนุกกับ Horizon X ✨"
           );
         }
@@ -682,6 +1556,10 @@
       }
     });
 
+    /* =========================================
+       LOGOUT
+    ========================================= */
+
     async function logout() {
       if (!auth || busy) return;
 
@@ -689,17 +1567,20 @@
 
       try {
         await signOut(auth);
+
         showPage("home");
 
         showNotification(
-          "success", "ออกจากระบบสำเร็จ!",
+          "success",
+          "ออกจากระบบสำเร็จ!",
           "คุณออกจากระบบ Horizon X เรียบร้อยแล้ว 👋"
         );
       } catch (error) {
         console.error("Sign-out error:", error);
 
         showNotification(
-          "error", "ออกจากระบบไม่สำเร็จ",
+          "error",
+          "ออกจากระบบไม่สำเร็จ",
           friendlyError(error)
         );
       } finally {
@@ -710,12 +1591,17 @@
     $("navLogout").addEventListener("click", logout);
     $("dashboardLogout").addEventListener("click", logout);
 
+    /* =========================================
+       FORGOT PASSWORD
+    ========================================= */
+
     $("forgotBtn").addEventListener("click", async () => {
       if (busy) return;
 
       if (!auth) {
         showNotification(
-          "error", "ระบบยังไม่พร้อม",
+          "error",
+          "ระบบยังไม่พร้อม",
           "กรุณาตรวจสอบ Firebase Configuration"
         );
         return;
@@ -725,9 +1611,11 @@
 
       if (!email) {
         showNotification(
-          "info", "กรอกอีเมลก่อน",
+          "info",
+          "กรอกอีเมลก่อน",
           "กรอกอีเมลในช่องด้านบนเพื่อขอลิงก์ตั้งรหัสผ่านใหม่"
         );
+
         $("email").focus();
         return;
       }
@@ -738,14 +1626,16 @@
         await sendPasswordResetEmail(auth, email);
 
         showNotification(
-          "success", "ส่งคำขอแล้ว",
+          "success",
+          "ส่งคำขอแล้ว",
           "หากอีเมลนี้มีบัญชี คุณจะได้รับอีเมลสำหรับตั้งรหัสผ่านใหม่"
         );
       } catch (error) {
         console.error("Password reset error:", error);
 
         showNotification(
-          "error", "ส่งคำขอไม่สำเร็จ",
+          "error",
+          "ส่งคำขอไม่สำเร็จ",
           friendlyError(error)
         );
       } finally {
@@ -753,32 +1643,75 @@
       }
     });
 
-    try {
-      const app = getApps().length
-        ? getApps()[0]
-        : initializeApp(firebaseConfig);
+    /* =========================================
+       INITIALIZE FIREBASE
+    ========================================= */
 
-      auth = getAuth(app);
+    async function initializeFirebase() {
+      try {
+        const app = getApps().length
+          ? getApps()[0]
+          : initializeApp(firebaseConfig);
 
-      onAuthStateChanged(auth, user => {
-        if (user) {
-          $("welcomeText").textContent =
-            "บัญชี: " + (user.displayName || user.email || "ผู้ใช้ Horizon X");
-          showPage("dashboard");
-        } else {
-          showPage("home");
+        auth = getAuth(app);
+
+        /* Analytics is optional and may be unsupported in some browsers. */
+        try {
+          if (await isSupported()) {
+            getAnalytics(app);
+          }
+        } catch (analyticsError) {
+          console.warn(
+            "Firebase Analytics unavailable:",
+            analyticsError
+          );
         }
-      });
-    } catch (error) {
-      console.error("Firebase initialization error:", error);
 
-      showPage("home");
+        if (!authObserverStarted) {
+          authObserverStarted = true;
 
-      showNotification(
-        "error", "เริ่มต้นระบบไม่สำเร็จ",
-        "ตรวจสอบ Firebase Config และการตั้งค่าโปรเจกต์"
-      );
+          onAuthStateChanged(auth, user => {
+            if (user) {
+              $("welcomeText").textContent =
+                "บัญชี: " +
+                (user.displayName || user.email || "ผู้ใช้ Horizon X");
+
+              showPage("dashboard");
+            } else {
+              showPage("home");
+            }
+          }, error => {
+            console.error("Authentication state error:", error);
+
+            showPage("home");
+
+            showNotification(
+              "error",
+              "ตรวจสอบสถานะบัญชีไม่สำเร็จ",
+              friendlyError(error)
+            );
+          });
+        }
+      } catch (error) {
+        console.error("Firebase initialization error:", error);
+
+        auth = null;
+        showPage("home");
+
+        showNotification(
+          "error",
+          "เริ่มต้นระบบไม่สำเร็จ",
+          "ตรวจสอบ Firebase Config, การเชื่อมต่ออินเทอร์เน็ต และการตั้งค่าโปรเจกต์"
+        );
+      }
     }
+
+    /* =========================================
+       STARTUP
+    ========================================= */
+
+    createAmbientParticles();
+    initializeFirebase();
   </script>
 </body>
 </html>

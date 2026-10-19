@@ -21,7 +21,6 @@
 }
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -44,7 +43,6 @@ input:focus-visible {
 }
 
 button:disabled { cursor: wait; opacity: .6; }
-
 .hidden { display: none !important; }
 
 .container {
@@ -53,7 +51,6 @@ button:disabled { cursor: wait; opacity: .6; }
 }
 
 /* Ambient background */
-
 body::before {
   content: "";
   position: fixed;
@@ -74,7 +71,6 @@ body::before {
 }
 
 /* Header */
-
 header {
   height: 76px;
   display: flex;
@@ -125,13 +121,9 @@ header::after {
   filter: drop-shadow(0 0 10px rgba(255,255,255,.6));
 }
 
-.nav-actions {
-  display: flex;
-  gap: 8px;
-}
+.nav-actions { display: flex; gap: 8px; }
 
 /* Buttons */
-
 .btn {
   position: relative;
   isolation: isolate;
@@ -184,11 +176,8 @@ header::after {
   to { transform: scale(1); opacity: 0; }
 }
 
-/* Page layout and transitions */
-
-.page {
-  min-height: calc(100vh - 140px);
-}
+/* Page transitions */
+.page { min-height: calc(100vh - 140px); }
 
 .page-enter {
   animation: pageEnter .48s var(--ease) both;
@@ -226,7 +215,6 @@ header::after {
 }
 
 /* Home */
-
 .hero {
   min-height: calc(100vh - 140px);
   display: flex;
@@ -314,7 +302,6 @@ header::after {
 }
 
 /* Authentication */
-
 .auth-wrap {
   min-height: calc(100vh - 140px);
   display: grid;
@@ -425,7 +412,6 @@ header::after {
 .success { color: #a8efb2; }
 
 /* Dashboard */
-
 .dashboard { padding: 40px 0 70px; }
 
 .dash-head {
@@ -437,7 +423,6 @@ header::after {
 }
 
 .dash-head h1 { margin: 10px 0 5px; }
-
 .muted { color: var(--muted); }
 
 .grid {
@@ -555,7 +540,6 @@ input[type="range"] {
 #resetBtn { margin-top: 22px; }
 
 /* Footer */
-
 footer {
   border-top: 1px solid var(--line);
   padding: 22px 0;
@@ -567,7 +551,6 @@ footer {
 }
 
 /* Toast */
-
 .toast {
   position: fixed;
   bottom: 24px;
@@ -599,7 +582,6 @@ footer {
 }
 
 /* Mobile */
-
 @media (max-width: 700px) {
   header { height: 65px; }
 
@@ -622,20 +604,12 @@ footer {
   }
 
   .wallet, .profile { grid-column: span 12; }
-
   .settings-grid { grid-template-columns: 1fr; }
-
   .card { padding: 23px; }
   .panel { padding: 18px; }
-
   .hero h1 { letter-spacing: 5px; }
-
   .hero-logo { width: min(320px, 78vw); }
-
-  .dash-head {
-    align-items: flex-start;
-  }
-
+  .dash-head { align-items: flex-start; }
   footer { flex-direction: column; }
 }
 
@@ -656,8 +630,8 @@ footer {
 }
 </style>
 </head>
-
 <body>
+
 <header class="container">
   <button class="brand" id="homeBtn" type="button"
           aria-label="กลับหน้าแรก Horizon X">
@@ -682,34 +656,44 @@ footer {
 
   <!-- HOME -->
   <section class="hero page" id="homePage">
-    <img class="hero-logo" src="./horizon-x.png" alt="Horizon X Logo">
+    <img class="hero-logo"
+         src="./horizon-x.png"
+         alt="Horizon X Logo">
 
     <div class="eyebrow">Beyond the ordinary</div>
+
     <h1>HORIZON X</h1>
 
     <p>
-      อีกระดับของการช้อปปิ้ง พบกับสินค้าไลฟ์สไตล์ที่คัดสรรมาเพื่อคุณ ในโลกของ Horizon X
-      
+      อีกระดับของการช้อปปิ้ง พบกับสินค้าไลฟ์สไตล์
+      ที่คัดสรรมาเพื่อคุณ ในโลกของ Horizon X
     </p>
 
     <div class="actions">
       <button class="btn primary" id="startBtn" type="button">
         เริ่มต้นใช้งาน ↗
       </button>
+
       <button class="btn" id="aboutBtn" type="button">
         เกี่ยวกับเรา
       </button>
     </div>
 
-    <p class="small">MINIMAL DESIGN · MONOCHROME · HORIZON X</p>
+    <p class="small">
+      MINIMAL DESIGN · MONOCHROME · HORIZON X
+    </p>
   </section>
 
   <!-- AUTHENTICATION -->
   <section class="auth-wrap page hidden" id="authPage">
     <div class="card">
-      <img class="auth-logo" src="./horizon-x.png" alt="Horizon X">
+
+      <img class="auth-logo"
+           src="./horizon-x.png"
+           alt="Horizon X">
 
       <h2 id="authTitle">ยินดีต้อนรับกลับ</h2>
+
       <p class="subtitle" id="authSubtitle">
         เข้าสู่ระบบเพื่อใช้งานบัญชีของคุณ
       </p>
@@ -718,46 +702,70 @@ footer {
         <button class="tab active" id="signInTab" type="button">
           เข้าสู่ระบบ
         </button>
+
         <button class="tab" id="signUpTab" type="button">
           สมัครสมาชิก
         </button>
       </div>
 
       <form id="authForm">
+
         <label class="field hidden" id="nameWrap">
           <span>ชื่อที่แสดง</span>
-          <input id="displayName" type="text" maxlength="40"
-                 autocomplete="nickname" placeholder="ชื่อของคุณ">
+          <input
+            id="displayName"
+            type="text"
+            maxlength="40"
+            autocomplete="nickname"
+            placeholder="ชื่อของคุณ">
         </label>
 
         <label class="field">
           <span>อีเมล</span>
-          <input id="email" type="email" autocomplete="email"
-                 placeholder="you@example.com" required>
+          <input
+            id="email"
+            type="email"
+            autocomplete="email"
+            placeholder="you@example.com"
+            required>
         </label>
 
         <label class="field">
           <span>รหัสผ่าน</span>
-          <input id="password" type="password" minlength="6"
-                 autocomplete="current-password"
-                 placeholder="อย่างน้อย 6 ตัวอักษร" required>
+          <input
+            id="password"
+            type="password"
+            minlength="6"
+            autocomplete="current-password"
+            placeholder="อย่างน้อย 6 ตัวอักษร"
+            required>
         </label>
 
-        <button class="btn primary full" id="submitBtn" type="submit">
+        <button
+          class="btn primary full"
+          id="submitBtn"
+          type="submit">
           เข้าสู่ระบบ
         </button>
 
-        <p class="message" id="authMessage" aria-live="polite"></p>
+        <p
+          class="message"
+          id="authMessage"
+          aria-live="polite">
+        </p>
+
       </form>
 
       <button class="btn full" id="backBtn" type="button">
         กลับหน้าแรก
       </button>
+
     </div>
   </section>
 
   <!-- DASHBOARD -->
   <section class="dashboard page hidden" id="dashboardPage">
+
     <div class="dash-head">
       <div>
         <div class="eyebrow">Personal space</div>
@@ -771,6 +779,8 @@ footer {
     </div>
 
     <div class="grid">
+
+      <!-- WALLET -->
       <article class="panel wallet">
         <div class="panel-head">
           <strong>ยอดคงเหลือ</strong>
@@ -778,11 +788,13 @@ footer {
         </div>
 
         <div class="balance">฿0.00</div>
+
         <div class="small">
           กระเป๋าเงินตัวอย่าง · ยังไม่เชื่อมระบบเงินจริง
         </div>
       </article>
 
+      <!-- PROFILE -->
       <article class="panel profile">
         <div class="panel-head">
           <strong>โปรไฟล์ของคุณ</strong>
@@ -791,15 +803,19 @@ footer {
 
         <div class="profile-row">
           <div class="avatar" id="avatar">HX</div>
+
           <div>
             <strong id="profileName">ผู้ใช้งาน</strong>
             <span id="profileEmail"></span>
           </div>
         </div>
 
-        <div class="small">สถานะ: เข้าสู่ระบบแล้ว</div>
+        <div class="small">
+          สถานะ: เข้าสู่ระบบแล้ว
+        </div>
       </article>
 
+      <!-- SETTINGS -->
       <article class="panel settings">
         <div class="panel-head">
           <strong>ปรับแต่งหน้าตา</strong>
@@ -807,29 +823,55 @@ footer {
         </div>
 
         <div class="settings-grid">
+
           <div>
             <div class="range-head">
-              <label for="widthRange">ความกว้างเนื้อหา</label>
-              <output id="widthValue" for="widthRange">1120 px</output>
+              <label for="widthRange">
+                ความกว้างเนื้อหา
+              </label>
+
+              <output id="widthValue" for="widthRange">
+                1120 px
+              </output>
             </div>
-            <input id="widthRange" type="range" min="900" max="1400"
-                   step="20" value="1120">
+
+            <input
+              id="widthRange"
+              type="range"
+              min="900"
+              max="1400"
+              step="20"
+              value="1120">
           </div>
 
           <div>
             <div class="range-head">
-              <label for="radiusRange">ความโค้งของการ์ด</label>
-              <output id="radiusValue" for="radiusRange">18 px</output>
+              <label for="radiusRange">
+                ความโค้งของการ์ด
+              </label>
+
+              <output id="radiusValue" for="radiusRange">
+                18 px
+              </output>
             </div>
-            <input id="radiusRange" type="range" min="8" max="30"
-                   step="2" value="18">
+
+            <input
+              id="radiusRange"
+              type="range"
+              min="8"
+              max="30"
+              step="2"
+              value="18">
           </div>
+
         </div>
 
         <button class="btn" id="resetBtn" type="button">
           คืนค่าเริ่มต้น
         </button>
+
       </article>
+
     </div>
   </section>
 
@@ -840,9 +882,12 @@ footer {
   <span>Built for a clearer digital horizon.</span>
 </footer>
 
-<div class="toast hidden" id="toast" role="status"
-     aria-live="polite"></div>
-
+<div
+  class="toast hidden"
+  id="toast"
+  role="status"
+  aria-live="polite">
+</div>
 <script type="module">
 import { initializeApp }
   from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
@@ -856,23 +901,18 @@ import {
   updateProfile
 } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js";
 
-/*
-  FIREBASE SETUP
-  1. Firebase Console > Create project
-  2. Authentication > Sign-in method > Email/Password > Enable
-  3. Project settings > Your apps > Web app
-  4. Copy the real config into the object below
-*/
-
+/* FIREBASE CONFIGURATION */
 const firebaseConfig = {
-  apiKey: "ใส่_API_KEY_ของคุณ",
+  apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
   authDomain: "horizon-x-f920b.firebaseapp.com",
   projectId: "horizon-x-f920b",
   storageBucket: "horizon-x-f920b.firebasestorage.app",
-  messagingSenderId: "ใส่_MESSAGING_SENDER_ID",
-  appId: "ใส่_APP_ID_ของคุณ"
+  messagingSenderId: "621329414639",
+  appId: "1:621329414639:web:16024b58edcb6348491e1a",
+  measurementId: "G-Y8NRP7NSCC"
 };
 
+/* INITIALIZE */
 const $ = id => document.getElementById(id);
 
 const homePage = $("homePage");
@@ -893,8 +933,7 @@ let toastTimeout = null;
 
 $("year").textContent = new Date().getFullYear();
 
-/* Notifications */
-
+/* TOAST NOTIFICATIONS */
 function showToast(message) {
   const toast = $("toast");
 
@@ -907,21 +946,32 @@ function showToast(message) {
   }, 2800);
 }
 
-/* Page transition */
-
+/* PAGE TRANSITIONS */
 function showPage(page) {
   const target = pages[page];
   if (!target) return;
 
-  $("loginNav").classList.toggle("hidden", page === "dashboard");
-  $("dashNav").classList.toggle("hidden", page !== "dashboard");
-  $("logoutNav").classList.toggle("hidden", page !== "dashboard");
+  $("loginNav").classList.toggle(
+    "hidden", page === "dashboard"
+  );
 
-  if (currentPage === page && !target.classList.contains("hidden")) {
+  $("dashNav").classList.toggle(
+    "hidden", page !== "dashboard"
+  );
+
+  $("logoutNav").classList.toggle(
+    "hidden", page !== "dashboard"
+  );
+
+  if (
+    currentPage === page &&
+    !target.classList.contains("hidden")
+  ) {
     return;
   }
 
   const transitionId = ++pageTransitionId;
+
   const previous = Object.values(pages).find(
     element => !element.classList.contains("hidden")
   );
@@ -973,8 +1023,7 @@ function showPage(page) {
   }, 220);
 }
 
-/* Auth form modes */
-
+/* AUTH FORM */
 function setMessage(message, type = "") {
   $("authMessage").textContent = message;
   $("authMessage").className = "message " + type;
@@ -985,6 +1034,7 @@ function setAuthMode(signUp) {
 
   $("signInTab").classList.toggle("active", !signUp);
   $("signUpTab").classList.toggle("active", signUp);
+
   $("nameWrap").classList.toggle("hidden", !signUp);
   $("displayName").required = signUp;
 
@@ -1018,8 +1068,7 @@ function openAuth(signUp = false) {
   showPage("auth");
 }
 
-/* User profile */
-
+/* USER PROFILE */
 function renderUser(user) {
   const name =
     user.displayName ||
@@ -1031,48 +1080,71 @@ function renderUser(user) {
   $("avatar").textContent = name.slice(0, 2).toUpperCase();
 }
 
-/* Friendly Firebase errors */
-
+/* FRIENDLY ERRORS */
 function friendlyError(error) {
   const messages = {
     "auth/email-already-in-use":
       "อีเมลนี้ถูกใช้งานแล้ว",
+
     "auth/invalid-email":
       "รูปแบบอีเมลไม่ถูกต้อง",
+
     "auth/weak-password":
-      "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+      "รหัสผ่านไม่ปลอดภัยหรือสั้นเกินไป",
+
     "auth/invalid-credential":
       "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+
     "auth/user-not-found":
       "ไม่พบบัญชีนี้ กรุณาตรวจสอบอีเมล",
+
     "auth/wrong-password":
       "รหัสผ่านไม่ถูกต้อง",
+
     "auth/too-many-requests":
       "ลองหลายครั้งเกินไป กรุณารอสักครู่",
+
     "auth/network-request-failed":
       "เชื่อมต่ออินเทอร์เน็ตไม่ได้",
+
     "auth/operation-not-allowed":
-      "กรุณาเปิดใช้งาน Email/Password ใน Firebase",
+      "กรุณาเปิด Email/Password ใน Firebase",
+
     "auth/unauthorized-domain":
-      "โดเมนเว็บไซต์ยังไม่ได้รับอนุญาตใน Firebase"
+      "โดเมนเว็บไซต์ยังไม่ได้รับอนุญาตใน Firebase",
+
+    "auth/invalid-api-key":
+      "API Key ไม่ถูกต้อง กรุณาตรวจสอบ Firebase Config"
   };
 
   return messages[error.code] ||
-    "เกิดข้อผิดพลาด กรุณาตรวจสอบ Firebase configuration";
+    "เกิดข้อผิดพลาด กรุณาตรวจสอบการตั้งค่า Firebase";
 }
 
-/* Navigation */
-
+/* NAVIGATION */
 $("homeBtn").addEventListener("click", () => {
   showPage(auth?.currentUser ? "dashboard" : "home");
 });
 
-$("loginNav").addEventListener("click", () => openAuth(false));
-$("startBtn").addEventListener("click", () => openAuth(false));
-$("backBtn").addEventListener("click", () => showPage("home"));
+$("loginNav").addEventListener("click", () => {
+  openAuth(false);
+});
 
-$("signInTab").addEventListener("click", () => setAuthMode(false));
-$("signUpTab").addEventListener("click", () => setAuthMode(true));
+$("startBtn").addEventListener("click", () => {
+  openAuth(false);
+});
+
+$("backBtn").addEventListener("click", () => {
+  showPage("home");
+});
+
+$("signInTab").addEventListener("click", () => {
+  setAuthMode(false);
+});
+
+$("signUpTab").addEventListener("click", () => {
+  setAuthMode(true);
+});
 
 $("dashNav").addEventListener("click", () => {
   if (auth?.currentUser) showPage("dashboard");
@@ -1082,14 +1154,13 @@ $("aboutBtn").addEventListener("click", () => {
   showToast("Horizon X — Beyond the ordinary.");
 });
 
-/* Login and registration */
-
+/* REGISTER AND LOGIN */
 $("authForm").addEventListener("submit", async event => {
   event.preventDefault();
 
   if (!auth) {
     setMessage(
-      "ยังไม่ได้ตั้งค่า Firebase กรุณาใส่ Configuration จริงก่อน",
+      "Firebase ยังไม่พร้อมใช้งาน กรุณาตรวจสอบ Configuration",
       "error"
     );
     return;
@@ -1099,7 +1170,6 @@ $("authForm").addEventListener("submit", async event => {
   const password = $("password").value;
   const name = $("displayName").value.trim();
   const submit = $("submitBtn");
-
   const modeAtSubmit = isSignUp;
 
   submit.disabled = true;
@@ -1109,7 +1179,9 @@ $("authForm").addEventListener("submit", async event => {
   try {
     if (modeAtSubmit) {
       const result = await createUserWithEmailAndPassword(
-        auth, email, password
+        auth,
+        email,
+        password
       );
 
       if (name) {
@@ -1118,22 +1190,30 @@ $("authForm").addEventListener("submit", async event => {
         });
       }
 
-      renderUser(result.user);
-      setMessage("สมัครสมาชิกสำเร็จ", "success");
-      showToast("ยินดีต้อนรับสู่ Horizon X");
+      await result.user.reload();
+
+      renderUser(auth.currentUser || result.user);
+
+      showToast("สมัครสมาชิกสำเร็จ ยินดีต้อนรับสู่ Horizon X");
       showPage("dashboard");
+
     } else {
       const result = await signInWithEmailAndPassword(
-        auth, email, password
+        auth,
+        email,
+        password
       );
 
       renderUser(result.user);
-      setMessage("เข้าสู่ระบบสำเร็จ", "success");
+
       showToast("เข้าสู่ระบบสำเร็จ");
       showPage("dashboard");
     }
+
   } catch (error) {
+    console.error("Authentication error:", error);
     setMessage(friendlyError(error), "error");
+
   } finally {
     submit.disabled = false;
     submit.textContent = isSignUp
@@ -1142,71 +1222,68 @@ $("authForm").addEventListener("submit", async event => {
   }
 });
 
-/* Sign out */
-
+/* LOGOUT */
 async function logout() {
   if (!auth?.currentUser) {
     showPage("home");
     return;
   }
 
-  const buttons = [$("logoutNav"), $("dashLogoutBtn")];
-  buttons.forEach(button => button.disabled = true);
+  const buttons = [
+    $("logoutNav"),
+    $("dashLogoutBtn")
+  ];
+
+  buttons.forEach(button => {
+    button.disabled = true;
+  });
 
   try {
     await signOut(auth);
     showPage("home");
     showToast("ออกจากระบบแล้ว");
+
   } catch (error) {
     console.error("Sign-out error:", error);
     showToast("ออกจากระบบไม่สำเร็จ กรุณาลองอีกครั้ง");
+
   } finally {
-    buttons.forEach(button => button.disabled = false);
+    buttons.forEach(button => {
+      button.disabled = false;
+    });
   }
 }
 
 $("logoutNav").addEventListener("click", logout);
 $("dashLogoutBtn").addEventListener("click", logout);
 
-/* Firebase initialization */
+/* FIREBASE INITIALIZATION */
+try {
+  const app = initializeApp(firebaseConfig);
+  auth = getAuth(app);
 
-const configured =
-  firebaseConfig.apiKey !== "ใส่_API_KEY_ของคุณ" &&
-  firebaseConfig.messagingSenderId !== "ใส่_MESSAGING_SENDER_ID" &&
-  firebaseConfig.appId !== "ใส่_APP_ID_ของคุณ" &&
-  firebaseConfig.apiKey.trim() !== "" &&
-  firebaseConfig.messagingSenderId.trim() !== "" &&
-  firebaseConfig.appId.trim() !== "";
+  onAuthStateChanged(auth, user => {
+    if (user) {
+      renderUser(user);
+      showPage("dashboard");
+    } else {
+      showPage("home");
+    }
+  });
 
-if (configured) {
-  try {
-    const app = initializeApp(firebaseConfig);
-    auth = getAuth(app);
-
-    onAuthStateChanged(auth, user => {
-      if (user) {
-        renderUser(user);
-        showPage("dashboard");
-      } else {
-        showPage("home");
-      }
-    });
-  } catch (error) {
-    console.error("Firebase initialization error:", error);
-    showPage("home");
-    showToast("Firebase ตั้งค่าไม่ถูกต้อง");
-  }
-} else {
+} catch (error) {
+  console.error("Firebase initialization error:", error);
   showPage("home");
+  showToast("Firebase ตั้งค่าไม่ถูกต้อง");
 }
 
-/* Dashboard customization */
-
+/* DASHBOARD CUSTOMIZATION */
 $("widthRange").addEventListener("input", event => {
   const value = Number(event.target.value);
 
   document.documentElement.style.setProperty(
-    "--width", value + "px"
+    "--width",
+    value + "px"
   );
 
   $("widthValue").textContent = value + " px";
@@ -1216,7 +1293,8 @@ $("radiusRange").addEventListener("input", event => {
   const value = Number(event.target.value);
 
   document.documentElement.style.setProperty(
-    "--radius", value + "px"
+    "--radius",
+    value + "px"
   );
 
   $("radiusValue").textContent = value + " px";
@@ -1226,8 +1304,13 @@ $("resetBtn").addEventListener("click", () => {
   $("widthRange").value = 1120;
   $("radiusRange").value = 18;
 
-  document.documentElement.style.setProperty("--width", "1120px");
-  document.documentElement.style.setProperty("--radius", "18px");
+  document.documentElement.style.setProperty(
+    "--width", "1120px"
+  );
+
+  document.documentElement.style.setProperty(
+    "--radius", "18px"
+  );
 
   $("widthValue").textContent = "1120 px";
   $("radiusValue").textContent = "18 px";
@@ -1235,8 +1318,7 @@ $("resetBtn").addEventListener("click", () => {
   showToast("คืนค่าการตั้งค่าแล้ว");
 });
 
-/* Ripple effect for buttons */
-
+/* BUTTON RIPPLE */
 document.querySelectorAll("button").forEach(button => {
   button.addEventListener("click", event => {
     if (button.disabled) return;
@@ -1268,5 +1350,6 @@ document.querySelectorAll("button").forEach(button => {
   });
 });
 </script>
+
 </body>
 </html>

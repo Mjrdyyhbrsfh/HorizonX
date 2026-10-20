@@ -1,0 +1,1582 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#050505">
+  <meta name="description" content="Horizon X — Beyond the Ordinary">
+  <title>Horizon X — Digital Store</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #050505;
+      --panel: #101010;
+      --panel2: #171717;
+      --line: #292929;
+      --white: #f5f5f5;
+      --muted: #999;
+      --accent: #fff;
+      --danger: #ff6262;
+      --success: #79e6a2;
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      background:
+        radial-gradient(ellipse at 50% -20%, #272727 0, transparent 50%),
+        var(--bg);
+      color: var(--white);
+      font-family: "Prompt", sans-serif;
+      min-height: 100vh;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: .16;
+      background-image:
+        linear-gradient(#fff 1px, transparent 1px),
+        linear-gradient(90deg, #fff 1px, transparent 1px);
+      background-size: 54px 54px;
+      mask-image: linear-gradient(to bottom, #000, transparent 80%);
+    }
+
+    button, input, textarea, select { font: inherit; }
+    button { cursor: pointer; }
+    button:disabled { opacity: .45; cursor: not-allowed; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .container {
+      width: min(1180px, 92%);
+      margin: auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: #050505d9;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      min-height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .brand {
+      font: 800 23px "Orbitron", sans-serif;
+      letter-spacing: 2px;
+      white-space: nowrap;
+    }
+
+    .brand span { color: #999; }
+
+    .nav-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 42px;
+      padding: 10px 16px;
+      color: #fff;
+      background: #171717;
+      border: 1px solid #383838;
+      border-radius: 12px;
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      border-color: #fff;
+      transform: translateY(-1px);
+    }
+
+    .btn.primary {
+      color: #050505;
+      background: #fff;
+      border-color: #fff;
+      font-weight: 700;
+    }
+
+    .btn.danger {
+      border-color: #783737;
+      color: #ff9a9a;
+    }
+
+    .btn.small {
+      min-height: 34px;
+      padding: 6px 10px;
+      font-size: 13px;
+    }
+
+    .hero {
+      padding: 78px 0 54px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid #3a3a3a;
+      border-radius: 99px;
+      padding: 7px 13px;
+      color: #bbb;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: white;
+      box-shadow: 0 0 12px white;
+    }
+
+    h1 {
+      font: 800 clamp(35px, 8vw, 76px) "Orbitron", sans-serif;
+      line-height: 1.1;
+      letter-spacing: -2px;
+      margin: 24px 0 16px;
+    }
+
+    h1 span {
+      color: transparent;
+      -webkit-text-stroke: 1px #eee;
+    }
+
+    .hero p {
+      max-width: 620px;
+      margin: 0 auto 26px;
+      color: #aaa;
+      line-height: 1.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 12px auto 56px;
+    }
+
+    .stat {
+      border: 1px solid var(--line);
+      background: #101010b8;
+      border-radius: 16px;
+      padding: 19px;
+      text-align: center;
+    }
+
+    .stat strong {
+      display: block;
+      font: 700 23px "Orbitron", sans-serif;
+    }
+
+    .stat span {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .section { padding: 20px 0 55px; }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 15px;
+      margin-bottom: 22px;
+    }
+
+    .section-head h2 {
+      font: 700 25px "Orbitron", sans-serif;
+      margin: 0 0 6px;
+    }
+
+    .section-head p {
+      color: var(--muted);
+      margin: 0;
+      font-size: 13px;
+    }
+
+    .search {
+      width: min(300px, 100%);
+    }
+
+    input, textarea, select {
+      width: 100%;
+      min-height: 44px;
+      color: white;
+      background: #090909;
+      border: 1px solid #333;
+      border-radius: 11px;
+      padding: 11px 13px;
+      outline: none;
+    }
+
+    textarea { resize: vertical; min-height: 90px; }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #aaa;
+    }
+
+    label {
+      display: block;
+      color: #bbb;
+      font-size: 13px;
+      margin: 12px 0 6px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 17px;
+    }
+
+    .product {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      background: linear-gradient(145deg, #151515, #090909);
+      border-radius: var(--radius);
+      transition: .25s ease;
+    }
+
+    .product:hover {
+      transform: translateY(-4px);
+      border-color: #777;
+      box-shadow: 0 16px 50px #0008;
+    }
+
+    .product-image {
+      height: 190px;
+      display: grid;
+      place-items: center;
+      background:
+        radial-gradient(circle at 50% 45%, #383838, transparent 50%),
+        #0b0b0b;
+      border-bottom: 1px solid var(--line);
+      overflow: hidden;
+    }
+
+    .product-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .product-placeholder {
+      font: 700 32px "Orbitron", sans-serif;
+      color: #555;
+    }
+
+    .product-content { padding: 17px; }
+
+    .product-content h3 { margin: 0 0 8px; font-size: 17px; }
+
+    .product-content p {
+      min-height: 42px;
+      color: #aaa;
+      font-size: 13px;
+      line-height: 1.7;
+      white-space: pre-wrap;
+      overflow-wrap: anywhere;
+    }
+
+    .product-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      margin-top: 16px;
+    }
+
+    .price { font-size: 19px; font-weight: 700; }
+
+    .muted { color: var(--muted); font-size: 12px; }
+
+    .panel {
+      padding: 22px;
+      border: 1px solid var(--line);
+      background: #101010e8;
+      border-radius: var(--radius);
+      margin-bottom: 18px;
+    }
+
+    .panel h3 { margin-top: 0; }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .balance {
+      font: 700 clamp(27px, 5vw, 42px) "Orbitron", sans-serif;
+      margin: 12px 0;
+      overflow-wrap: anywhere;
+    }
+
+    .list { display: grid; gap: 10px; }
+
+    .list-item {
+      border: 1px solid #2a2a2a;
+      background: #0a0a0a;
+      border-radius: 12px;
+      padding: 14px;
+      overflow-wrap: anywhere;
+    }
+
+    .list-item-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .status {
+      display: inline-block;
+      border: 1px solid #444;
+      border-radius: 99px;
+      padding: 3px 9px;
+      font-size: 11px;
+      color: #ccc;
+    }
+
+    .status.approved, .status.completed {
+      color: var(--success);
+      border-color: #315d40;
+    }
+
+    .status.rejected, .status.cancelled {
+      color: #ff9a9a;
+      border-color: #733;
+    }
+
+    .hidden { display: none !important; }
+
+    .notice {
+      color: #bbb;
+      background: #171717;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 13px;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .notice.warning {
+      border-color: #6e5830;
+      color: #e7d2a0;
+    }
+
+    .notice.success {
+      border-color: #315d40;
+      color: #a9f1c1;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0 12px;
+    }
+
+    .form-grid .full { grid-column: 1 / -1; }
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      z-index: 100;
+      background: #000c;
+      backdrop-filter: blur(10px);
+      display: grid;
+      place-items: center;
+      padding: 18px;
+    }
+
+    .modal-card {
+      width: min(470px, 100%);
+      max-height: 90vh;
+      overflow: auto;
+      padding: 24px;
+      border: 1px solid #414141;
+      border-radius: 20px;
+      background: #101010;
+      box-shadow: 0 25px 100px #000;
+    }
+
+    .modal-title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .modal-title h2 {
+      font: 700 21px "Orbitron", sans-serif;
+    }
+
+    .close {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      color: white;
+      background: #1a1a1a;
+      border: 1px solid #333;
+    }
+
+    .toast {
+      position: fixed;
+      z-index: 200;
+      left: 50%;
+      bottom: 22px;
+      transform: translate(-50%, 20px);
+      width: max-content;
+      max-width: 90%;
+      background: #f5f5f5;
+      color: #050505;
+      padding: 12px 18px;
+      border-radius: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: .25s;
+      box-shadow: 0 10px 40px #0008;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 28px 0;
+      color: #777;
+      font-size: 12px;
+      text-align: center;
+      line-height: 1.9;
+    }
+
+    .admin-tools {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 15px 0;
+    }
+
+    @media (max-width: 800px) {
+      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .product-image { height: 160px; }
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    @media (max-width: 520px) {
+      .nav { align-items: flex-start; padding: 15px 0; }
+      .brand { font-size: 18px; padding-top: 8px; }
+      .nav-actions { max-width: 65%; }
+      .nav-actions .btn { padding: 8px 10px; font-size: 12px; }
+      .hero { padding-top: 55px; }
+      .stats { gap: 7px; }
+      .stat { padding: 12px 5px; }
+      .stat strong { font-size: 17px; }
+      .stat span { font-size: 10px; }
+      .products { grid-template-columns: 1fr; }
+      .product-image { height: 210px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .form-grid .full { grid-column: auto; }
+      .panel { padding: 16px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        scroll-behavior: auto !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="container nav">
+      <a class="brand" href="#">HORIZON <span>X</span></a>
+      <div class="nav-actions">
+        <button class="btn" id="accountBtn">เข้าสู่ระบบ</button>
+        <button class="btn" id="walletBtn">Wallet ฿0</button>
+        <button class="btn primary" id="cartBtn">ตะกร้า <span id="cartCount">0</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="container hero">
+      <div class="eyebrow"><span class="dot"></span> DIGITAL STORE • NEXT GENERATION</div>
+      <h1>HORIZON <span>X</span></h1>
+      <p>
+        Beyond the ordinary. ค้นพบสินค้าและบริการดิจิทัล
+        ในประสบการณ์ร้านค้าโมโนโครมที่เรียบง่าย ทันสมัย และรวดเร็ว
+      </p>
+      <div class="hero-actions">
+        <a class="btn primary" href="#store">สำรวจสินค้า ↗</a>
+        <button class="btn" id="heroWalletBtn">เติมเงิน Wallet</button>
+      </div>
+    </section>
+
+    <section class="container stats">
+      <div class="stat"><strong id="productCount">0</strong><span>PRODUCTS</span></div>
+      <div class="stat"><strong id="memberState">GUEST</strong><span>ACCOUNT STATUS</span></div>
+      <div class="stat"><strong id="connectionState">CONNECTING</strong><span>SYSTEM STATUS</span></div>
+    </section>
+
+    <section class="container section" id="store">
+      <div class="section-head">
+        <div>
+          <h2>THE STORE</h2>
+          <p>เลือกสินค้าดิจิทัลที่เหมาะกับคุณ</p>
+        </div>
+        <input class="search" id="searchInput" placeholder="ค้นหาสินค้า...">
+      </div>
+      <div class="products" id="products">
+        <div class="notice">กำลังโหลดสินค้า...</div>
+      </div>
+    </section>
+
+    <section class="container section hidden" id="accountSection">
+      <div class="section-head">
+        <div>
+          <h2>MY ACCOUNT</h2>
+          <p>ข้อมูลสมาชิก กระเป๋าเงิน และรายการของคุณ</p>
+        </div>
+      </div>
+      <div class="grid-2">
+        <div class="panel">
+          <h3>WALLET BALANCE</h3>
+          <div class="balance" id="walletBalance">฿0.00</div>
+          <p class="muted" id="userEmail">ยังไม่ได้เข้าสู่ระบบ</p>
+          <div class="admin-tools">
+            <button class="btn primary" id="topupBtn">แจ้งเติมเงิน</button>
+            <button class="btn" id="refreshBtn">รีเฟรช</button>
+            <button class="btn danger" id="logoutBtn">ออกจากระบบ</button>
+          </div>
+          <p class="muted">ยอดเงินจะแสดงจากฐานข้อมูล Firestore ไม่ใช่ยอดที่เก็บไว้เฉพาะในเบราว์เซอร์</p>
+        </div>
+        <div class="panel">
+          <h3>เติมเงินผ่าน TrueMoney</h3>
+          <p>เบอร์รับชำระที่ผู้ดูแลกำหนด:</p>
+          <div class="balance" style="font-size:25px">0939432704</div>
+          <div class="notice warning">
+            โอนเงินเฉพาะเมื่อคุณตรวจสอบผู้รับและจำนวนเงินถูกต้องแล้ว
+            หลังชำระให้ส่งเลขอ้างอิงผ่านแบบฟอร์มเติมเงิน
+            รายการจะรอแอดมินตรวจสอบก่อนอนุมัติ
+          </div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="panel">
+          <h3>ประวัติเติมเงิน</h3>
+          <div class="list" id="topupHistory"><p class="muted">เข้าสู่ระบบเพื่อดูรายการ</p></div>
+        </div>
+        <div class="panel">
+          <h3>ประวัติคำสั่งซื้อ</h3>
+          <div class="list" id="orderHistory"><p class="muted">เข้าสู่ระบบเพื่อดูรายการ</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section hidden" id="adminSection">
+      <div class="section-head">
+        <div>
+          <h2>ADMIN CONSOLE</h2>
+          <p>พื้นที่จัดการสำหรับบัญชีผู้ดูแลที่ได้รับสิทธิ์จาก Firestore</p>
+        </div>
+        <span class="status approved">ADMIN VERIFIED</span>
+      </div>
+
+      <div class="panel">
+        <h3>เพิ่มสินค้าใหม่</h3>
+        <form id="productForm">
+          <div class="form-grid">
+            <div>
+              <label for="productName">ชื่อสินค้า</label>
+              <input id="productName" maxlength="100" required>
+            </div>
+            <div>
+              <label for="productPrice">ราคา (บาท)</label>
+              <input id="productPrice" type="number" min="0" max="1000000" step="0.01" required>
+            </div>
+            <div class="full">
+              <label for="productImage">URL รูปภาพ (ถ้ามี)</label>
+              <input id="productImage" type="url" placeholder="https://example.com/image.jpg">
+            </div>
+            <div class="full">
+              <label for="productDescription">รายละเอียดสินค้า</label>
+              <textarea id="productDescription" maxlength="2000"></textarea>
+            </div>
+          </div>
+          <button class="btn primary" type="submit">+ เพิ่มสินค้า</button>
+        </form>
+      </div>
+
+      <div class="panel">
+        <h3>จัดการสินค้า</h3>
+        <div class="list" id="adminProducts"><p class="muted">กำลังโหลด...</p></div>
+      </div>
+
+      <div class="panel">
+        <h3>รายการเติมเงิน</h3>
+        <div class="list" id="adminTopups"><p class="muted">กำลังโหลด...</p></div>
+      </div>
+
+      <div class="panel">
+        <h3>คำสั่งซื้อทั้งหมด</h3>
+        <div class="list" id="adminOrders"><p class="muted">กำลังโหลด...</p></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <div class="brand">HORIZON <span>X</span></div>
+      <p>BEYOND THE ORDINARY • DIGITAL COMMERCE</p>
+      <p>ระบบนี้ต้องตั้งค่า Firebase Security Rules ก่อนใช้งานจริง</p>
+    </div>
+  </footer>
+
+  <div class="modal hidden" id="authModal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <h2 id="authTitle">เข้าสู่ระบบ</h2>
+        <button class="close" data-close="authModal" aria-label="ปิด">✕</button>
+      </div>
+      <form id="authForm">
+        <label for="authEmail">อีเมล</label>
+        <input id="authEmail" type="email" autocomplete="email" required>
+        <label for="authPassword">รหัสผ่าน</label>
+        <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required>
+        <div class="admin-tools">
+          <button class="btn primary" type="submit" id="authSubmit">เข้าสู่ระบบ</button>
+          <button class="btn" type="button" id="switchAuth">สร้างบัญชี</button>
+        </div>
+        <button class="btn" type="button" id="resetPassword">ส่งลิงก์รีเซ็ตรหัสผ่าน</button>
+      </form>
+      <p class="muted">อย่าใช้รหัสผ่านเดียวกับบัญชีสำคัญอื่น</p>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="cartModal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <h2>YOUR CART</h2>
+        <button class="close" data-close="cartModal">✕</button>
+      </div>
+      <div class="list" id="cartItems"></div>
+      <div class="balance" id="cartTotal" style="font-size:25px">฿0.00</div>
+      <div class="notice warning">
+        คำสั่งซื้อจะถูกบันทึกเป็นรายการรอตรวจสอบ ไม่ได้หักยอด Wallet อัตโนมัติ
+      </div>
+      <button class="btn primary" id="checkoutBtn" style="width:100%;margin-top:14px">
+        ยืนยันคำสั่งซื้อ
+      </button>
+    </div>
+  </div>
+
+  <div class="modal hidden" id="topupModal">
+    <div class="modal-card">
+      <div class="modal-title">
+        <h2>TOP UP WALLET</h2>
+        <button class="close" data-close="topupModal">✕</button>
+      </div>
+      <div class="notice warning">
+        เบอร์ TrueMoney: <strong>0939432704</strong><br>
+        ตรวจสอบชื่อผู้รับในแอปก่อนยืนยันการโอนทุกครั้ง
+        แบบฟอร์มนี้ไม่ได้ยืนยันการชำระเงินแทนผู้ให้บริการ
+      </div>
+      <form id="topupForm">
+        <label for="topupAmount">จำนวนเงิน (บาท)</label>
+        <input id="topupAmount" type="number" min="1" max="10000" step="0.01" required>
+        <label for="topupReference">เลขอ้างอิงธุรกรรม</label>
+        <input id="topupReference" maxlength="120" required placeholder="กรอกเลขอ้างอิงจากรายการจริง">
+        <label for="topupNote">หมายเหตุ (ไม่บังคับ)</label>
+        <textarea id="topupNote" maxlength="500" placeholder="ข้อมูลเพิ่มเติมสำหรับแอดมิน"></textarea>
+        <button class="btn primary" type="submit" style="width:100%;margin-top:15px">
+          ส่งคำขอเติมเงิน
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
+    import {
+      getAuth,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      sendPasswordResetEmail,
+      signOut,
+      onAuthStateChanged
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
+
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDoc,
+      getDocs,
+      addDoc,
+      updateDoc,
+      deleteDoc,
+      setDoc,
+      query,
+      where,
+      orderBy,
+      limit,
+      onSnapshot,
+      serverTimestamp,
+      runTransaction
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
+
+    import {
+      getAnalytics,
+      isSupported
+    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
+
+    // Firebase web configuration supplied for Horizon X.
+    const firebaseConfig = {
+      apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
+      authDomain: "horizon-x-f920b.firebaseapp.com",
+      projectId: "horizon-x-f920b",
+      storageBucket: "horizon-x-f920b.firebasestorage.app",
+      messagingSenderId: "621329414639",
+      appId: "1:621329414639:web:16024b58edcb6348491e1a",
+      measurementId: "G-Y8NRP7NSCC"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    isSupported()
+      .then(ok => ok ? getAnalytics(app) : null)
+      .catch(() => null);
+
+    const $ = id => document.getElementById(id);
+    const money = amount =>
+      new Intl.NumberFormat("th-TH", {
+        style: "currency",
+        currency: "THB"
+      }).format(Number(amount || 0));
+
+    let currentUser = null;
+    let currentRole = "guest";
+    let currentBalance = 0;
+    let authMode = "login";
+    let products = [];
+    let cart = [];
+    let unsubProducts = null;
+    let unsubUser = null;
+    let unsubTopups = null;
+    let unsubOrders = null;
+    let unsubAdminTopups = null;
+    let unsubAdminOrders = null;
+    let toastTimer = null;
+
+    function toast(message) {
+      $("toast").textContent = message;
+      $("toast").classList.add("show");
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3200);
+    }
+
+    function showModal(id) {
+      $(id).classList.remove("hidden");
+    }
+
+    function hideModal(id) {
+      $(id).classList.add("hidden");
+    }
+
+    function escapeHTML(value = "") {
+      return String(value).replace(/[&<>"']/g, char => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        '"': "&quot;",
+        "'": "&#39;"
+      })[char]);
+    }
+
+    function formatDate(value) {
+      if (!value) return "รอสถานะเวลา";
+      const date = typeof value.toDate === "function" ? value.toDate() : new Date(value);
+      if (Number.isNaN(date.getTime())) return "ไม่ทราบเวลา";
+      return date.toLocaleString("th-TH");
+    }
+
+    function statusHTML(status) {
+      const labels = {
+        pending: "รอตรวจสอบ",
+        approved: "อนุมัติแล้ว",
+        rejected: "ปฏิเสธ",
+        processing: "กำลังดำเนินการ",
+        completed: "เสร็จสิ้น",
+        cancelled: "ยกเลิก"
+      };
+      const safe = labels[status] ? status : "pending";
+      return `<span class="status ${safe}">${labels[safe]}</span>`;
+    }
+
+    function stopListeners() {
+      [unsubUser, unsubTopups, unsubOrders, unsubAdminTopups, unsubAdminOrders]
+        .forEach(unsub => { if (unsub) unsub(); });
+      unsubUser = unsubTopups = unsubOrders = null;
+      unsubAdminTopups = unsubAdminOrders = null;
+    }
+
+    function setConnection(text) {
+      $("connectionState").textContent = text;
+    }
+
+    function updateAccountUI() {
+      $("accountBtn").textContent = currentUser
+        ? (currentUser.email || "บัญชี")
+        : "เข้าสู่ระบบ";
+      $("memberState").textContent = currentUser ? "MEMBER" : "GUEST";
+      $("walletBtn").textContent = `Wallet ${money(currentBalance)}`;
+      $("walletBalance").textContent = money(currentBalance);
+      $("userEmail").textContent = currentUser
+        ? currentUser.email
+        : "ยังไม่ได้เข้าสู่ระบบ";
+      $("accountSection").classList.toggle("hidden", !currentUser);
+      $("adminSection").classList.toggle("hidden", currentRole !== "admin");
+      $("logoutBtn").classList.toggle("hidden", !currentUser);
+    }
+
+    function openAccount() {
+      if (!currentUser) {
+        authMode = "login";
+        updateAuthModal();
+        showModal("authModal");
+        return;
+      }
+      $("accountSection").scrollIntoView({ behavior: "smooth" });
+    }
+
+    function updateAuthModal() {
+      const login = authMode === "login";
+      $("authTitle").textContent = login ? "เข้าสู่ระบบ" : "สร้างบัญชี";
+      $("authSubmit").textContent = login ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
+      $("switchAuth").textContent = login ? "สร้างบัญชีใหม่" : "กลับไปเข้าสู่ระบบ";
+      $("authPassword").autocomplete = login ? "current-password" : "new-password";
+    }
+
+    $("accountBtn").addEventListener("click", openAccount);
+    $("walletBtn").addEventListener("click", openAccount);
+    $("heroWalletBtn").addEventListener("click", () => {
+      if (!currentUser) return openAccount();
+      showModal("topupModal");
+    });
+    $("topupBtn").addEventListener("click", () => showModal("topupModal"));
+    $("cartBtn").addEventListener("click", () => {
+      renderCart();
+      showModal("cartModal");
+    });
+
+    document.querySelectorAll("[data-close]").forEach(button => {
+      button.addEventListener("click", () => hideModal(button.dataset.close));
+    });
+
+    document.querySelectorAll(".modal").forEach(modal => {
+      modal.addEventListener("click", event => {
+        if (event.target === modal) hideModal(modal.id);
+      });
+    });
+
+    $("switchAuth").addEventListener("click", () => {
+      authMode = authMode === "login" ? "register" : "login";
+      updateAuthModal();
+    });
+
+    $("authForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      const email = $("authEmail").value.trim();
+      const password = $("authPassword").value;
+      const submit = $("authSubmit");
+      submit.disabled = true;
+
+      try {
+        if (authMode === "register") {
+          const credential = await createUserWithEmailAndPassword(auth, email, password);
+          await setDoc(doc(db, "users", credential.user.uid), {
+            email: credential.user.email || email,
+            role: "user",
+            walletBalance: 0,
+            createdAt: serverTimestamp()
+          });
+          toast("สมัครสมาชิกสำเร็จ");
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+          toast("เข้าสู่ระบบสำเร็จ");
+        }
+        hideModal("authModal");
+        $("authForm").reset();
+      } catch (error) {
+        console.error(error);
+        toast(authErrorMessage(error.code));
+      } finally {
+        submit.disabled = false;
+      }
+    });
+
+    function authErrorMessage(code) {
+      const messages = {
+        "auth/email-already-in-use": "อีเมลนี้มีบัญชีแล้ว",
+        "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
+        "auth/weak-password": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
+        "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+        "auth/user-not-found": "ไม่พบบัญชีนี้",
+        "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
+        "auth/too-many-requests": "ลองใหม่ภายหลัง",
+        "auth/network-request-failed": "เครือข่ายมีปัญหา"
+      };
+      return messages[code] || `เกิดข้อผิดพลาด: ${code || "unknown"}`;
+    }
+
+    $("resetPassword").addEventListener("click", async () => {
+      const email = $("authEmail").value.trim();
+      if (!email) return toast("กรอกอีเมลก่อน");
+      try {
+        await sendPasswordResetEmail(auth, email);
+        toast("ส่งลิงก์รีเซ็ตรหัสผ่านแล้ว โปรดตรวจสอบอีเมล");
+      } catch (error) {
+        toast(authErrorMessage(error.code));
+      }
+    });
+
+    $("logoutBtn").addEventListener("click", async () => {
+      try {
+        await signOut(auth);
+        toast("ออกจากระบบแล้ว");
+      } catch (error) {
+        toast("ออกจากระบบไม่สำเร็จ");
+      }
+    });
+
+    $("refreshBtn").addEventListener("click", () => {
+      if (currentUser) {
+        startUserListeners(currentUser);
+        if (currentRole === "admin") startAdminListeners();
+        toast("กำลังรีเฟรชข้อมูล");
+      }
+    });
+
+    // Product catalog
+    function startProductListener() {
+      if (unsubProducts) unsubProducts();
+
+      unsubProducts = onSnapshot(collection(db, "products"), snapshot => {
+        products = snapshot.docs.map(item => ({
+          id: item.id,
+          ...item.data()
+        })).filter(item => item.active !== false);
+
+        renderProducts();
+        renderAdminProducts();
+        $("productCount").textContent = products.length;
+        setConnection("ONLINE");
+      }, error => {
+        console.error(error);
+        setConnection("ERROR");
+        $("products").innerHTML =
+          '<div class="notice warning">โหลดสินค้าไม่ได้ ตรวจสอบ Firestore Rules และการตั้งค่า Firebase</div>';
+      });
+    }
+
+    function renderProducts() {
+      const search = $("searchInput").value.trim().toLowerCase();
+      const filtered = products.filter(product =>
+        String(product.name || "").toLowerCase().includes(search) ||
+        String(product.description || "").toLowerCase().includes(search)
+      );
+
+      if (!filtered.length) {
+        $("products").innerHTML = `
+          <div class="notice">
+            ยังไม่มีสินค้าแสดงอยู่
+            ${currentRole === "admin" ? "เพิ่มสินค้าได้จาก Admin Console" : "โปรดกลับมาตรวจสอบอีกครั้ง"}
+          </div>`;
+        return;
+      }
+
+      $("products").innerHTML = filtered.map(product => {
+        const image = typeof product.imageUrl === "string" ? product.imageUrl : "";
+        return `
+          <article class="product">
+            <div class="product-image">
+              ${image
+                ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.name || "สินค้า")}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
+                : `<span class="product-placeholder">H X</span>`}
+            </div>
+            <div class="product-content">
+              <h3>${escapeHTML(product.name || "สินค้าไม่มีชื่อ")}</h3>
+              <p>${escapeHTML(product.description || "สินค้าดิจิทัลจาก Horizon X")}</p>
+              <div class="product-bottom">
+                <span class="price">${money(product.price)}</span>
+                <button class="btn primary small" data-add="${escapeHTML(product.id)}">+ เพิ่ม</button>
+              </div>
+            </div>
+          </article>`;
+      }).join("");
+
+      $("products").querySelectorAll("[data-add]").forEach(button => {
+        button.addEventListener("click", () => addToCart(button.dataset.add));
+      });
+    }
+
+    $("searchInput").addEventListener("input", renderProducts);
+
+    // Cart is local to this browser session and is not a payment record.
+    function addToCart(productId) {
+      const product = products.find(item => item.id === productId);
+      if (!product) return toast("ไม่พบสินค้านี้");
+
+      const existing = cart.find(item => item.id === productId);
+      if (existing) existing.quantity = Math.min(existing.quantity + 1, 99);
+      else cart.push({
+        id: product.id,
+        name: product.name || "สินค้า",
+        price: Number(product.price) || 0,
+        quantity: 1
+      });
+
+      renderCart();
+      toast("เพิ่มสินค้าในตะกร้าแล้ว");
+    }
+
+    function renderCart() {
+      $("cartCount").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+      if (!cart.length) {
+        $("cartItems").innerHTML = '<p class="muted">ยังไม่มีสินค้าในตะกร้า</p>';
+        $("cartTotal").textContent = money(0);
+        $("checkoutBtn").disabled = true;
+        return;
+      }
+
+      $("checkoutBtn").disabled = false;
+      $("cartItems").innerHTML = cart.map(item => `
+        <div class="list-item">
+          <div class="list-item-top">
+            <strong>${escapeHTML(item.name)}</strong>
+            <strong>${money(item.price * item.quantity)}</strong>
+          </div>
+          <p class="muted">จำนวน ${item.quantity} • ${money(item.price)} ต่อชิ้น</p>
+          <div class="admin-tools">
+            <button class="btn small" data-minus="${escapeHTML(item.id)}">−</button>
+            <button class="btn small" data-plus="${escapeHTML(item.id)}">+</button>
+            <button class="btn danger small" data-remove="${escapeHTML(item.id)}">ลบ</button>
+          </div>
+        </div>`).join("");
+
+      $("cartTotal").textContent = money(
+        cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
+      );
+
+      $("cartItems").querySelectorAll("[data-minus]").forEach(button =>
+        button.addEventListener("click", () => changeQuantity(button.dataset.minus, -1)));
+      $("cartItems").querySelectorAll("[data-plus]").forEach(button =>
+        button.addEventListener("click", () => changeQuantity(button.dataset.plus, 1)));
+      $("cartItems").querySelectorAll("[data-remove]").forEach(button =>
+        button.addEventListener("click", () => {
+          cart = cart.filter(item => item.id !== button.dataset.remove);
+          renderCart();
+        }));
+    }
+
+    function changeQuantity(id, delta) {
+      const item = cart.find(entry => entry.id === id);
+      if (!item) return;
+      item.quantity += delta;
+      if (item.quantity <= 0) cart = cart.filter(entry => entry.id !== id);
+      if (item.quantity > 99) item.quantity = 99;
+      renderCart();
+    }
+
+    $("checkoutBtn").addEventListener("click", async () => {
+      if (!currentUser) {
+        hideModal("cartModal");
+        openAccount();
+        return toast("เข้าสู่ระบบก่อนสั่งซื้อ");
+      }
+      if (!cart.length) return toast("ตะกร้าว่าง");
+
+      const button = $("checkoutBtn");
+      button.disabled = true;
+
+      try {
+        // Re-read prices from Firestore; do not trust browser cart prices.
+        const items = [];
+        let total = 0;
+
+        for (const cartItem of cart) {
+          const productSnap = await getDoc(doc(db, "products", cartItem.id));
+          if (!productSnap.exists()) throw new Error("PRODUCT_MISSING");
+          const product = productSnap.data();
+
+          if (product.active === false) throw new Error("PRODUCT_INACTIVE");
+
+          const price = Number(product.price);
+          const quantity = Number(cartItem.quantity);
+
+          if (!Number.isFinite(price) || price < 0 ||
+              !Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
+            throw new Error("INVALID_ITEM");
+          }
+
+          total += price * quantity;
+          items.push({
+            productId: cartItem.id,
+            name: String(product.name || "สินค้า").slice(0, 100),
+            price,
+            quantity
+          });
+        }
+
+        await addDoc(collection(db, "orders"), {
+          uid: currentUser.uid,
+          email: currentUser.email || "",
+          items,
+          total,
+          status: "pending",
+          paymentStatus: "unpaid",
+          createdAt: serverTimestamp()
+        });
+
+        cart = [];
+        renderCart();
+        hideModal("cartModal");
+        toast("ส่งคำสั่งซื้อแล้ว รอแอดมินตรวจสอบ");
+      } catch (error) {
+        console.error(error);
+        toast(error.message === "PRODUCT_MISSING"
+          ? "สินค้าบางรายการไม่มีอยู่แล้ว"
+          : "สร้างคำสั่งซื้อไม่ได้ ตรวจสอบ Rules หรือสินค้าอีกครั้ง");
+      } finally {
+        button.disabled = false;
+      }
+    });
+
+    // Top-up requests
+    $("topupForm").addEventListener("submit", async event => {
+      event.preventDefault();
+
+      if (!currentUser) return toast("เข้าสู่ระบบก่อน");
+      const amount = Number($("topupAmount").value);
+      const reference = $("topupReference").value.trim();
+      const note = $("topupNote").value.trim();
+
+      if (!Number.isFinite(amount) || amount < 1 || amount > 10000) {
+        return toast("จำนวนเงินต้องอยู่ระหว่าง 1–10,000 บาท");
+      }
+      if (reference.length < 4) return toast("กรอกเลขอ้างอิงให้ถูกต้อง");
+
+      const button = event.submitter;
+      if (button) button.disabled = true;
+
+      try {
+        await addDoc(collection(db, "topups"), {
+          uid: currentUser.uid,
+          email: currentUser.email || "",
+          amount,
+          reference: reference.slice(0, 120),
+          note: note.slice(0, 500),
+          status: "pending",
+          createdAt: serverTimestamp()
+        });
+
+        $("topupForm").reset();
+        hideModal("topupModal");
+        toast("ส่งคำขอแล้ว รอแอดมินตรวจสอบ");
+      } catch (error) {
+        console.error(error);
+        toast("ส่งคำขอไม่สำเร็จ ตรวจสอบ Firestore Rules");
+      } finally {
+        if (button) button.disabled = false;
+      }
+    });
+
+    function startUserListeners(user) {
+      stopListeners();
+
+      unsubUser = onSnapshot(doc(db, "users", user.uid), snapshot => {
+        const data = snapshot.exists() ? snapshot.data() : {};
+        currentRole = data.role === "admin" ? "admin" : "user";
+        currentBalance = Number(data.walletBalance) || 0;
+        updateAccountUI();
+        if (currentRole === "admin") startAdminListeners();
+      }, error => {
+        console.error(error);
+        toast("อ่านข้อมูลบัญชีไม่ได้ ตรวจสอบ Firestore Rules");
+      });
+
+      unsubTopups = onSnapshot(
+        query(collection(db, "topups"), where("uid", "==", user.uid)),
+        snapshot => {
+          const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+          rows.sort((a, b) => {
+            const ta = a.createdAt?.toMillis?.() || 0;
+            const tb = b.createdAt?.toMillis?.() || 0;
+            return tb - ta;
+          });
+          $("topupHistory").innerHTML = rows.length ? rows.map(item => `
+            <div class="list-item">
+              <div class="list-item-top">
+                <strong>${money(item.amount)}</strong>${statusHTML(item.status)}
+              </div>
+              <p class="muted">เลขอ้างอิง: ${escapeHTML(item.reference || "-")}</p>
+              <p class="muted">${formatDate(item.createdAt)}</p>
+              ${item.adminNote ? `<p>${escapeHTML(item.adminNote)}</p>` : ""}
+            </div>`).join("") : '<p class="muted">ยังไม่มีรายการเติมเงิน</p>';
+        },
+        error => {
+          console.error(error);
+          $("topupHistory").innerHTML = '<p class="muted">อ่านประวัติเติมเงินไม่ได้</p>';
+        }
+      );
+
+      unsubOrders = onSnapshot(
+        query(collection(db, "orders"), where("uid", "==", user.uid)),
+        snapshot => {
+          const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+          rows.sort((a, b) => {
+            const ta = a.createdAt?.toMillis?.() || 0;
+            const tb = b.createdAt?.toMillis?.() || 0;
+            return tb - ta;
+          });
+          $("orderHistory").innerHTML = rows.length ? rows.map(item => `
+            <div class="list-item">
+              <div class="list-item-top">
+                <strong>${money(item.total)}</strong>${statusHTML(item.status)}
+              </div>
+              <p class="muted">${(item.items || []).map(i =>
+                `${escapeHTML(i.name)} × ${Number(i.quantity) || 1}`).join(", ")}</p>
+              <p class="muted">ชำระเงิน: ${escapeHTML(item.paymentStatus || "unpaid")}</p>
+              <p class="muted">${formatDate(item.createdAt)}</p>
+            </div>`).join("") : '<p class="muted">ยังไม่มีคำสั่งซื้อ</p>';
+        },
+        error => {
+          console.error(error);
+          $("orderHistory").innerHTML = '<p class="muted">อ่านคำสั่งซื้อไม่ได้</p>';
+        }
+      );
+    }
+
+    // Admin panel
+    function startAdminListeners() {
+      if (currentRole !== "admin") return;
+
+      if (unsubAdminTopups) unsubAdminTopups();
+      if (unsubAdminOrders) unsubAdminOrders();
+
+      unsubAdminTopups = onSnapshot(collection(db, "topups"), snapshot => {
+        const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+        rows.sort((a, b) =>
+          (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0));
+
+        $("adminTopups").innerHTML = rows.length ? rows.map(item => `
+          <div class="list-item">
+            <div class="list-item-top">
+              <strong>${money(item.amount)}</strong>${statusHTML(item.status)}
+            </div>
+            <p class="muted">ผู้ใช้: ${escapeHTML(item.email || item.uid)}</p>
+            <p class="muted">UID: ${escapeHTML(item.uid || "-")}</p>
+            <p class="muted">เลขอ้างอิง: ${escapeHTML(item.reference || "-")}</p>
+            <p class="muted">หมายเหตุ: ${escapeHTML(item.note || "-")}</p>
+            <p class="muted">${formatDate(item.createdAt)}</p>
+            ${item.status === "pending" ? `
+              <div class="admin-tools">
+                <button class="btn primary small" data-approve-topup="${escapeHTML(item.id)}">ตรวจสอบและอนุมัติ</button>
+                <button class="btn danger small" data-reject-topup="${escapeHTML(item.id)}">ปฏิเสธ</button>
+              </div>` : ""}
+          </div>`).join("") : '<p class="muted">ไม่มีรายการเติมเงิน</p>';
+
+        $("adminTopups").querySelectorAll("[data-approve-topup]").forEach(button =>
+          button.addEventListener("click", () => approveTopup(button.dataset.approveTopup, button)));
+        $("adminTopups").querySelectorAll("[data-reject-topup]").forEach(button =>
+          button.addEventListener("click", () => rejectTopup(button.dataset.rejectTopup, button)));
+      }, error => {
+        console.error(error);
+        $("adminTopups").innerHTML = '<p class="muted">อ่านรายการเติมเงินไม่ได้ ตรวจสอบ Rules</p>';
+      });
+
+      unsubAdminOrders = onSnapshot(collection(db, "orders"), snapshot => {
+        const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
+        rows.sort((a, b) =>
+          (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
+
+        $("adminOrders").innerHTML = rows.length ? rows.map(item => `
+          <div class="list-item">
+            <div class="list-item-top">
+              <strong>${money(item.total)}</strong>${statusHTML(item.status)}
+            </div>
+            <p class="muted">ผู้ใช้: ${escapeHTML(item.email || item.uid)}</p>
+            <p class="muted">UID: ${escapeHTML(item.uid || "-")}</p>
+            <p class="muted">${(item.items || []).map(i =>
+              `${escapeHTML(i.name)} × ${Number(i.quantity) || 1}`).join(", ")}</p>
+            <p class="muted">ชำระเงิน: ${escapeHTML(item.paymentStatus || "unpaid")}</p>
+            <p class="muted">${formatDate(item.createdAt)}</p>
+            ${item.status === "pending" ? `
+              <div class="admin-tools">
+                <button class="btn primary small" data-complete-order="${escapeHTML(item.id)}">ทำเครื่องหมายเสร็จสิ้น</button>
+                <button class="btn danger small" data-cancel-order="${escapeHTML(item.id)}">ยกเลิก</button>
+              </div>` : ""}
+          </div>`).join("") : '<p class="muted">ไม่มีคำสั่งซื้อ</p>';
+
+        $("adminOrders").querySelectorAll("[data-complete-order]").forEach(button =>
+          button.addEventListener("click", () =>
+            setOrderStatus(button.dataset.completeOrder, "completed", button)));
+        $("adminOrders").querySelectorAll("[data-cancel-order]").forEach(button =>
+          button.addEventListener("click", () =>
+            setOrderStatus(button.dataset.cancelOrder, "cancelled", button)));
+      }, error => {
+        console.error(error);
+        $("adminOrders").innerHTML = '<p class="muted">อ่านคำสั่งซื้อไม่ได้ ตรวจสอบ Rules</p>';
+      });
+    }
+
+    async function approveTopup(id, button) {
+      if (currentRole !== "admin" || !currentUser) return toast("ไม่มีสิทธิ์แอดมิน");
+      if (!confirm("ยืนยันว่าได้ตรวจสอบธุรกรรมจริงแล้ว และต้องการเพิ่มยอด Wallet ใช่หรือไม่?")) return;
+
+      button.disabled = true;
+      try {
+        await runTransaction(db, async transaction => {
+          const topupRef = doc(db, "topups", id);
+          const topupSnap = await transaction.get(topupRef);
+          if (!topupSnap.exists()) throw new Error("ไม่พบรายการเติมเงิน");
+
+          const topup = topupSnap.data();
+          if (topup.status !== "pending") throw new Error("รายการนี้ถูกตรวจสอบแล้ว");
+
+          const amount = Number(topup.amount);
+          if (!Number.isFinite(amount) || amount <= 0 || amount > 10000) {
+            throw new Error("จำนวนเงินไม่ถูกต้อง");
+          }
+
+          const userRef = doc(db, "users", topup.uid);
+          const userSnap = await transaction.get(userRef);
+          if (!userSnap.exists()) throw new Error("ไม่พบข้อมูลบัญชีผู้ใช้");
+
+          const oldBalance = Number(userSnap.data().walletBalance) || 0;
+          transaction.update(userRef, {
+            walletBalance: oldBalance + amount,
+            updatedAt: serverTimestamp()
+          });
+          transaction.update(topupRef, {
+            status: "approved",
+            reviewedBy: currentUser.uid,
+            reviewedAt: serverTimestamp()
+          });
+        });
+
+        toast("อนุมัติและปรับยอด Wallet แล้ว");
+      } catch (error) {
+        console.error(error);
+        toast(error.message || "อนุมัติไม่สำเร็จ");
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function rejectTopup(id, button) {
+      if (currentRole !== "admin") return toast("ไม่มีสิทธิ์แอดมิน");
+      const reason = prompt("เหตุผลที่ปฏิเสธ (ไม่บังคับ):") || "";
+      button.disabled = true;
+
+      try {
+        const ref = doc(db, "topups", id);
+        await runTransaction(db, async transaction => {
+          const snap = await transaction.get(ref);
+          if (!snap.exists() || snap.data().status !== "pending") {
+            throw new Error("รายการนี้ไม่อยู่ในสถานะรอตรวจสอบ");
+          }
+          transaction.update(ref, {
+            status: "rejected",
+            adminNote: reason.slice(0, 500),
+            reviewedBy: currentUser.uid,
+            reviewedAt: serverTimestamp()
+          });
+        });
+        toast("ปฏิเสธรายการแล้ว");
+      } catch (error) {
+        console.error(error);
+        toast(error.message || "ดำเนินการไม่สำเร็จ");
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    async function setOrderStatus(id, status, button) {
+      if (currentRole !== "admin") return toast("ไม่มีสิทธิ์แอดมิน");
+      if (!confirm(`ยืนยันเปลี่ยนสถานะเป็น ${status} ?`)) return;
+
+      button.disabled = true;
+      try {
+        const ref = doc(db, "orders", id);
+        await runTransaction(db, async transaction => {
+          const snap = await transaction.get(ref);
+          if (!snap.exists() || snap.data().status !== "pending") {
+            throw new Error("คำสั่งซื้อนี้ถูกจัดการไปแล้ว");
+          }
+          transaction.update(ref, {
+            status,
+            reviewedBy: currentUser.uid,
+            reviewedAt: serverTimestamp()
+          });
+        });
+        toast("อัปเดตสถานะคำสั่งซื้อแล้ว");
+      } catch (error) {
+        console.error(error);
+        toast(error.message || "อัปเดตไม่สำเร็จ");
+      } finally {
+        button.disabled = false;
+      }
+    }
+
+    $("productForm").addEventListener("submit", async event => {
+      event.preventDefault();
+      if (currentRole !== "admin") return toast("ไม่มีสิทธิ์แอดมิน");
+
+      const name = $("productName").value.trim();
+      const price = Number($("productPrice").value);
+      const imageUrl = $("productImage").value.trim();
+      const description = $("productDescription").value.trim();
+
+      if (!name || !Number.isFinite(price) || price < 0 || price > 1000000) {
+        return toast("ตรวจสอบชื่อสินค้าและราคา");
+      }
+
+      if (imageUrl && !/^https:\/\//i.test(imageUrl)) {
+        return toast("URL รูปภาพต้องใช้ HTTPS");
+      }
+
+      try {
+        await addDoc(collection(db, "products"), {
+          name: name.slice(0, 100),
+          price,
+          imageUrl,
+          description: description.slice(0, 2000),
+          active: true,
+          createdAt: serverTimestamp(),
+          createdBy: currentUser.uid
+        });
+
+        $("productForm").reset();
+        toast("เพิ่มสินค้าแล้ว");
+      } catch (error) {
+        console.error(error);
+        toast("เพิ่มสินค้าไม่ได้ ตรวจสอบสิทธิ์ Firestore");
+      }
+    });
+
+    function renderAdminProducts() {
+      if (currentRole !== "admin") return;
+      $("adminProducts").innerHTML = products.length ? products.map(product => `
+        <div class="list-item">
+          <div class="list-item-top">
+            <strong>${escapeHTML(product.name || "สินค้า")}</strong>
+            <strong>${money(product.price)}</strong>
+          </div>
+          <p class="muted">${escapeHTML(product.description || "")}</p>
+          <button class="btn danger small" data-delete-product="${escapeHTML(product.id)}">ลบสินค้า</button>
+        </div>`).join("") : '<p class="muted">ยังไม่มีสินค้า</p>';
+
+      $("adminProducts").querySelectorAll("[data-delete-product]").forEach(button =>
+        button.addEventListener("click", async () => {
+          if (currentRole !== "admin") return;
+          if (!confirm("ยืนยันลบสินค้านี้?")) return;
+
+          button.disabled = true;
+          try {
+            await deleteDoc(doc(db, "products", button.dataset.deleteProduct));
+            toast("ลบสินค้าแล้ว");
+          } catch (error) {
+            console.error(error);
+            toast("ลบสินค้าไม่ได้");
+          } finally {
+            button.disabled = false;
+          }
+        }));
+    }
+
+    onAuthStateChanged(auth, async user => {
+      stopListeners();
+      currentUser = user;
+      currentRole = user ? "user" : "guest";
+      currentBalance = 0;
+      updateAccountUI();
+
+      if (user) {
+        try {
+          const userRef = doc(db, "users", user.uid);
+          const userSnap = await getDoc(userRef);
+
+          if (!userSnap.exists()) {
+            // New user profile is created with no privileges.
+            await setDoc(userRef, {
+              email: user.email || "",
+              role: "user",
+              walletBalance: 0,
+              createdAt: serverTimestamp()
+            });
+          }
+        } catch (error) {
+          console.error(error);
+          toast("อ่านโปรไฟล์ไม่ได้ ตรวจสอบ Firestore Rules");
+        }
+
+        startUserListeners(user);
+      }
+    });
+
+    startProductListener();
+    renderCart();
+    updateAuthModal();
+  </script>
+</body>
+    </html>

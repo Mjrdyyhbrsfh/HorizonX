@@ -1,1582 +1,185 @@
 <!DOCTYPE html>
-<html lang="th">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#050505">
-  <meta name="description" content="Horizon X — Beyond the Ordinary">
-  <title>Horizon X — Digital Store</title>
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-  <style>
-    :root {
-      color-scheme: dark;
-      --bg: #050505;
-      --panel: #101010;
-      --panel2: #171717;
-      --line: #292929;
-      --white: #f5f5f5;
-      --muted: #999;
-      --accent: #fff;
-      --danger: #ff6262;
-      --success: #79e6a2;
-      --radius: 18px;
-    }
-
-    * { box-sizing: border-box; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      background:
-        radial-gradient(ellipse at 50% -20%, #272727 0, transparent 50%),
-        var(--bg);
-      color: var(--white);
-      font-family: "Prompt", sans-serif;
-      min-height: 100vh;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      inset: 0;
-      z-index: -1;
-      pointer-events: none;
-      opacity: .16;
-      background-image:
-        linear-gradient(#fff 1px, transparent 1px),
-        linear-gradient(90deg, #fff 1px, transparent 1px);
-      background-size: 54px 54px;
-      mask-image: linear-gradient(to bottom, #000, transparent 80%);
-    }
-
-    button, input, textarea, select { font: inherit; }
-    button { cursor: pointer; }
-    button:disabled { opacity: .45; cursor: not-allowed; }
-
-    a { color: inherit; text-decoration: none; }
-
-    .container {
-      width: min(1180px, 92%);
-      margin: auto;
-    }
-
-    .topbar {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      backdrop-filter: blur(18px);
-      background: #050505d9;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .nav {
-      min-height: 76px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 18px;
-    }
-
-    .brand {
-      font: 800 23px "Orbitron", sans-serif;
-      letter-spacing: 2px;
-      white-space: nowrap;
-    }
-
-    .brand span { color: #999; }
-
-    .nav-actions {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: flex-end;
-      gap: 8px;
-    }
-
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      min-height: 42px;
-      padding: 10px 16px;
-      color: #fff;
-      background: #171717;
-      border: 1px solid #383838;
-      border-radius: 12px;
-      transition: .2s ease;
-    }
-
-    .btn:hover {
-      border-color: #fff;
-      transform: translateY(-1px);
-    }
-
-    .btn.primary {
-      color: #050505;
-      background: #fff;
-      border-color: #fff;
-      font-weight: 700;
-    }
-
-    .btn.danger {
-      border-color: #783737;
-      color: #ff9a9a;
-    }
-
-    .btn.small {
-      min-height: 34px;
-      padding: 6px 10px;
-      font-size: 13px;
-    }
-
-    .hero {
-      padding: 78px 0 54px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      border: 1px solid #3a3a3a;
-      border-radius: 99px;
-      padding: 7px 13px;
-      color: #bbb;
-      font-size: 12px;
-      letter-spacing: 2px;
-    }
-
-    .dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: white;
-      box-shadow: 0 0 12px white;
-    }
-
-    h1 {
-      font: 800 clamp(35px, 8vw, 76px) "Orbitron", sans-serif;
-      line-height: 1.1;
-      letter-spacing: -2px;
-      margin: 24px 0 16px;
-    }
-
-    h1 span {
-      color: transparent;
-      -webkit-text-stroke: 1px #eee;
-    }
-
-    .hero p {
-      max-width: 620px;
-      margin: 0 auto 26px;
-      color: #aaa;
-      line-height: 1.9;
-    }
-
-    .hero-actions {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-      margin: 12px auto 56px;
-    }
-
-    .stat {
-      border: 1px solid var(--line);
-      background: #101010b8;
-      border-radius: 16px;
-      padding: 19px;
-      text-align: center;
-    }
-
-    .stat strong {
-      display: block;
-      font: 700 23px "Orbitron", sans-serif;
-    }
-
-    .stat span {
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .section { padding: 20px 0 55px; }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 15px;
-      margin-bottom: 22px;
-    }
-
-    .section-head h2 {
-      font: 700 25px "Orbitron", sans-serif;
-      margin: 0 0 6px;
-    }
-
-    .section-head p {
-      color: var(--muted);
-      margin: 0;
-      font-size: 13px;
-    }
-
-    .search {
-      width: min(300px, 100%);
-    }
-
-    input, textarea, select {
-      width: 100%;
-      min-height: 44px;
-      color: white;
-      background: #090909;
-      border: 1px solid #333;
-      border-radius: 11px;
-      padding: 11px 13px;
-      outline: none;
-    }
-
-    textarea { resize: vertical; min-height: 90px; }
-
-    input:focus, textarea:focus, select:focus {
-      border-color: #aaa;
-    }
-
-    label {
-      display: block;
-      color: #bbb;
-      font-size: 13px;
-      margin: 12px 0 6px;
-    }
-
-    .products {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 17px;
-    }
-
-    .product {
-      overflow: hidden;
-      border: 1px solid var(--line);
-      background: linear-gradient(145deg, #151515, #090909);
-      border-radius: var(--radius);
-      transition: .25s ease;
-    }
-
-    .product:hover {
-      transform: translateY(-4px);
-      border-color: #777;
-      box-shadow: 0 16px 50px #0008;
-    }
-
-    .product-image {
-      height: 190px;
-      display: grid;
-      place-items: center;
-      background:
-        radial-gradient(circle at 50% 45%, #383838, transparent 50%),
-        #0b0b0b;
-      border-bottom: 1px solid var(--line);
-      overflow: hidden;
-    }
-
-    .product-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .product-placeholder {
-      font: 700 32px "Orbitron", sans-serif;
-      color: #555;
-    }
-
-    .product-content { padding: 17px; }
-
-    .product-content h3 { margin: 0 0 8px; font-size: 17px; }
-
-    .product-content p {
-      min-height: 42px;
-      color: #aaa;
-      font-size: 13px;
-      line-height: 1.7;
-      white-space: pre-wrap;
-      overflow-wrap: anywhere;
-    }
-
-    .product-bottom {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      margin-top: 16px;
-    }
-
-    .price { font-size: 19px; font-weight: 700; }
-
-    .muted { color: var(--muted); font-size: 12px; }
-
-    .panel {
-      padding: 22px;
-      border: 1px solid var(--line);
-      background: #101010e8;
-      border-radius: var(--radius);
-      margin-bottom: 18px;
-    }
-
-    .panel h3 { margin-top: 0; }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .balance {
-      font: 700 clamp(27px, 5vw, 42px) "Orbitron", sans-serif;
-      margin: 12px 0;
-      overflow-wrap: anywhere;
-    }
-
-    .list { display: grid; gap: 10px; }
-
-    .list-item {
-      border: 1px solid #2a2a2a;
-      background: #0a0a0a;
-      border-radius: 12px;
-      padding: 14px;
-      overflow-wrap: anywhere;
-    }
-
-    .list-item-top {
-      display: flex;
-      justify-content: space-between;
-      gap: 10px;
-      flex-wrap: wrap;
-    }
-
-    .status {
-      display: inline-block;
-      border: 1px solid #444;
-      border-radius: 99px;
-      padding: 3px 9px;
-      font-size: 11px;
-      color: #ccc;
-    }
-
-    .status.approved, .status.completed {
-      color: var(--success);
-      border-color: #315d40;
-    }
-
-    .status.rejected, .status.cancelled {
-      color: #ff9a9a;
-      border-color: #733;
-    }
-
-    .hidden { display: none !important; }
-
-    .notice {
-      color: #bbb;
-      background: #171717;
-      border: 1px solid #333;
-      border-radius: 12px;
-      padding: 13px;
-      font-size: 13px;
-      line-height: 1.8;
-    }
-
-    .notice.warning {
-      border-color: #6e5830;
-      color: #e7d2a0;
-    }
-
-    .notice.success {
-      border-color: #315d40;
-      color: #a9f1c1;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 0 12px;
-    }
-
-    .form-grid .full { grid-column: 1 / -1; }
-
-    .modal {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: #000c;
-      backdrop-filter: blur(10px);
-      display: grid;
-      place-items: center;
-      padding: 18px;
-    }
-
-    .modal-card {
-      width: min(470px, 100%);
-      max-height: 90vh;
-      overflow: auto;
-      padding: 24px;
-      border: 1px solid #414141;
-      border-radius: 20px;
-      background: #101010;
-      box-shadow: 0 25px 100px #000;
-    }
-
-    .modal-title {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .modal-title h2 {
-      font: 700 21px "Orbitron", sans-serif;
-    }
-
-    .close {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      color: white;
-      background: #1a1a1a;
-      border: 1px solid #333;
-    }
-
-    .toast {
-      position: fixed;
-      z-index: 200;
-      left: 50%;
-      bottom: 22px;
-      transform: translate(-50%, 20px);
-      width: max-content;
-      max-width: 90%;
-      background: #f5f5f5;
-      color: #050505;
-      padding: 12px 18px;
-      border-radius: 12px;
-      opacity: 0;
-      pointer-events: none;
-      transition: .25s;
-      box-shadow: 0 10px 40px #0008;
-    }
-
-    .toast.show {
-      opacity: 1;
-      transform: translate(-50%, 0);
-    }
-
-    footer {
-      border-top: 1px solid var(--line);
-      padding: 28px 0;
-      color: #777;
-      font-size: 12px;
-      text-align: center;
-      line-height: 1.9;
-    }
-
-    .admin-tools {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-      margin: 15px 0;
-    }
-
-    @media (max-width: 800px) {
-      .products { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .product-image { height: 160px; }
-      .grid-2 { grid-template-columns: 1fr; }
-    }
-
-    @media (max-width: 520px) {
-      .nav { align-items: flex-start; padding: 15px 0; }
-      .brand { font-size: 18px; padding-top: 8px; }
-      .nav-actions { max-width: 65%; }
-      .nav-actions .btn { padding: 8px 10px; font-size: 12px; }
-      .hero { padding-top: 55px; }
-      .stats { gap: 7px; }
-      .stat { padding: 12px 5px; }
-      .stat strong { font-size: 17px; }
-      .stat span { font-size: 10px; }
-      .products { grid-template-columns: 1fr; }
-      .product-image { height: 210px; }
-      .form-grid { grid-template-columns: 1fr; }
-      .form-grid .full { grid-column: auto; }
-      .panel { padding: 16px; }
-    }
-
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after {
-        scroll-behavior: auto !important;
-        transition: none !important;
-      }
-    }
-  </style>
-</head>
-
-<body>
-  <header class="topbar">
-    <div class="container nav">
-      <a class="brand" href="#">HORIZON <span>X</span></a>
-      <div class="nav-actions">
-        <button class="btn" id="accountBtn">เข้าสู่ระบบ</button>
-        <button class="btn" id="walletBtn">Wallet ฿0</button>
-        <button class="btn primary" id="cartBtn">ตะกร้า <span id="cartCount">0</span></button>
-      </div>
-    </div>
-  </header>
-
-  <main>
-    <section class="container hero">
-      <div class="eyebrow"><span class="dot"></span> DIGITAL STORE • NEXT GENERATION</div>
-      <h1>HORIZON <span>X</span></h1>
-      <p>
-        Beyond the ordinary. ค้นพบสินค้าและบริการดิจิทัล
-        ในประสบการณ์ร้านค้าโมโนโครมที่เรียบง่าย ทันสมัย และรวดเร็ว
-      </p>
-      <div class="hero-actions">
-        <a class="btn primary" href="#store">สำรวจสินค้า ↗</a>
-        <button class="btn" id="heroWalletBtn">เติมเงิน Wallet</button>
-      </div>
-    </section>
-
-    <section class="container stats">
-      <div class="stat"><strong id="productCount">0</strong><span>PRODUCTS</span></div>
-      <div class="stat"><strong id="memberState">GUEST</strong><span>ACCOUNT STATUS</span></div>
-      <div class="stat"><strong id="connectionState">CONNECTING</strong><span>SYSTEM STATUS</span></div>
-    </section>
-
-    <section class="container section" id="store">
-      <div class="section-head">
-        <div>
-          <h2>THE STORE</h2>
-          <p>เลือกสินค้าดิจิทัลที่เหมาะกับคุณ</p>
-        </div>
-        <input class="search" id="searchInput" placeholder="ค้นหาสินค้า...">
-      </div>
-      <div class="products" id="products">
-        <div class="notice">กำลังโหลดสินค้า...</div>
-      </div>
-    </section>
-
-    <section class="container section hidden" id="accountSection">
-      <div class="section-head">
-        <div>
-          <h2>MY ACCOUNT</h2>
-          <p>ข้อมูลสมาชิก กระเป๋าเงิน และรายการของคุณ</p>
-        </div>
-      </div>
-      <div class="grid-2">
-        <div class="panel">
-          <h3>WALLET BALANCE</h3>
-          <div class="balance" id="walletBalance">฿0.00</div>
-          <p class="muted" id="userEmail">ยังไม่ได้เข้าสู่ระบบ</p>
-          <div class="admin-tools">
-            <button class="btn primary" id="topupBtn">แจ้งเติมเงิน</button>
-            <button class="btn" id="refreshBtn">รีเฟรช</button>
-            <button class="btn danger" id="logoutBtn">ออกจากระบบ</button>
-          </div>
-          <p class="muted">ยอดเงินจะแสดงจากฐานข้อมูล Firestore ไม่ใช่ยอดที่เก็บไว้เฉพาะในเบราว์เซอร์</p>
-        </div>
-        <div class="panel">
-          <h3>เติมเงินผ่าน TrueMoney</h3>
-          <p>เบอร์รับชำระที่ผู้ดูแลกำหนด:</p>
-          <div class="balance" style="font-size:25px">0939432704</div>
-          <div class="notice warning">
-            โอนเงินเฉพาะเมื่อคุณตรวจสอบผู้รับและจำนวนเงินถูกต้องแล้ว
-            หลังชำระให้ส่งเลขอ้างอิงผ่านแบบฟอร์มเติมเงิน
-            รายการจะรอแอดมินตรวจสอบก่อนอนุมัติ
-          </div>
-        </div>
-      </div>
-
-      <div class="grid-2">
-        <div class="panel">
-          <h3>ประวัติเติมเงิน</h3>
-          <div class="list" id="topupHistory"><p class="muted">เข้าสู่ระบบเพื่อดูรายการ</p></div>
-        </div>
-        <div class="panel">
-          <h3>ประวัติคำสั่งซื้อ</h3>
-          <div class="list" id="orderHistory"><p class="muted">เข้าสู่ระบบเพื่อดูรายการ</p></div>
-        </div>
-      </div>
-    </section>
-
-    <section class="container section hidden" id="adminSection">
-      <div class="section-head">
-        <div>
-          <h2>ADMIN CONSOLE</h2>
-          <p>พื้นที่จัดการสำหรับบัญชีผู้ดูแลที่ได้รับสิทธิ์จาก Firestore</p>
-        </div>
-        <span class="status approved">ADMIN VERIFIED</span>
-      </div>
-
-      <div class="panel">
-        <h3>เพิ่มสินค้าใหม่</h3>
-        <form id="productForm">
-          <div class="form-grid">
-            <div>
-              <label for="productName">ชื่อสินค้า</label>
-              <input id="productName" maxlength="100" required>
-            </div>
-            <div>
-              <label for="productPrice">ราคา (บาท)</label>
-              <input id="productPrice" type="number" min="0" max="1000000" step="0.01" required>
-            </div>
-            <div class="full">
-              <label for="productImage">URL รูปภาพ (ถ้ามี)</label>
-              <input id="productImage" type="url" placeholder="https://example.com/image.jpg">
-            </div>
-            <div class="full">
-              <label for="productDescription">รายละเอียดสินค้า</label>
-              <textarea id="productDescription" maxlength="2000"></textarea>
-            </div>
-          </div>
-          <button class="btn primary" type="submit">+ เพิ่มสินค้า</button>
-        </form>
-      </div>
-
-      <div class="panel">
-        <h3>จัดการสินค้า</h3>
-        <div class="list" id="adminProducts"><p class="muted">กำลังโหลด...</p></div>
-      </div>
-
-      <div class="panel">
-        <h3>รายการเติมเงิน</h3>
-        <div class="list" id="adminTopups"><p class="muted">กำลังโหลด...</p></div>
-      </div>
-
-      <div class="panel">
-        <h3>คำสั่งซื้อทั้งหมด</h3>
-        <div class="list" id="adminOrders"><p class="muted">กำลังโหลด...</p></div>
-      </div>
-    </section>
-  </main>
-
-  <footer>
-    <div class="container">
-      <div class="brand">HORIZON <span>X</span></div>
-      <p>BEYOND THE ORDINARY • DIGITAL COMMERCE</p>
-      <p>ระบบนี้ต้องตั้งค่า Firebase Security Rules ก่อนใช้งานจริง</p>
-    </div>
-  </footer>
-
-  <div class="modal hidden" id="authModal">
-    <div class="modal-card">
-      <div class="modal-title">
-        <h2 id="authTitle">เข้าสู่ระบบ</h2>
-        <button class="close" data-close="authModal" aria-label="ปิด">✕</button>
-      </div>
-      <form id="authForm">
-        <label for="authEmail">อีเมล</label>
-        <input id="authEmail" type="email" autocomplete="email" required>
-        <label for="authPassword">รหัสผ่าน</label>
-        <input id="authPassword" type="password" autocomplete="current-password" minlength="6" required>
-        <div class="admin-tools">
-          <button class="btn primary" type="submit" id="authSubmit">เข้าสู่ระบบ</button>
-          <button class="btn" type="button" id="switchAuth">สร้างบัญชี</button>
-        </div>
-        <button class="btn" type="button" id="resetPassword">ส่งลิงก์รีเซ็ตรหัสผ่าน</button>
-      </form>
-      <p class="muted">อย่าใช้รหัสผ่านเดียวกับบัญชีสำคัญอื่น</p>
-    </div>
-  </div>
-
-  <div class="modal hidden" id="cartModal">
-    <div class="modal-card">
-      <div class="modal-title">
-        <h2>YOUR CART</h2>
-        <button class="close" data-close="cartModal">✕</button>
-      </div>
-      <div class="list" id="cartItems"></div>
-      <div class="balance" id="cartTotal" style="font-size:25px">฿0.00</div>
-      <div class="notice warning">
-        คำสั่งซื้อจะถูกบันทึกเป็นรายการรอตรวจสอบ ไม่ได้หักยอด Wallet อัตโนมัติ
-      </div>
-      <button class="btn primary" id="checkoutBtn" style="width:100%;margin-top:14px">
-        ยืนยันคำสั่งซื้อ
-      </button>
-    </div>
-  </div>
-
-  <div class="modal hidden" id="topupModal">
-    <div class="modal-card">
-      <div class="modal-title">
-        <h2>TOP UP WALLET</h2>
-        <button class="close" data-close="topupModal">✕</button>
-      </div>
-      <div class="notice warning">
-        เบอร์ TrueMoney: <strong>0939432704</strong><br>
-        ตรวจสอบชื่อผู้รับในแอปก่อนยืนยันการโอนทุกครั้ง
-        แบบฟอร์มนี้ไม่ได้ยืนยันการชำระเงินแทนผู้ให้บริการ
-      </div>
-      <form id="topupForm">
-        <label for="topupAmount">จำนวนเงิน (บาท)</label>
-        <input id="topupAmount" type="number" min="1" max="10000" step="0.01" required>
-        <label for="topupReference">เลขอ้างอิงธุรกรรม</label>
-        <input id="topupReference" maxlength="120" required placeholder="กรอกเลขอ้างอิงจากรายการจริง">
-        <label for="topupNote">หมายเหตุ (ไม่บังคับ)</label>
-        <textarea id="topupNote" maxlength="500" placeholder="ข้อมูลเพิ่มเติมสำหรับแอดมิน"></textarea>
-        <button class="btn primary" type="submit" style="width:100%;margin-top:15px">
-          ส่งคำขอเติมเงิน
-        </button>
-      </form>
-    </div>
-  </div>
-
-  <div class="toast" id="toast" role="status" aria-live="polite"></div>
-
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-app.js";
-    import {
-      getAuth,
-      createUserWithEmailAndPassword,
-      signInWithEmailAndPassword,
-      sendPasswordResetEmail,
-      signOut,
-      onAuthStateChanged
-    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-auth.js";
-
-    import {
-      getFirestore,
-      collection,
-      doc,
-      getDoc,
-      getDocs,
-      addDoc,
-      updateDoc,
-      deleteDoc,
-      setDoc,
-      query,
-      where,
-      orderBy,
-      limit,
-      onSnapshot,
-      serverTimestamp,
-      runTransaction
-    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-firestore.js";
-
-    import {
-      getAnalytics,
-      isSupported
-    } from "https://www.gstatic.com/firebasejs/11.10.0/firebase-analytics.js";
-
-    // Firebase web configuration supplied for Horizon X.
-    const firebaseConfig = {
-      apiKey: "AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",
-      authDomain: "horizon-x-f920b.firebaseapp.com",
-      projectId: "horizon-x-f920b",
-      storageBucket: "horizon-x-f920b.firebasestorage.app",
-      messagingSenderId: "621329414639",
-      appId: "1:621329414639:web:16024b58edcb6348491e1a",
-      measurementId: "G-Y8NRP7NSCC"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
-
-    isSupported()
-      .then(ok => ok ? getAnalytics(app) : null)
-      .catch(() => null);
-
-    const $ = id => document.getElementById(id);
-    const money = amount =>
-      new Intl.NumberFormat("th-TH", {
-        style: "currency",
-        currency: "THB"
-      }).format(Number(amount || 0));
-
-    let currentUser = null;
-    let currentRole = "guest";
-    let currentBalance = 0;
-    let authMode = "login";
-    let products = [];
-    let cart = [];
-    let unsubProducts = null;
-    let unsubUser = null;
-    let unsubTopups = null;
-    let unsubOrders = null;
-    let unsubAdminTopups = null;
-    let unsubAdminOrders = null;
-    let toastTimer = null;
-
-    function toast(message) {
-      $("toast").textContent = message;
-      $("toast").classList.add("show");
-      clearTimeout(toastTimer);
-      toastTimer = setTimeout(() => $("toast").classList.remove("show"), 3200);
-    }
-
-    function showModal(id) {
-      $(id).classList.remove("hidden");
-    }
-
-    function hideModal(id) {
-      $(id).classList.add("hidden");
-    }
-
-    function escapeHTML(value = "") {
-      return String(value).replace(/[&<>"']/g, char => ({
-        "&": "&amp;",
-        "<": "&lt;",
-        ">": "&gt;",
-        '"': "&quot;",
-        "'": "&#39;"
-      })[char]);
-    }
-
-    function formatDate(value) {
-      if (!value) return "รอสถานะเวลา";
-      const date = typeof value.toDate === "function" ? value.toDate() : new Date(value);
-      if (Number.isNaN(date.getTime())) return "ไม่ทราบเวลา";
-      return date.toLocaleString("th-TH");
-    }
-
-    function statusHTML(status) {
-      const labels = {
-        pending: "รอตรวจสอบ",
-        approved: "อนุมัติแล้ว",
-        rejected: "ปฏิเสธ",
-        processing: "กำลังดำเนินการ",
-        completed: "เสร็จสิ้น",
-        cancelled: "ยกเลิก"
-      };
-      const safe = labels[status] ? status : "pending";
-      return `<span class="status ${safe}">${labels[safe]}</span>`;
-    }
-
-    function stopListeners() {
-      [unsubUser, unsubTopups, unsubOrders, unsubAdminTopups, unsubAdminOrders]
-        .forEach(unsub => { if (unsub) unsub(); });
-      unsubUser = unsubTopups = unsubOrders = null;
-      unsubAdminTopups = unsubAdminOrders = null;
-    }
-
-    function setConnection(text) {
-      $("connectionState").textContent = text;
-    }
-
-    function updateAccountUI() {
-      $("accountBtn").textContent = currentUser
-        ? (currentUser.email || "บัญชี")
-        : "เข้าสู่ระบบ";
-      $("memberState").textContent = currentUser ? "MEMBER" : "GUEST";
-      $("walletBtn").textContent = `Wallet ${money(currentBalance)}`;
-      $("walletBalance").textContent = money(currentBalance);
-      $("userEmail").textContent = currentUser
-        ? currentUser.email
-        : "ยังไม่ได้เข้าสู่ระบบ";
-      $("accountSection").classList.toggle("hidden", !currentUser);
-      $("adminSection").classList.toggle("hidden", currentRole !== "admin");
-      $("logoutBtn").classList.toggle("hidden", !currentUser);
-    }
-
-    function openAccount() {
-      if (!currentUser) {
-        authMode = "login";
-        updateAuthModal();
-        showModal("authModal");
-        return;
-      }
-      $("accountSection").scrollIntoView({ behavior: "smooth" });
-    }
-
-    function updateAuthModal() {
-      const login = authMode === "login";
-      $("authTitle").textContent = login ? "เข้าสู่ระบบ" : "สร้างบัญชี";
-      $("authSubmit").textContent = login ? "เข้าสู่ระบบ" : "สมัครสมาชิก";
-      $("switchAuth").textContent = login ? "สร้างบัญชีใหม่" : "กลับไปเข้าสู่ระบบ";
-      $("authPassword").autocomplete = login ? "current-password" : "new-password";
-    }
-
-    $("accountBtn").addEventListener("click", openAccount);
-    $("walletBtn").addEventListener("click", openAccount);
-    $("heroWalletBtn").addEventListener("click", () => {
-      if (!currentUser) return openAccount();
-      showModal("topupModal");
-    });
-    $("topupBtn").addEventListener("click", () => showModal("topupModal"));
-    $("cartBtn").addEventListener("click", () => {
-      renderCart();
-      showModal("cartModal");
-    });
-
-    document.querySelectorAll("[data-close]").forEach(button => {
-      button.addEventListener("click", () => hideModal(button.dataset.close));
-    });
-
-    document.querySelectorAll(".modal").forEach(modal => {
-      modal.addEventListener("click", event => {
-        if (event.target === modal) hideModal(modal.id);
-      });
-    });
-
-    $("switchAuth").addEventListener("click", () => {
-      authMode = authMode === "login" ? "register" : "login";
-      updateAuthModal();
-    });
-
-    $("authForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      const email = $("authEmail").value.trim();
-      const password = $("authPassword").value;
-      const submit = $("authSubmit");
-      submit.disabled = true;
-
-      try {
-        if (authMode === "register") {
-          const credential = await createUserWithEmailAndPassword(auth, email, password);
-          await setDoc(doc(db, "users", credential.user.uid), {
-            email: credential.user.email || email,
-            role: "user",
-            walletBalance: 0,
-            createdAt: serverTimestamp()
-          });
-          toast("สมัครสมาชิกสำเร็จ");
-        } else {
-          await signInWithEmailAndPassword(auth, email, password);
-          toast("เข้าสู่ระบบสำเร็จ");
-        }
-        hideModal("authModal");
-        $("authForm").reset();
-      } catch (error) {
-        console.error(error);
-        toast(authErrorMessage(error.code));
-      } finally {
-        submit.disabled = false;
-      }
-    });
-
-    function authErrorMessage(code) {
-      const messages = {
-        "auth/email-already-in-use": "อีเมลนี้มีบัญชีแล้ว",
-        "auth/invalid-email": "รูปแบบอีเมลไม่ถูกต้อง",
-        "auth/weak-password": "รหัสผ่านต้องมีอย่างน้อย 6 ตัวอักษร",
-        "auth/invalid-credential": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
-        "auth/user-not-found": "ไม่พบบัญชีนี้",
-        "auth/wrong-password": "รหัสผ่านไม่ถูกต้อง",
-        "auth/too-many-requests": "ลองใหม่ภายหลัง",
-        "auth/network-request-failed": "เครือข่ายมีปัญหา"
-      };
-      return messages[code] || `เกิดข้อผิดพลาด: ${code || "unknown"}`;
-    }
-
-    $("resetPassword").addEventListener("click", async () => {
-      const email = $("authEmail").value.trim();
-      if (!email) return toast("กรอกอีเมลก่อน");
-      try {
-        await sendPasswordResetEmail(auth, email);
-        toast("ส่งลิงก์รีเซ็ตรหัสผ่านแล้ว โปรดตรวจสอบอีเมล");
-      } catch (error) {
-        toast(authErrorMessage(error.code));
-      }
-    });
-
-    $("logoutBtn").addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        toast("ออกจากระบบแล้ว");
-      } catch (error) {
-        toast("ออกจากระบบไม่สำเร็จ");
-      }
-    });
-
-    $("refreshBtn").addEventListener("click", () => {
-      if (currentUser) {
-        startUserListeners(currentUser);
-        if (currentRole === "admin") startAdminListeners();
-        toast("กำลังรีเฟรชข้อมูล");
-      }
-    });
-
-    // Product catalog
-    function startProductListener() {
-      if (unsubProducts) unsubProducts();
-
-      unsubProducts = onSnapshot(collection(db, "products"), snapshot => {
-        products = snapshot.docs.map(item => ({
-          id: item.id,
-          ...item.data()
-        })).filter(item => item.active !== false);
-
-        renderProducts();
-        renderAdminProducts();
-        $("productCount").textContent = products.length;
-        setConnection("ONLINE");
-      }, error => {
-        console.error(error);
-        setConnection("ERROR");
-        $("products").innerHTML =
-          '<div class="notice warning">โหลดสินค้าไม่ได้ ตรวจสอบ Firestore Rules และการตั้งค่า Firebase</div>';
-      });
-    }
-
-    function renderProducts() {
-      const search = $("searchInput").value.trim().toLowerCase();
-      const filtered = products.filter(product =>
-        String(product.name || "").toLowerCase().includes(search) ||
-        String(product.description || "").toLowerCase().includes(search)
-      );
-
-      if (!filtered.length) {
-        $("products").innerHTML = `
-          <div class="notice">
-            ยังไม่มีสินค้าแสดงอยู่
-            ${currentRole === "admin" ? "เพิ่มสินค้าได้จาก Admin Console" : "โปรดกลับมาตรวจสอบอีกครั้ง"}
-          </div>`;
-        return;
-      }
-
-      $("products").innerHTML = filtered.map(product => {
-        const image = typeof product.imageUrl === "string" ? product.imageUrl : "";
-        return `
-          <article class="product">
-            <div class="product-image">
-              ${image
-                ? `<img src="${escapeHTML(image)}" alt="${escapeHTML(product.name || "สินค้า")}" loading="lazy" referrerpolicy="no-referrer" onerror="this.remove()">`
-                : `<span class="product-placeholder">H X</span>`}
-            </div>
-            <div class="product-content">
-              <h3>${escapeHTML(product.name || "สินค้าไม่มีชื่อ")}</h3>
-              <p>${escapeHTML(product.description || "สินค้าดิจิทัลจาก Horizon X")}</p>
-              <div class="product-bottom">
-                <span class="price">${money(product.price)}</span>
-                <button class="btn primary small" data-add="${escapeHTML(product.id)}">+ เพิ่ม</button>
-              </div>
-            </div>
-          </article>`;
-      }).join("");
-
-      $("products").querySelectorAll("[data-add]").forEach(button => {
-        button.addEventListener("click", () => addToCart(button.dataset.add));
-      });
-    }
-
-    $("searchInput").addEventListener("input", renderProducts);
-
-    // Cart is local to this browser session and is not a payment record.
-    function addToCart(productId) {
-      const product = products.find(item => item.id === productId);
-      if (!product) return toast("ไม่พบสินค้านี้");
-
-      const existing = cart.find(item => item.id === productId);
-      if (existing) existing.quantity = Math.min(existing.quantity + 1, 99);
-      else cart.push({
-        id: product.id,
-        name: product.name || "สินค้า",
-        price: Number(product.price) || 0,
-        quantity: 1
-      });
-
-      renderCart();
-      toast("เพิ่มสินค้าในตะกร้าแล้ว");
-    }
-
-    function renderCart() {
-      $("cartCount").textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-
-      if (!cart.length) {
-        $("cartItems").innerHTML = '<p class="muted">ยังไม่มีสินค้าในตะกร้า</p>';
-        $("cartTotal").textContent = money(0);
-        $("checkoutBtn").disabled = true;
-        return;
-      }
-
-      $("checkoutBtn").disabled = false;
-      $("cartItems").innerHTML = cart.map(item => `
-        <div class="list-item">
-          <div class="list-item-top">
-            <strong>${escapeHTML(item.name)}</strong>
-            <strong>${money(item.price * item.quantity)}</strong>
-          </div>
-          <p class="muted">จำนวน ${item.quantity} • ${money(item.price)} ต่อชิ้น</p>
-          <div class="admin-tools">
-            <button class="btn small" data-minus="${escapeHTML(item.id)}">−</button>
-            <button class="btn small" data-plus="${escapeHTML(item.id)}">+</button>
-            <button class="btn danger small" data-remove="${escapeHTML(item.id)}">ลบ</button>
-          </div>
-        </div>`).join("");
-
-      $("cartTotal").textContent = money(
-        cart.reduce((sum, item) => sum + item.price * item.quantity, 0)
-      );
-
-      $("cartItems").querySelectorAll("[data-minus]").forEach(button =>
-        button.addEventListener("click", () => changeQuantity(button.dataset.minus, -1)));
-      $("cartItems").querySelectorAll("[data-plus]").forEach(button =>
-        button.addEventListener("click", () => changeQuantity(button.dataset.plus, 1)));
-      $("cartItems").querySelectorAll("[data-remove]").forEach(button =>
-        button.addEventListener("click", () => {
-          cart = cart.filter(item => item.id !== button.dataset.remove);
-          renderCart();
-        }));
-    }
-
-    function changeQuantity(id, delta) {
-      const item = cart.find(entry => entry.id === id);
-      if (!item) return;
-      item.quantity += delta;
-      if (item.quantity <= 0) cart = cart.filter(entry => entry.id !== id);
-      if (item.quantity > 99) item.quantity = 99;
-      renderCart();
-    }
-
-    $("checkoutBtn").addEventListener("click", async () => {
-      if (!currentUser) {
-        hideModal("cartModal");
-        openAccount();
-        return toast("เข้าสู่ระบบก่อนสั่งซื้อ");
-      }
-      if (!cart.length) return toast("ตะกร้าว่าง");
-
-      const button = $("checkoutBtn");
-      button.disabled = true;
-
-      try {
-        // Re-read prices from Firestore; do not trust browser cart prices.
-        const items = [];
-        let total = 0;
-
-        for (const cartItem of cart) {
-          const productSnap = await getDoc(doc(db, "products", cartItem.id));
-          if (!productSnap.exists()) throw new Error("PRODUCT_MISSING");
-          const product = productSnap.data();
-
-          if (product.active === false) throw new Error("PRODUCT_INACTIVE");
-
-          const price = Number(product.price);
-          const quantity = Number(cartItem.quantity);
-
-          if (!Number.isFinite(price) || price < 0 ||
-              !Number.isInteger(quantity) || quantity < 1 || quantity > 99) {
-            throw new Error("INVALID_ITEM");
-          }
-
-          total += price * quantity;
-          items.push({
-            productId: cartItem.id,
-            name: String(product.name || "สินค้า").slice(0, 100),
-            price,
-            quantity
-          });
-        }
-
-        await addDoc(collection(db, "orders"), {
-          uid: currentUser.uid,
-          email: currentUser.email || "",
-          items,
-          total,
-          status: "pending",
-          paymentStatus: "unpaid",
-          createdAt: serverTimestamp()
-        });
-
-        cart = [];
-        renderCart();
-        hideModal("cartModal");
-        toast("ส่งคำสั่งซื้อแล้ว รอแอดมินตรวจสอบ");
-      } catch (error) {
-        console.error(error);
-        toast(error.message === "PRODUCT_MISSING"
-          ? "สินค้าบางรายการไม่มีอยู่แล้ว"
-          : "สร้างคำสั่งซื้อไม่ได้ ตรวจสอบ Rules หรือสินค้าอีกครั้ง");
-      } finally {
-        button.disabled = false;
-      }
-    });
-
-    // Top-up requests
-    $("topupForm").addEventListener("submit", async event => {
-      event.preventDefault();
-
-      if (!currentUser) return toast("เข้าสู่ระบบก่อน");
-      const amount = Number($("topupAmount").value);
-      const reference = $("topupReference").value.trim();
-      const note = $("topupNote").value.trim();
-
-      if (!Number.isFinite(amount) || amount < 1 || amount > 10000) {
-        return toast("จำนวนเงินต้องอยู่ระหว่าง 1–10,000 บาท");
-      }
-      if (reference.length < 4) return toast("กรอกเลขอ้างอิงให้ถูกต้อง");
-
-      const button = event.submitter;
-      if (button) button.disabled = true;
-
-      try {
-        await addDoc(collection(db, "topups"), {
-          uid: currentUser.uid,
-          email: currentUser.email || "",
-          amount,
-          reference: reference.slice(0, 120),
-          note: note.slice(0, 500),
-          status: "pending",
-          createdAt: serverTimestamp()
-        });
-
-        $("topupForm").reset();
-        hideModal("topupModal");
-        toast("ส่งคำขอแล้ว รอแอดมินตรวจสอบ");
-      } catch (error) {
-        console.error(error);
-        toast("ส่งคำขอไม่สำเร็จ ตรวจสอบ Firestore Rules");
-      } finally {
-        if (button) button.disabled = false;
-      }
-    });
-
-    function startUserListeners(user) {
-      stopListeners();
-
-      unsubUser = onSnapshot(doc(db, "users", user.uid), snapshot => {
-        const data = snapshot.exists() ? snapshot.data() : {};
-        currentRole = data.role === "admin" ? "admin" : "user";
-        currentBalance = Number(data.walletBalance) || 0;
-        updateAccountUI();
-        if (currentRole === "admin") startAdminListeners();
-      }, error => {
-        console.error(error);
-        toast("อ่านข้อมูลบัญชีไม่ได้ ตรวจสอบ Firestore Rules");
-      });
-
-      unsubTopups = onSnapshot(
-        query(collection(db, "topups"), where("uid", "==", user.uid)),
-        snapshot => {
-          const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-          rows.sort((a, b) => {
-            const ta = a.createdAt?.toMillis?.() || 0;
-            const tb = b.createdAt?.toMillis?.() || 0;
-            return tb - ta;
-          });
-          $("topupHistory").innerHTML = rows.length ? rows.map(item => `
-            <div class="list-item">
-              <div class="list-item-top">
-                <strong>${money(item.amount)}</strong>${statusHTML(item.status)}
-              </div>
-              <p class="muted">เลขอ้างอิง: ${escapeHTML(item.reference || "-")}</p>
-              <p class="muted">${formatDate(item.createdAt)}</p>
-              ${item.adminNote ? `<p>${escapeHTML(item.adminNote)}</p>` : ""}
-            </div>`).join("") : '<p class="muted">ยังไม่มีรายการเติมเงิน</p>';
-        },
-        error => {
-          console.error(error);
-          $("topupHistory").innerHTML = '<p class="muted">อ่านประวัติเติมเงินไม่ได้</p>';
-        }
-      );
-
-      unsubOrders = onSnapshot(
-        query(collection(db, "orders"), where("uid", "==", user.uid)),
-        snapshot => {
-          const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-          rows.sort((a, b) => {
-            const ta = a.createdAt?.toMillis?.() || 0;
-            const tb = b.createdAt?.toMillis?.() || 0;
-            return tb - ta;
-          });
-          $("orderHistory").innerHTML = rows.length ? rows.map(item => `
-            <div class="list-item">
-              <div class="list-item-top">
-                <strong>${money(item.total)}</strong>${statusHTML(item.status)}
-              </div>
-              <p class="muted">${(item.items || []).map(i =>
-                `${escapeHTML(i.name)} × ${Number(i.quantity) || 1}`).join(", ")}</p>
-              <p class="muted">ชำระเงิน: ${escapeHTML(item.paymentStatus || "unpaid")}</p>
-              <p class="muted">${formatDate(item.createdAt)}</p>
-            </div>`).join("") : '<p class="muted">ยังไม่มีคำสั่งซื้อ</p>';
-        },
-        error => {
-          console.error(error);
-          $("orderHistory").innerHTML = '<p class="muted">อ่านคำสั่งซื้อไม่ได้</p>';
-        }
-      );
-    }
-
-    // Admin panel
-    function startAdminListeners() {
-      if (currentRole !== "admin") return;
-
-      if (unsubAdminTopups) unsubAdminTopups();
-      if (unsubAdminOrders) unsubAdminOrders();
-
-      unsubAdminTopups = onSnapshot(collection(db, "topups"), snapshot => {
-        const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-        rows.sort((a, b) =>
-          (a.createdAt?.toMillis?.() || 0) - (b.createdAt?.toMillis?.() || 0));
-
-        $("adminTopups").innerHTML = rows.length ? rows.map(item => `
-          <div class="list-item">
-            <div class="list-item-top">
-              <strong>${money(item.amount)}</strong>${statusHTML(item.status)}
-            </div>
-            <p class="muted">ผู้ใช้: ${escapeHTML(item.email || item.uid)}</p>
-            <p class="muted">UID: ${escapeHTML(item.uid || "-")}</p>
-            <p class="muted">เลขอ้างอิง: ${escapeHTML(item.reference || "-")}</p>
-            <p class="muted">หมายเหตุ: ${escapeHTML(item.note || "-")}</p>
-            <p class="muted">${formatDate(item.createdAt)}</p>
-            ${item.status === "pending" ? `
-              <div class="admin-tools">
-                <button class="btn primary small" data-approve-topup="${escapeHTML(item.id)}">ตรวจสอบและอนุมัติ</button>
-                <button class="btn danger small" data-reject-topup="${escapeHTML(item.id)}">ปฏิเสธ</button>
-              </div>` : ""}
-          </div>`).join("") : '<p class="muted">ไม่มีรายการเติมเงิน</p>';
-
-        $("adminTopups").querySelectorAll("[data-approve-topup]").forEach(button =>
-          button.addEventListener("click", () => approveTopup(button.dataset.approveTopup, button)));
-        $("adminTopups").querySelectorAll("[data-reject-topup]").forEach(button =>
-          button.addEventListener("click", () => rejectTopup(button.dataset.rejectTopup, button)));
-      }, error => {
-        console.error(error);
-        $("adminTopups").innerHTML = '<p class="muted">อ่านรายการเติมเงินไม่ได้ ตรวจสอบ Rules</p>';
-      });
-
-      unsubAdminOrders = onSnapshot(collection(db, "orders"), snapshot => {
-        const rows = snapshot.docs.map(item => ({ id: item.id, ...item.data() }));
-        rows.sort((a, b) =>
-          (b.createdAt?.toMillis?.() || 0) - (a.createdAt?.toMillis?.() || 0));
-
-        $("adminOrders").innerHTML = rows.length ? rows.map(item => `
-          <div class="list-item">
-            <div class="list-item-top">
-              <strong>${money(item.total)}</strong>${statusHTML(item.status)}
-            </div>
-            <p class="muted">ผู้ใช้: ${escapeHTML(item.email || item.uid)}</p>
-            <p class="muted">UID: ${escapeHTML(item.uid || "-")}</p>
-            <p class="muted">${(item.items || []).map(i =>
-              `${escapeHTML(i.name)} × ${Number(i.quantity) || 1}`).join(", ")}</p>
-            <p class="muted">ชำระเงิน: ${escapeHTML(item.paymentStatus || "unpaid")}</p>
-            <p class="muted">${formatDate(item.createdAt)}</p>
-            ${item.status === "pending" ? `
-              <div class="admin-tools">
-                <button class="btn primary small" data-complete-order="${escapeHTML(item.id)}">ทำเครื่องหมายเสร็จสิ้น</button>
-                <button class="btn danger small" data-cancel-order="${escapeHTML(item.id)}">ยกเลิก</button>
-              </div>` : ""}
-          </div>`).join("") : '<p class="muted">ไม่มีคำสั่งซื้อ</p>';
-
-        $("adminOrders").querySelectorAll("[data-complete-order]").forEach(button =>
-          button.addEventListener("click", () =>
-            setOrderStatus(button.dataset.completeOrder, "completed", button)));
-        $("adminOrders").querySelectorAll("[data-cancel-order]").forEach(button =>
-          button.addEventListener("click", () =>
-            setOrderStatus(button.dataset.cancelOrder, "cancelled", button)));
-      }, error => {
-        console.error(error);
-        $("adminOrders").innerHTML = '<p class="muted">อ่านคำสั่งซื้อไม่ได้ ตรวจสอบ Rules</p>';
-      });
-    }
-
-    async function approveTopup(id, button) {
-      if (currentRole !== "admin" || !currentUser) return toast("ไม่มีสิทธิ์แอดมิน");
-      if (!confirm("ยืนยันว่าได้ตรวจสอบธุรกรรมจริงแล้ว และต้องการเพิ่มยอด Wallet ใช่หรือไม่?")) return;
-
-      button.disabled = true;
-      try {
-        await runTransaction(db, async transaction => {
-          const topupRef = doc(db, "topups", id);
-          const topupSnap = await transaction.get(topupRef);
-          if (!topupSnap.exists()) throw new Error("ไม่พบรายการเติมเงิน");
-
-          const topup = topupSnap.data();
-          if (topup.status !== "pending") throw new Error("รายการนี้ถูกตรวจสอบแล้ว");
-
-          const amount = Number(topup.amount);
-          if (!Number.isFinite(amount) || amount <= 0 || amount > 10000) {
-            throw new Error("จำนวนเงินไม่ถูกต้อง");
-          }
-
-          const userRef = doc(db, "users", topup.uid);
-          const userSnap = await transaction.get(userRef);
-          if (!userSnap.exists()) throw new Error("ไม่พบข้อมูลบัญชีผู้ใช้");
-
-          const oldBalance = Number(userSnap.data().walletBalance) || 0;
-          transaction.update(userRef, {
-            walletBalance: oldBalance + amount,
-            updatedAt: serverTimestamp()
-          });
-          transaction.update(topupRef, {
-            status: "approved",
-            reviewedBy: currentUser.uid,
-            reviewedAt: serverTimestamp()
-          });
-        });
-
-        toast("อนุมัติและปรับยอด Wallet แล้ว");
-      } catch (error) {
-        console.error(error);
-        toast(error.message || "อนุมัติไม่สำเร็จ");
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    async function rejectTopup(id, button) {
-      if (currentRole !== "admin") return toast("ไม่มีสิทธิ์แอดมิน");
-      const reason = prompt("เหตุผลที่ปฏิเสธ (ไม่บังคับ):") || "";
-      button.disabled = true;
-
-      try {
-        const ref = doc(db, "topups", id);
-        await runTransaction(db, async transaction => {
-          const snap = await transaction.get(ref);
-          if (!snap.exists() || snap.data().status !== "pending") {
-            throw new Error("รายการนี้ไม่อยู่ในสถานะรอตรวจสอบ");
-          }
-          transaction.update(ref, {
-            status: "rejected",
-            adminNote: reason.slice(0, 500),
-            reviewedBy: currentUser.uid,
-            reviewedAt: serverTimestamp()
-          });
-        });
-        toast("ปฏิเสธรายการแล้ว");
-      } catch (error) {
-        console.error(error);
-        toast(error.message || "ดำเนินการไม่สำเร็จ");
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    async function setOrderStatus(id, status, button) {
-      if (currentRole !== "admin") return toast("ไม่มีสิทธิ์แอดมิน");
-      if (!confirm(`ยืนยันเปลี่ยนสถานะเป็น ${status} ?`)) return;
-
-      button.disabled = true;
-      try {
-        const ref = doc(db, "orders", id);
-        await runTransaction(db, async transaction => {
-          const snap = await transaction.get(ref);
-          if (!snap.exists() || snap.data().status !== "pending") {
-            throw new Error("คำสั่งซื้อนี้ถูกจัดการไปแล้ว");
-          }
-          transaction.update(ref, {
-            status,
-            reviewedBy: currentUser.uid,
-            reviewedAt: serverTimestamp()
-          });
-        });
-        toast("อัปเดตสถานะคำสั่งซื้อแล้ว");
-      } catch (error) {
-        console.error(error);
-        toast(error.message || "อัปเดตไม่สำเร็จ");
-      } finally {
-        button.disabled = false;
-      }
-    }
-
-    $("productForm").addEventListener("submit", async event => {
-      event.preventDefault();
-      if (currentRole !== "admin") return toast("ไม่มีสิทธิ์แอดมิน");
-
-      const name = $("productName").value.trim();
-      const price = Number($("productPrice").value);
-      const imageUrl = $("productImage").value.trim();
-      const description = $("productDescription").value.trim();
-
-      if (!name || !Number.isFinite(price) || price < 0 || price > 1000000) {
-        return toast("ตรวจสอบชื่อสินค้าและราคา");
-      }
-
-      if (imageUrl && !/^https:\/\//i.test(imageUrl)) {
-        return toast("URL รูปภาพต้องใช้ HTTPS");
-      }
-
-      try {
-        await addDoc(collection(db, "products"), {
-          name: name.slice(0, 100),
-          price,
-          imageUrl,
-          description: description.slice(0, 2000),
-          active: true,
-          createdAt: serverTimestamp(),
-          createdBy: currentUser.uid
-        });
-
-        $("productForm").reset();
-        toast("เพิ่มสินค้าแล้ว");
-      } catch (error) {
-        console.error(error);
-        toast("เพิ่มสินค้าไม่ได้ ตรวจสอบสิทธิ์ Firestore");
-      }
-    });
-
-    function renderAdminProducts() {
-      if (currentRole !== "admin") return;
-      $("adminProducts").innerHTML = products.length ? products.map(product => `
-        <div class="list-item">
-          <div class="list-item-top">
-            <strong>${escapeHTML(product.name || "สินค้า")}</strong>
-            <strong>${money(product.price)}</strong>
-          </div>
-          <p class="muted">${escapeHTML(product.description || "")}</p>
-          <button class="btn danger small" data-delete-product="${escapeHTML(product.id)}">ลบสินค้า</button>
-        </div>`).join("") : '<p class="muted">ยังไม่มีสินค้า</p>';
-
-      $("adminProducts").querySelectorAll("[data-delete-product]").forEach(button =>
-        button.addEventListener("click", async () => {
-          if (currentRole !== "admin") return;
-          if (!confirm("ยืนยันลบสินค้านี้?")) return;
-
-          button.disabled = true;
-          try {
-            await deleteDoc(doc(db, "products", button.dataset.deleteProduct));
-            toast("ลบสินค้าแล้ว");
-          } catch (error) {
-            console.error(error);
-            toast("ลบสินค้าไม่ได้");
-          } finally {
-            button.disabled = false;
-          }
-        }));
-    }
-
-    onAuthStateChanged(auth, async user => {
-      stopListeners();
-      currentUser = user;
-      currentRole = user ? "user" : "guest";
-      currentBalance = 0;
-      updateAccountUI();
-
-      if (user) {
-        try {
-          const userRef = doc(db, "users", user.uid);
-          const userSnap = await getDoc(userRef);
-
-          if (!userSnap.exists()) {
-            // New user profile is created with no privileges.
-            await setDoc(userRef, {
-              email: user.email || "",
-              role: "user",
-              walletBalance: 0,
-              createdAt: serverTimestamp()
-            });
-          }
-        } catch (error) {
-          console.error(error);
-          toast("อ่านโปรไฟล์ไม่ได้ ตรวจสอบ Firestore Rules");
-        }
-
-        startUserListeners(user);
-      }
-    });
-
-    startProductListener();
-    renderCart();
-    updateAuthModal();
-  </script>
-</body>
-    </html>
+<html lang="th"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>HorizonX</title>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=Prompt:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#050a16;--cd:rgba(20,32,58,.6);--ln:rgba(140,190,255,.16);--tx:#eaf4ff;--mu:#8ea6c4;--ice:#7dd3fc;--cy:#22d3ee;--ind:#818cf8;--sp:cubic-bezier(.34,1.56,.64,1)}
+*{box-sizing:border-box;margin:0;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--tx);font:300 16px Prompt,system-ui,sans-serif;overflow-x:hidden}
+h1,h2,h3,.lg,.pr{font-family:'Chakra Petch',Prompt,sans-serif;letter-spacing:.03em}
+button,input,select,textarea{font:inherit;color:var(--tx)}
+.au{position:fixed;inset:0;pointer-events:none;overflow:hidden}.au i{position:absolute;width:60vmax;height:60vmax;border-radius:50%;filter:blur(90px);opacity:.33;animation:dr 18s ease-in-out infinite alternate}
+.au i:nth-child(1){background:#0ea5e9;top:-20vmax;left:-15vmax}.au i:nth-child(2){background:#6366f1;bottom:-25vmax;right:-20vmax;animation-delay:-6s}
+@keyframes dr{to{transform:translate(8vmax,6vmax) scale(1.2)}}
+nav{position:fixed;top:0;left:0;right:0;z-index:50;display:flex;gap:8px;align-items:center;padding:calc(10px + env(safe-area-inset-top)) 14px 10px;backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);background:rgba(5,10,22,.6);border-bottom:1px solid var(--ln)}
+.lg{font-weight:700;font-size:1.15rem;margin-right:auto;cursor:pointer;user-select:none}.lg b{color:var(--ice);display:inline-block;animation:sp 8s linear infinite}
+@keyframes sp{50%{transform:rotate(180deg) scale(1.2)}to{transform:rotate(360deg)}}
+.mini,.chip,#cb{background:rgba(125,211,252,.12);border:1px solid var(--ln);color:var(--ice);border-radius:999px;padding:9px 15px;cursor:pointer;transition:transform .45s var(--sp),background .3s;white-space:nowrap}
+.mini:active,.chip:active,#cb:active{transform:scale(.88)}.chip.on{background:linear-gradient(135deg,var(--ice),var(--cy));color:#021226;transform:scale(1.06)}
+#cb{position:relative;color:var(--tx)}#bd{position:absolute;top:-7px;right:-6px;min-width:20px;height:20px;border-radius:10px;background:linear-gradient(135deg,var(--cy),var(--ind));color:#021;font-size:.72rem;display:grid;place-items:center;transform:scale(0)}#bd.on{transform:scale(1)}#bd.pop{animation:pp .5s var(--sp)}
+@keyframes pp{0%{transform:scale(.4)}60%{transform:scale(1.6)}to{transform:scale(1)}}
+@media(max-width:600px){.nl{display:none}}.nl{display:flex;gap:16px;color:var(--mu);font-size:.9rem}.nl a{color:inherit;text-decoration:none}.nl a:hover{color:var(--ice)}
+main{position:relative}
+.hero{min-height:100svh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:100px 22px 50px}
+.hero svg{width:min(50vw,210px);filter:drop-shadow(0 0 28px rgba(125,211,252,.55));animation:fl 5s ease-in-out infinite}@keyframes fl{50%{transform:translateY(-16px) rotate(-2deg)}}
+.hero h1{font-size:clamp(2.4rem,11vw,5rem);margin:22px 0 10px}.hero h1 span{display:inline-block;opacity:0;transform:translateY(60px) scale(.5);animation:lt .9s var(--sp) forwards}@keyframes lt{to{opacity:1;transform:none}}
+.gr{background:linear-gradient(90deg,var(--ice),var(--ind),var(--cy));background-size:200%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sh 4s linear infinite}@keyframes sh{to{background-position:200%}}
+.hero p{color:var(--mu);max-width:34ch;line-height:1.7}
+.btn{margin-top:14px;padding:14px 30px;border-radius:999px;border:0;font-weight:500;color:#021226;background:linear-gradient(135deg,var(--ice),var(--cy));cursor:pointer;box-shadow:0 10px 40px -8px rgba(34,211,238,.6);transition:transform .45s var(--sp);text-decoration:none;display:inline-block}.btn:hover{transform:scale(1.06)}.btn:active{transform:scale(.9)}
+.fs{margin-top:26px;padding:12px 20px;border-radius:18px;border:1px solid var(--ln);background:var(--cd);font-family:'Chakra Petch'}.fs b{color:#fb7185;font-size:1.2rem}
+.mq{overflow:hidden;border-block:1px solid var(--ln);padding:14px 0;background:rgba(10,20,40,.5);transform:rotate(-1.5deg);margin:20px -10px}.mq div{display:flex;gap:44px;white-space:nowrap;width:max-content;animation:mq 24s linear infinite;color:var(--ice);letter-spacing:.2em}@keyframes mq{to{transform:translateX(-50%)}}
+section{padding:70px 18px;max-width:1100px;margin:auto}section h2{font-size:clamp(1.8rem,7vw,2.8rem);margin-bottom:6px}.sub{color:var(--mu);margin-bottom:24px}
+.tb{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}.tb input,.tb select,.box input,.box select,.box textarea,#ab input,#ab select,#ab textarea{background:rgba(255,255,255,.06);border:1px solid var(--ln);border-radius:12px;padding:11px;width:100%}.tb input{flex:2 1 180px;width:auto}.tb select{flex:1 1 130px;width:auto}select option{background:#0b1426}
+#chips{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:18px;perspective:900px}
+.card{position:relative;overflow:hidden;background:var(--cd);border:1px solid var(--ln);border-radius:24px;padding:14px;backdrop-filter:blur(10px);transition:transform .5s var(--sp),border-color .3s,box-shadow .3s;animation:in .8s var(--sp) backwards}.card:hover{border-color:rgba(125,211,252,.5);box-shadow:0 20px 60px -20px rgba(34,211,238,.45)}
+@keyframes in{from{opacity:0;transform:translateY(60px) scale(.9)}}
+.pic{height:180px;border-radius:16px;display:grid;place-items:center;font-size:4rem;margin-bottom:12px;overflow:hidden;cursor:zoom-in}.pic span{animation:fl 4s ease-in-out infinite}.pic img{width:100%;height:100%;object-fit:cover}
+.card small{color:var(--mu)}.row{display:flex;justify-content:space-between;align-items:center;margin-top:12px}.pr{font-size:1.25rem;color:var(--ice)}
+.add{width:44px;height:44px;border-radius:50%;border:1px solid var(--ln);background:rgba(125,211,252,.12);color:var(--ice);font-size:1.4rem;cursor:pointer;transition:transform .45s var(--sp),background .3s}.add:hover{background:var(--ice);color:#021226;transform:rotate(90deg) scale(1.15)}.add:active{transform:scale(.75)}.add:disabled{opacity:.3;pointer-events:none}
+.ht{position:absolute;top:22px;right:22px;z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid var(--ln);background:rgba(5,10,22,.55);cursor:pointer;transition:transform .45s var(--sp)}.ht:active{transform:scale(.7)}
+.tg{position:absolute;top:22px;left:22px;z-index:3;font-style:normal;font-size:.72rem;padding:4px 10px;border-radius:999px;background:#fb7185;color:#fff}.tg.lo{background:#fbbf24;color:#2a1a00}
+.em{grid-column:1/-1;text-align:center;color:var(--mu);padding:40px}
+.pk{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}.pk div{background:var(--cd);border:1px solid var(--ln);border-radius:20px;padding:20px;transition:transform .5s var(--sp)}.pk div:hover{transform:translateY(-8px) rotate(-1deg)}.pk b{font-size:2rem;display:block}
+footer{position:relative;text-align:center;padding:40px 18px;color:var(--mu);font-size:.85rem;border-top:1px solid var(--ln)}footer a{color:inherit;margin:0 8px;cursor:pointer}
+#vl{position:fixed;inset:0;background:rgba(2,6,16,.6);backdrop-filter:blur(4px);z-index:60;opacity:0;pointer-events:none;transition:opacity .3s}#vl.on{opacity:1;pointer-events:auto}
+#dr{position:fixed;top:0;right:0;bottom:0;width:min(400px,92vw);z-index:70;background:rgba(10,18,36,.94);backdrop-filter:blur(24px);border-left:1px solid var(--ln);transform:translateX(105%);transition:transform .65s var(--sp);display:flex;flex-direction:column;padding:calc(18px + env(safe-area-inset-top)) 18px calc(18px + env(safe-area-inset-bottom))}#dr.on{transform:none}
+#dr header{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}#it{flex:1;overflow:auto}
+.it{display:flex;gap:10px;align-items:center;padding:10px;border:1px solid var(--ln);border-radius:16px;margin-bottom:8px;animation:si .5s var(--sp)}@keyframes si{from{opacity:0;transform:translateX(50px)}}.it>div{flex:1}.it .e{font-size:1.8rem}.it small{color:var(--mu)}
+.qt{display:flex;align-items:center;gap:8px;margin-top:4px}.qt button,.x{width:28px;height:28px;border-radius:50%;border:1px solid var(--ln);background:rgba(125,211,252,.12);color:var(--ice);cursor:pointer}.x{background:none;border:0;color:#fb7185}
+.sb{height:8px;border-radius:6px;background:rgba(255,255,255,.08);overflow:hidden;margin:6px 0 12px}.sb i{display:block;height:100%;background:linear-gradient(90deg,var(--cy),var(--ind));transition:width .9s var(--sp)}
+.tt{display:flex;justify-content:space-between;font-size:1.2rem;padding:12px 0;font-family:'Chakra Petch'}
+.modal{position:fixed;inset:0;z-index:80;display:none}.modal.on{display:grid;place-items:center;background:rgba(2,6,16,.75);backdrop-filter:blur(8px)}
+.box{width:min(430px,94vw);max-height:92vh;overflow:auto;background:rgba(12,22,42,.97);border:1px solid var(--ln);border-radius:24px;padding:22px;display:flex;flex-direction:column;gap:10px;animation:si .6s var(--sp)}.two{display:flex;gap:8px}.two>*{flex:1}
+.steps{display:flex;margin:8px 0}.steps span{flex:1;text-align:center;font-size:.75rem;color:var(--mu)}.steps b{display:grid;place-items:center;width:30px;height:30px;margin:0 auto 4px;border-radius:50%;border:1px solid var(--ln)}.steps .on{color:var(--ice)}.steps .on b{background:var(--ice);color:#021226;animation:pp .6s var(--sp)}
+#toast{position:fixed;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translate(-50%,220%);z-index:99;background:var(--cd);backdrop-filter:blur(14px);border:2px solid;padding:11px 22px;border-radius:999px;transition:transform .6s var(--sp);max-width:92vw}#toast.on{transform:translate(-50%,0)}#toast.ok{border-color:#34d399;box-shadow:0 0 30px -6px #34d399}#toast.er{border-color:#fb7185;box-shadow:0 0 30px -6px #fb7185}
+.cf{position:fixed;z-index:120;width:10px;height:14px;border-radius:3px;pointer-events:none}
+#ad{position:fixed;inset:0;z-index:85;display:none;overflow:auto;background:var(--bg);padding:calc(14px + env(safe-area-inset-top)) 14px 30px}#ad.on{display:block}
+#ab{max-width:760px;margin:auto;display:flex;flex-direction:column;gap:10px}#tb2{display:flex;gap:8px;overflow-x:auto;margin-bottom:14px}
+.ar,.oc,.stats div{background:var(--cd);border:1px solid var(--ln);border-radius:16px;padding:10px;animation:si .5s var(--sp)}.ar{display:flex;gap:8px;align-items:center}.ar>div{flex:1;min-width:0}.ar input{width:80px;padding:8px}.oc{display:flex;flex-direction:column;gap:6px;padding:14px}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;text-align:center}.stats b{display:block;font:700 1.5rem 'Chakra Petch';color:var(--ice)}.stats div{padding:16px 6px;font-size:.8rem;color:var(--mu)}
+.fm{display:grid;grid-template-columns:1fr 1fr;gap:8px}.fm .w{grid-column:1/-1}
+.ch{display:flex;align-items:flex-end;gap:10px;height:170px;padding-top:22px}.ch i{flex:1;background:linear-gradient(var(--ice),var(--ind));border-radius:8px 8px 0 0;position:relative;min-height:6px;animation:gw .9s var(--sp);transform-origin:bottom}@keyframes gw{from{transform:scaleY(0)}}.ch em{position:absolute;top:-18px;left:-10px;right:-10px;text-align:center;font-size:.6rem;font-style:normal;color:var(--mu)}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01s!important}.hero h1 span{opacity:1;transform:none}}
+</style></head><body>
+<div class="au"><i></i><i></i></div>
+<nav><div class="lg" id="lg"><b>✕</b> HorizonX</div><div class="nl"><a href="#shop">สินค้า</a><a href="#why">ทำไมต้องเรา</a></div><button class="mini" id="ac">เข้าสู่ระบบ</button><button id="cb" aria-label="ตะกร้า">🛒<span id="bd">0</span></button></nav>
+<main>
+<div class="hero"><svg viewBox="0 0 400 300" fill="none"><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#818cf8"/></linearGradient></defs><path d="M110 50L200 108L290 50H330L226 125L330 245H290L200 160L110 245H70L174 125L70 50Z" fill="url(#g)"/><path d="M20 150H380" stroke="#eaf4ff" stroke-width="2" opacity=".8"/></svg>
+<h1 id="ti"></h1><p>ช้อปยุคใหม่ ที่ขอบฟ้าคือแค่จุดเริ่มต้น</p><a class="btn" href="#shop">เริ่มช้อปเลย</a><div class="fs">⚡ Flash Sale จบใน <b id="cd">--:--:--</b></div></div>
+<div class="mq"><div id="mq"></div></div>
+<section id="shop"><h2>สินค้าแนะนำ</h2><p class="sub">แตะรูปเพื่อดูรายละเอียด · กด ❤ เก็บไว้ · กด + ใส่ตะกร้า</p>
+<div class="tb"><input id="q" placeholder="🔍 ค้นหาสินค้า"><select id="so"><option value="d">แนะนำ</option><option value="a">ราคาต่ำ → สูง</option><option value="z">ราคาสูง → ต่ำ</option></select><button class="mini" id="wo">❤ ที่ชอบ</button></div>
+<div id="chips"></div><div class="grid" id="grid"></div></section>
+<section id="why"><h2>ทำไมต้อง HorizonX</h2><p class="sub">ซื้อง่าย มั่นใจทุกออเดอร์</p><div class="pk"><div><b>🚚</b>ส่งฟรีเมื่อครบ ฿2,000</div><div><b>🛡️</b>สินค้าแท้ รับประกัน</div><div><b>📦</b>ติดตามพัสดุได้ในบัญชี</div><div><b>💬</b>ซัพพอร์ตทุกวัน</div></div></section>
+</main>
+<footer>© 2026 HorizonX<br><a data-i="เงื่อนไขการใช้งาน">เงื่อนไขการใช้งาน</a><a data-i="นโยบายความเป็นส่วนตัว">ความเป็นส่วนตัว</a><a data-i="การคืนสินค้า">การคืนสินค้า</a><a data-i="ติดต่อเรา">ติดต่อเรา</a></footer>
+<div id="vl"></div>
+<aside id="dr"><header><h2>ตะกร้า</h2><button class="x" id="cl">✕</button></header><div id="it"></div><div class="tt"><span>รวม</span><span id="sm">฿0</span></div><button class="btn" id="co" style="width:100%;margin:0">ชำระเงิน</button></aside>
+<div id="m" class="modal"><div class="box"></div></div>
+<div id="ad"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px"><b class="lg">✕ HorizonX · หลังบ้าน</b><button class="mini" id="ax">ปิด</button></div><div id="tb2"></div><div id="ab"></div></div>
+<div id="toast"></div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),B=n=>'฿'+Number(n).toLocaleString();
+const LS=(k,d)=>{try{return JSON.parse(localStorage.getItem(k))??d}catch(e){return d}},SV=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+const DEF=[{id:1,n:'Nova Pro',d:'หูฟังรุ่นเรือธง',p:4990,s:20,e:'🎧',cat:'หูฟัง'},{id:2,n:'Aero Lite',d:'สมาร์ทวอทช์เบา',p:2290,s:20,e:'⌚',cat:'นาฬิกา'},{id:3,n:'Frost Case',d:'เคสดีไซน์เย็นตา',p:890,s:20,e:'🧊',cat:'อุปกรณ์เสริม'},{id:4,n:'Pulse Cam',d:'กล้องคมชัดทุกมุม',p:6490,s:20,e:'📷',cat:'กล้อง'}];
+let P=DEF,cart=LS('hx_c',[]),W=new Set(LS('hx_w',[])),U=null,adm=false,CAT='ทั้งหมด',Q='',SO='d',WO=false,cp=null,O=[],MO=[],CP=[],tab='dash',un=[],au=null,db=null;
+const gp=id=>P.find(p=>p.id==id),srt=s=>s.docs.map(d=>d.data()).sort((a,b)=>b.t.localeCompare(a.t));
+try{firebase.initializeApp({apiKey:"AIzaSyD96Cs3gNteaSwrJMFXKfROGBuvTHvMYDE",authDomain:"horizon-x-f920b.firebaseapp.com",projectId:"horizon-x-f920b",storageBucket:"horizon-x-f920b.firebasestorage.app",messagingSenderId:"621329414639",appId:"1:621329414639:web:16024b58edcb6348491e1a"});au=firebase.auth();db=firebase.firestore()}catch(e){console.error(e)}
+function toast(m,ok=true){const t=$('#toast');t.className='';t.textContent=(ok?'✓ ':'✕ ')+m;void t.offsetWidth;t.classList.add('on',ok?'ok':'er');clearTimeout(t.h);t.h=setTimeout(()=>t.className='',2600)}
+const M=h=>{$('#m .box').innerHTML=h;$('#m').classList.add('on')},XM=()=>$('#m').classList.remove('on');
+const AE={'auth/invalid-credential':'อีเมลหรือรหัสผ่านไม่ถูกต้อง','auth/email-already-in-use':'อีเมลนี้ถูกใช้แล้ว','auth/weak-password':'รหัสผ่านสั้นเกินไป','auth/invalid-email':'รูปแบบอีเมลไม่ถูกต้อง','auth/too-many-requests':'ลองบ่อยเกินไป รอสักครู่','auth/unauthorized-domain':'โดเมนนี้ยังไม่ได้อนุญาตใน Firebase'};
+const fe=e=>toast(AE[e.code]||(/firebase is not defined/.test(e.message)?'โหลด Firebase ไม่ได้ ต้องเปิดเว็บจากโฮสต์จริงหรือ localhost และต่ออินเทอร์เน็ต':'ผิดพลาด: '+(e.code||e.message)),false);
+addEventListener('load',()=>{if(typeof firebase==='undefined')toast('โหลด Firebase ไม่ได้ ตอนนี้เป็นโหมดดูสินค้าเฉยๆ',false)});
+// title / marquee / countdown
+"HorizonX".split('').forEach((c,i)=>{const s=document.createElement('span');s.textContent=c;s.style.animationDelay=(.2+i*.08)+'s';if(i>6)s.className='gr';$('#ti').appendChild(s)});
+$('#mq').innerHTML=Array(12).fill('✦ NEW ARRIVAL &nbsp; ✦ PREMIUM &nbsp; ✦ HORIZONX').join(' ');
+setInterval(()=>{const n=new Date,e=new Date(n);e.setHours(24,0,0,0);const s=Math.floor((e-n)/1e3);$('#cd').textContent=[s/3600,s/60%60,s%60].map(v=>String(Math.floor(v)).padStart(2,'0')).join(':')},1e3);
+// shop
+function shop(){
+ $('#chips').innerHTML=['ทั้งหมด',...new Set(P.map(p=>p.cat).filter(Boolean))].map(c=>`<button class="chip${c===CAT?' on':''}" data-c="${esc(c)}">${esc(c)}</button>`).join('');
+ const L=P.filter(p=>(CAT==='ทั้งหมด'||p.cat===CAT)&&(p.n+p.d).toLowerCase().includes(Q)&&(!WO||W.has(p.id)));
+ SO==='a'?L.sort((a,b)=>a.p-b.p):SO==='z'&&L.sort((a,b)=>b.p-a.p);
+ $('#grid').innerHTML=L.length?L.map((p,i)=>`<div class="card" style="animation-delay:${i*70}ms"><button class="ht" data-h="${p.id}">${W.has(p.id)?'❤️':'🤍'}</button>${p.s<=0?'<i class="tg">หมด</i>':p.s<=5?`<i class="tg lo">เหลือ ${p.s}</i>`:''}<div class="pic" data-q="${p.id}" style="background:linear-gradient(135deg,hsl(${p.id*67%360} 80% 55%/.35),hsl(${(p.id*67+60)%360} 80% 45%/.2))">${p.img?`<img src="${p.img}" alt="">`:`<span>${esc(p.e)}</span>`}</div><h3>${esc(p.n)}</h3><small>${esc(p.d)}</small><div class="row"><b class="pr">${B(p.p)}</b><button class="add" data-a="${p.id}"${p.s<=0?' disabled':''}>+</button></div></div>`).join(''):'<p class="em">ไม่พบสินค้า</p>'}
+let tc=null;
+$('#grid').addEventListener('pointermove',e=>{const c=e.target.closest('.card');if(tc&&tc!==c)tc.style.transform='';tc=c;if(!c||e.pointerType==='touch')return;const r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width,y=(e.clientY-r.top)/r.height;c.style.transform=`rotateY(${(x-.5)*14}deg) rotateX(${(.5-y)*14}deg) scale(1.03)`});
+$('#grid').addEventListener('pointerleave',()=>{if(tc)tc.style.transform=''});
+$('#q').oninput=e=>{Q=e.target.value.trim().toLowerCase();shop()};$('#so').onchange=e=>{SO=e.target.value;shop()};$('#wo').onclick=e=>{WO=!WO;e.target.classList.toggle('on',WO);shop()};
+// cart
+const CT=()=>cart.map(i=>({...gp(i.id),q:i.q})).filter(x=>x.n),sub=()=>CT().reduce((a,x)=>a+x.p*x.q,0),ship=s=>!s||s>=2000?0:60,dis=()=>cp?Math.round(sub()*cp.pct/100):0,tot=()=>sub()-dis()+ship(sub());
+function put(id,d=1){const p=gp(id);if(!p)return;const i=cart.find(c=>c.id==id),q=(i?i.q:0)+d;if(q>p.s)return toast('สินค้าหมดสต็อก',false);if(q<=0)cart=cart.filter(c=>c.id!=id);else if(i)i.q=q;else cart.push({id:p.id,q});if(d>0){toast('เพิ่ม '+p.n+' แล้ว');const b=$('#bd');b.classList.remove('pop');void b.offsetWidth;b.classList.add('pop')}rc()}
+function rc(){cart=cart.filter(c=>gp(c.id));const n=cart.reduce((a,c)=>a+c.q,0),s=sub();$('#bd').textContent=n;$('#bd').classList.toggle('on',n>0);
+ $('#it').innerHTML=n?`<small>${s>=2000?'🎉 ส่งฟรีแล้ว!':'อีก '+B(2000-s)+' ส่งฟรี'}</small><div class="sb"><i style="width:${Math.min(100,s/20)}%"></i></div>`+CT().map(x=>`<div class="it"><span class="e">${esc(x.e)}</span><div>${esc(x.n)}<br><small>${B(x.p)}</small><div class="qt"><button data-mi="${x.id}">−</button><b>${x.q}</b><button data-pl="${x.id}">+</button></div></div><button class="x" data-rm="${x.id}">🗑</button></div>`).join(''):'<p class="em">ตะกร้าว่าง เลือกของที่ถูกใจได้เลย ✦</p>';
+ $('#sm').textContent=B(s);SV('hx_c',cart)}
+const dr=v=>{$('#dr').classList.toggle('on',v);$('#vl').classList.toggle('on',v)};$('#cb').onclick=()=>dr(1);$('#cl').onclick=$('#vl').onclick=()=>dr(0);
+// confetti
+function boom(){if(matchMedia('(prefers-reduced-motion:reduce)').matches)return;const cs=['#7dd3fc','#818cf8','#22d3ee','#fbbf24','#fb7185','#34d399'];for(let i=0;i<70;i++){const d=document.createElement('i');d.className='cf';d.style.cssText=`background:${cs[i%6]};left:50vw;top:40vh`;document.body.appendChild(d);const a=Math.random()*6.28,v=150+Math.random()*350;d.animate([{transform:'none',opacity:1},{transform:`translate(${Math.cos(a)*v}px,${Math.sin(a)*v-120}px) rotate(${Math.random()*720}deg)`,opacity:1,offset:.45},{transform:`translate(${Math.cos(a)*v*1.2}px,${Math.sin(a)*v+420}px) rotate(900deg)`,opacity:0}],{duration:1600+Math.random()*800,easing:'cubic-bezier(.2,.7,.4,1)'}).onfinish=()=>d.remove()}}
+// auth
+function login(m='in'){const i=m==='in';M(`<h2>${i?'เข้าสู่ระบบ':'สมัครสมาชิก'}</h2>${i?'':'<input id="ln" placeholder="ชื่อ">'}<input id="le" type="email" placeholder="อีเมล" autocomplete="email"><input id="lp" type="password" placeholder="รหัสผ่าน (6 ตัวขึ้นไป)"><button class="btn" id="lgo" data-m="${m}" style="margin:0">${i?'เข้าสู่ระบบ':'สมัครสมาชิก'}</button><button class="mini" id="gg">เข้าด้วย Google</button><div class="two"><button class="mini" data-sw="${i?'up':'in'}">${i?'สมัครใหม่':'มีบัญชีแล้ว'}</button>${i?'<button class="mini" id="rs">ลืมรหัสผ่าน</button>':''}<button class="mini" data-x>ปิด</button></div>`)}
+const ST=['รอชำระ','ชำระแล้ว','จัดส่งแล้ว','ยกเลิก'];
+function acct(){M(`<h2>บัญชีของฉัน</h2><small>${esc(U.email)}</small><h3>ออเดอร์ของฉัน</h3>`+(MO.length?MO.map(o=>{const c=ST.indexOf(o.st);return `<div class="oc"><b>${o.id} · ${B(o.tot)}</b><small>${new Date(o.t).toLocaleString('th-TH')}${o.trk?' · พัสดุ '+esc(o.trk):''}</small>${c<3?`<div class="steps">${ST.slice(0,3).map((s,i)=>`<span class="${i<=c?'on':''}"><b>${i<=c?'✓':i+1}</b>${s}</span>`).join('')}</div>`:'<small>❌ ยกเลิกแล้ว</small>'}</div>`}).join(''):'<p class="em">ยังไม่มีออเดอร์</p>')+'<button class="mini" id="out">ออกจากระบบ</button><button class="mini" data-x>ปิด</button>')}
+$('#ac').onclick=()=>U?acct():login();
+// checkout
+function checkout(){if(!cart.length)return toast('ตะกร้าว่าง',false);if(!U){dr(0);toast('กรุณาเข้าสู่ระบบก่อนชำระเงิน',false);return login()}dr(0);
+ M(`<h2>ชำระเงิน</h2><small id="cs"></small><input id="fn" placeholder="ชื่อ-นามสกุล" value="${esc(U.displayName||'')}"><input id="ft" placeholder="เบอร์โทร" inputmode="tel"><textarea id="fa" placeholder="ที่อยู่จัดส่ง" rows="3"></textarea><div class="two"><input id="fc" placeholder="โค้ดส่วนลด"><button class="mini" id="fp">ใช้โค้ด</button></div><select id="fy"><option>เก็บเงินปลายทาง</option><option>โอนเงิน/PromptPay (แอดมินยืนยันยอด)</option></select><div class="tt"><span>สุทธิ</span><span id="ftot"></span></div><button class="btn" id="fo" style="margin:0">ยืนยันสั่งซื้อ</button><button class="mini" data-x>ยกเลิก</button>`);cs()}
+const cs=()=>{$('#cs').textContent=`สินค้า ${B(sub())} · ส่วนลด ${B(dis())} · ค่าส่ง ${B(ship(sub()))} (ส่งฟรีเมื่อครบ ฿2,000)`;$('#ftot').textContent=B(tot())};
+$('#co').onclick=checkout;
+async function place(){const n=$('#fn').value.trim(),t=$('#ft').value.trim(),a=$('#fa').value.trim();if(!n||!t||!a)return toast('กรอกข้อมูลให้ครบ',false);if(!db)return toast('เชื่อมต่อระบบไม่ได้',false);
+ const it=CT(),id='HX'+Date.now().toString().slice(-8),o={id,uid:U.uid,email:U.email,t:new Date().toISOString(),it:it.map(({id,n,e,p,q})=>({id,n,e,p,q})),sub:sub(),d:dis(),sh:ship(sub()),tot:tot(),cust:{n,t,a},pay:$('#fy').value,st:'รอชำระ',trk:''};
+ try{const b=db.batch();b.set(db.collection('orders').doc(id),o);it.forEach(x=>b.update(db.collection('products').doc(String(x.id)),{s:firebase.firestore.FieldValue.increment(-x.q)}));await b.commit();
+  cart=[];cp=null;rc();boom();M(`<h2>🎉 สั่งซื้อสำเร็จ</h2><p>หมายเลข <b style="color:var(--ice)">${id}</b><br>ยอดรวม ${B(o.tot)}</p><small>ติดตามสถานะได้ที่ "บัญชีของฉัน"</small><button class="mini" data-x>ปิด</button>`)}catch(e){fe(e)}}
+// admin
+const tabs=[['dash','ภาพรวม'],['prod','สินค้า'],['ord','ออเดอร์'],['cou','โค้ด']];
+const cmp=f=>new Promise((ok,no)=>{const i=new Image,u=URL.createObjectURL(f);i.onload=()=>{const s=Math.min(1,640/Math.max(i.width,i.height)),c=document.createElement('canvas');c.width=i.width*s|0;c.height=i.height*s|0;c.getContext('2d').drawImage(i,0,0,c.width,c.height);URL.revokeObjectURL(u);ok(c.toDataURL('image/jpeg',.72))};i.onerror=no;i.src=u});
+let nimg='';
+function ad(){$('#tb2').innerHTML=tabs.map(([k,v])=>`<button class="chip${k===tab?' on':''}" data-t="${k}">${v}</button>`).join('');const b=$('#ab');
+ if(tab==='dash'){const rev=O.filter(o=>/ชำระแล้ว|จัดส่งแล้ว/.test(o.st)).reduce((a,o)=>a+o.tot,0),l=O.slice(0,7).reverse(),mx=Math.max(1,...l.map(o=>o.tot));b.innerHTML=`<div class="stats"><div><b>${B(rev)}</b>ยอดขาย</div><div><b>${O.length}</b>ออเดอร์</div><div><b>${P.filter(p=>p.s<=5).length}</b>สต็อกต่ำ</div></div><h3>ออเดอร์ล่าสุด</h3><div class="ch">${l.map(o=>`<i style="height:${o.tot/mx*100}%"><em>${B(o.tot)}</em></i>`).join('')}</div>`}
+ if(tab==='prod')b.innerHTML=`<div class="fm"><input id="pn" class="w" placeholder="ชื่อสินค้า"><input id="pd" class="w" placeholder="คำโปรย"><input id="pc" placeholder="หมวดหมู่"><input id="pe" placeholder="อีโมจิ" maxlength="4"><input id="pp" type="number" placeholder="ราคา ฿"><input id="ps" type="number" placeholder="สต็อก"><label class="mini w" style="text-align:center">📷 เลือกรูป<input id="pf" type="file" accept="image/*" hidden></label><button class="btn w" id="pa" style="margin:0">+ เพิ่มสินค้า</button></div>${P.length?'':'<button class="mini" id="sd">ใส่สินค้าตัวอย่าง</button>'}`+P.map(p=>`<div class="ar"><span style="font-size:1.6rem">${p.img?`<img src="${p.img}" style="width:40px;height:40px;object-fit:cover;border-radius:10px">`:esc(p.e)}</span><div><b>${esc(p.n)}</b><br><small>${esc(p.cat||'')}</small></div><input data-pf="p" data-id="${p.id}" type="number" value="${p.p}"><input data-pf="s" data-id="${p.id}" type="number" value="${p.s}"><button class="x" data-del="${p.id}">🗑</button></div>`).join('');
+ if(tab==='ord')b.innerHTML=O.length?O.map(o=>`<div class="oc"><div style="display:flex;justify-content:space-between"><b>${o.id}</b><b style="color:var(--ice)">${B(o.tot)}</b></div><small>${new Date(o.t).toLocaleString('th-TH')} · ${esc(o.cust.n)} · ${esc(o.cust.t)}</small><div>${o.it.map(i=>esc(i.e)+' '+esc(i.n)+' ×'+i.q).join(', ')}</div><small>${esc(o.cust.a)} · ${esc(o.pay)}</small><div class="two"><select data-st="${o.id}">${ST.map(s=>`<option${s===o.st?' selected':''}>${s}</option>`).join('')}</select><input data-tk="${o.id}" placeholder="เลขพัสดุ" value="${esc(o.trk)}"></div></div>`).join(''):'<p class="em">ยังไม่มีออเดอร์</p>';
+ if(tab==='cou')b.innerHTML=`<div class="two"><input id="cc" placeholder="โค้ด เช่น SALE20"><input id="cpc" type="number" placeholder="ลด %"><button class="mini" id="ca">เพิ่ม</button></div>`+CP.map(c=>`<div class="ar"><div><b>${esc(c.code)}</b></div><span>-${c.pct}%</span><button class="x" data-cd="${esc(c.code)}">🗑</button></div>`).join('')}
+const openAd=()=>{if(!adm)return;$('#ad').classList.add('on');ad()};
+let tp=0,tt;$('#lg').onclick=()=>{tp++;clearTimeout(tt);tt=setTimeout(()=>tp=0,2500);if(tp>=5){tp=0;openAd()}};
+$('#ax').onclick=()=>$('#ad').classList.remove('on');
+const sure=t=>{if(t.dataset.arm)return true;t.dataset.arm=1;const l=t.textContent;t.textContent='ยืนยัน?';setTimeout(()=>{delete t.dataset.arm;t.textContent=l},2500)};
+// events
+document.addEventListener('click',async e=>{const t=e.target,el=t.closest('button,[data-q],[data-i]');if(t.classList.contains('modal'))XM();if(!el)return;const d=el.dataset,id=el.id;
+ try{
+ if(d.x!==undefined)XM();
+ if(d.c){CAT=d.c;shop()}
+ if(d.h){const n=+d.h;W.has(n)?W.delete(n):W.add(n);SV('hx_w',[...W]);el.textContent=W.has(n)?'❤️':'🤍';if(WO)shop()}
+ if(d.a)put(d.a);if(d.pl)put(d.pl);if(d.mi)put(d.mi,-1);if(d.rm){cart=cart.filter(c=>c.id!=d.rm);rc()}
+ if(d.q){const p=gp(d.q);M(`<div class="pic" style="height:220px;cursor:default;background:linear-gradient(135deg,hsl(${p.id*67%360} 80% 55%/.35),hsl(${(p.id*67+60)%360} 80% 45%/.2))">${p.img?`<img src="${p.img}" alt="">`:`<span style="font-size:6rem">${esc(p.e)}</span>`}</div><h2>${esc(p.n)}</h2><p style="color:var(--mu)">${esc(p.d)}</p><div class="row"><b class="pr">${B(p.p)}</b><small>คงเหลือ ${p.s}</small></div><button class="btn" data-a="${p.id}" data-x style="margin:0"${p.s<=0?' disabled':''}>ใส่ตะกร้า</button><button class="mini" data-x>ปิด</button>`)}
+ if(d.i){M(`<h2>${esc(d.i)}</h2><p style="line-height:1.8;color:var(--mu)">ข้อความตัวอย่าง กรุณาแก้เป็นเงื่อนไขจริงของร้านก่อนเปิดขาย</p><button class="mini" data-x>ปิด</button>`)}
+ if(d.sw)login(d.sw);
+ if(id==='lgo'){const m=$('#le').value.trim(),p=$('#lp').value;if(!m||!p)return toast('กรอกอีเมลและรหัสผ่าน',false);if(!au)return toast('เชื่อมต่อระบบไม่ได้',false);
+  if(d.m==='in')await au.signInWithEmailAndPassword(m,p);else{const c=await au.createUserWithEmailAndPassword(m,p),n=$('#ln').value.trim();if(n)await c.user.updateProfile({displayName:n})}XM();toast('สำเร็จ')}
+ if(id==='gg'){await au.signInWithPopup(new firebase.auth.GoogleAuthProvider());XM();toast('เข้าสู่ระบบสำเร็จ')}
+ if(id==='rs'){const m=$('#le').value.trim();if(!m)return toast('กรอกอีเมลก่อน',false);await au.sendPasswordResetEmail(m);toast('ส่งลิงก์รีเซ็ตรหัสผ่านแล้ว')}
+ if(id==='out'){await au.signOut();XM();toast('ออกจากระบบแล้ว')}
+ if(id==='fp'){const c=$('#fc').value.trim().toUpperCase(),s=await db.collection('coupons').doc(c).get();cp=s.exists?s.data():null;toast(cp?'ใช้โค้ดแล้ว -'+cp.pct+'%':'โค้ดไม่ถูกต้อง',!!cp);cs()}
+ if(id==='fo')place();
+ if(d.t){tab=d.t;ad()}
+ if(id==='sd'){const b=db.batch();DEF.forEach(p=>b.set(db.collection('products').doc(String(p.id)),p));await b.commit();toast('เพิ่มสินค้าตัวอย่างแล้ว')}
+ if(id==='pa'){const n=$('#pn').value.trim(),p=+$('#pp').value;if(!n||!(p>0))return toast('กรอกชื่อและราคา',false);const i=Math.max(0,...P.map(x=>x.id))+1;await db.collection('products').doc(String(i)).set({id:i,n,d:$('#pd').value.trim(),cat:$('#pc').value.trim(),e:$('#pe').value.trim()||'📦',p,s:Math.max(0,+$('#ps').value||0),img:nimg});nimg='';toast('เพิ่มสินค้าแล้ว')}
+ if(d.del&&sure(el)){await db.collection('products').doc(d.del).delete();toast('ลบแล้ว')}
+ if(id==='ca'){const c=$('#cc').value.trim().toUpperCase(),p=+$('#cpc').value;if(!c||!(p>0&&p<=100))return toast('กรอกโค้ดและ % (1-100)',false);await db.collection('coupons').doc(c).set({code:c,pct:p});toast('เพิ่มโค้ดแล้ว')}
+ if(d.cd){await db.collection('coupons').doc(d.cd).delete();toast('ลบโค้ดแล้ว')}
+ }catch(x){fe(x)}});
+document.addEventListener('change',async e=>{const t=e.target,d=t.dataset;try{
+ if(d.pf){await db.collection('products').doc(d.id).update({[d.pf]:Math.max(0,+t.value||0)});toast('บันทึกแล้ว')}
+ if(d.st){const o=O.find(x=>x.id===d.st),b=db.batch(),F=firebase.firestore.FieldValue;if(t.value==='ยกเลิก'&&o.st!=='ยกเลิก')o.it.forEach(i=>b.update(db.collection('products').doc(String(i.id)),{s:F.increment(i.q)}));if(o.st==='ยกเลิก'&&t.value!=='ยกเลิก')o.it.forEach(i=>b.update(db.collection('products').doc(String(i.id)),{s:F.increment(-i.q)}));b.update(db.collection('orders').doc(o.id),{st:t.value});await b.commit();toast('อัปเดตออเดอร์แล้ว')}
+ if(d.tk){await db.collection('orders').doc(d.tk).update({trk:t.value.trim()});toast('บันทึกเลขพัสดุแล้ว')}
+ if(t.id==='pf'&&t.files[0]){nimg=await cmp(t.files[0]);toast('เลือกรูปแล้ว กดเพิ่มสินค้าเพื่อบันทึก')}}catch(x){fe(x)}});
+// data
+if(db){db.collection('products').onSnapshot(s=>{P=s.docs.map(d=>d.data()).sort((a,b)=>a.id-b.id);shop();rc();if($('#ad').classList.contains('on')&&tab==='prod')ad()},e=>console.error(e));
+ au.onAuthStateChanged(async u=>{U=u;adm=false;un.forEach(f=>f());un=[];MO=[];O=[];CP=[];$('#ad').classList.remove('on');
+  if(u){try{const r=db.collection('users').doc(u.uid),d=await r.get();if(d.exists)adm=d.data().role==='admin';else await r.set({email:u.email,name:u.displayName||'',role:'customer',t:Date.now()})}catch(e){console.error(e)}
+   un.push(db.collection('orders').where('uid','==',u.uid).onSnapshot(s=>MO=srt(s),()=>{}));
+   if(adm)un.push(db.collection('orders').onSnapshot(s=>{O=srt(s);if($('#ad').classList.contains('on'))ad()},()=>{}),db.collection('coupons').onSnapshot(s=>{CP=s.docs.map(d=>d.data());if($('#ad').classList.contains('on')&&tab==='cou')ad()},()=>{}));
+   if(location.hash==='#hx'&&adm)openAd()}
+  $('#ac').textContent=u?(u.displayName||u.email.split('@')[0]):'เข้าสู่ระบบ'})}
+shop();rc();
+</script></body></html>
